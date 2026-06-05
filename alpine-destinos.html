@@ -1,0 +1,1948 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Road Trip Alpino · Guía de Destinos</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink:     #1a1f2e;
+    --pine:    #1e3828;
+    --moss:    #2f5a3a;
+    --sage:    #5c8a68;
+    --glacier: #7ab8c4;
+    --snow:    #f0ede6;
+    --parch:   #e8e3d8;
+    --gold:    #b8923a;
+    --amber:   #d4a843;
+    --rouge:   #8b3030;
+    --slate:   #4a5568;
+    --mist:    #9aa5b4;
+    --cream:   #faf7f0;
+    --white:   #ffffff;
+    --border:  #d5cfc2;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    min-height: 100vh;
+  }
+
+  /* ─── HEADER ─── */
+  header {
+    background: var(--pine);
+    padding: 56px 48px 44px;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 70% 0%, rgba(122,184,196,0.18) 0%, transparent 55%),
+      radial-gradient(ellipse at 10% 100%, rgba(184,146,58,0.12) 0%, transparent 50%);
+  }
+  .header-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+  .eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 3.5px;
+    text-transform: uppercase;
+    color: var(--glacier);
+    margin-bottom: 14px;
+  }
+  header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 5vw, 3.6rem);
+    font-weight: 600;
+    color: var(--snow);
+    line-height: 1.1;
+    margin-bottom: 16px;
+  }
+  header h1 em {
+    font-style: italic;
+    color: var(--amber);
+  }
+  .header-sub {
+    font-size: 14px;
+    color: rgba(240,237,230,0.65);
+    font-weight: 300;
+    max-width: 540px;
+    line-height: 1.6;
+  }
+  .header-meta {
+    margin-top: 28px;
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  .meta-pill {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.14);
+    border-radius: 4px;
+    padding: 6px 14px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--snow);
+    letter-spacing: 1px;
+  }
+  .meta-pill span { color: var(--amber); margin-right: 6px; }
+
+  /* ─── LAYOUT ─── */
+  .main-wrap {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 48px 24px 80px;
+  }
+
+  /* ─── LEGEND ─── */
+  .legend-bar {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-bottom: 32px;
+    padding: 16px 20px;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 12px;
+    color: var(--slate);
+  }
+  .legend-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* ─── MAP ─── */
+  .map-section {
+    margin-bottom: 48px;
+  }
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--mist);
+    margin-bottom: 12px;
+  }
+  #map-wrap {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 4px 24px rgba(26,31,46,0.07);
+  }
+  #map-wrap svg {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+  .map-tooltip {
+    display: none;
+    position: absolute;
+    background: var(--ink);
+    color: var(--snow);
+    border-radius: 6px;
+    padding: 12px 16px;
+    pointer-events: none;
+    z-index: 100;
+    min-width: 200px;
+    max-width: 260px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+  }
+  .tt-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 4px;
+    line-height: 1.3;
+  }
+  .tt-type {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+    opacity: 0.7;
+  }
+  .tt-score {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+  }
+  .tt-stars { color: var(--amber); letter-spacing: -1px; }
+  .tt-verdict {
+    font-size: 11px;
+    margin-top: 5px;
+    opacity: 0.75;
+    font-style: italic;
+  }
+
+  /* ─── FILTER TABS ─── */
+  .filter-wrap {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 28px;
+  }
+  .filter-btn {
+    padding: 7px 16px;
+    border: 1px solid var(--border);
+    background: var(--white);
+    border-radius: 20px;
+    font-size: 12px;
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    color: var(--slate);
+    transition: all 0.2s;
+  }
+  .filter-btn:hover, .filter-btn.active {
+    background: var(--pine);
+    color: var(--snow);
+    border-color: var(--pine);
+  }
+
+  /* ─── DESTINATION CARDS ─── */
+  .destinations-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  @media (max-width: 700px) {
+    .destinations-grid { grid-template-columns: 1fr; }
+  }
+
+  .dest-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: box-shadow 0.2s, transform 0.2s;
+  }
+  .dest-card:hover {
+    box-shadow: 0 6px 28px rgba(26,31,46,0.1);
+    transform: translateY(-2px);
+  }
+  .dest-card.hidden { display: none; }
+
+  .card-header {
+    padding: 16px 20px 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    user-select: none;
+  }
+  .card-number {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--mist);
+    padding-top: 3px;
+    flex-shrink: 0;
+    min-width: 24px;
+  }
+  .card-title-block { flex: 1; min-width: 0; }
+  .card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1.25;
+    margin-bottom: 4px;
+  }
+  .card-meta-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .card-type {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--mist);
+  }
+  .card-country {
+    font-size: 11px;
+    color: var(--mist);
+  }
+  .card-score-block {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 2px;
+    flex-shrink: 0;
+  }
+  .score-number {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1;
+  }
+  .score-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 1px;
+    color: var(--mist);
+    text-transform: uppercase;
+  }
+  .verdict-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 9px;
+    border-radius: 3px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-top: 6px;
+    font-weight: 500;
+  }
+  .badge-rec    { background: rgba(47,90,58,0.12); color: #2f5a3a; }
+  .badge-opt    { background: rgba(180,150,50,0.12); color: #9a7820; }
+  .badge-no     { background: rgba(139,48,48,0.12); color: #8b3030; }
+
+  .card-chevron {
+    font-size: 14px;
+    color: var(--mist);
+    transition: transform 0.25s;
+    padding-top: 3px;
+    flex-shrink: 0;
+  }
+  .dest-card.open .card-chevron { transform: rotate(180deg); }
+
+  .card-body {
+    display: none;
+    padding: 0 20px 20px 58px;
+    border-top: 1px solid var(--parch);
+  }
+  .dest-card.open .card-body { display: block; }
+
+  .card-distance {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--mist);
+    margin: 12px 0 14px;
+    display: flex;
+    gap: 18px;
+    flex-wrap: wrap;
+  }
+  .dist-item { display: flex; gap: 6px; }
+  .dist-key { color: var(--slate); }
+
+  .pros-cons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 14px;
+  }
+  @media (max-width: 500px) {
+    .pros-cons { grid-template-columns: 1fr; }
+    .card-body { padding-left: 20px; }
+  }
+
+  .pc-block { }
+  .pc-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    font-weight: 500;
+  }
+  .pc-title.pros { color: var(--moss); }
+  .pc-title.cons { color: var(--rouge); }
+
+  .pc-list { list-style: none; }
+  .pc-list li {
+    font-size: 12.5px;
+    line-height: 1.55;
+    color: var(--slate);
+    padding: 3px 0;
+    display: flex;
+    gap: 7px;
+  }
+  .pc-list li::before {
+    content: '—';
+    flex-shrink: 0;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    margin-top: 1px;
+  }
+  .pc-list.pros li::before { color: var(--sage); }
+  .pc-list.cons li::before { color: var(--rouge); }
+
+  .card-alert {
+    background: rgba(184,146,58,0.08);
+    border-left: 3px solid var(--gold);
+    border-radius: 0 4px 4px 0;
+    padding: 10px 14px;
+    font-size: 12px;
+    color: var(--ink);
+    margin-top: 12px;
+    line-height: 1.5;
+  }
+  .card-alert strong { color: var(--gold); }
+
+  /* Score bar */
+  .score-bar-wrap {
+    margin-top: 14px;
+    border-top: 1px solid var(--parch);
+    padding-top: 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .score-bar-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--mist);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .score-bar-track {
+    flex: 1;
+    height: 4px;
+    background: var(--parch);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .score-bar-fill {
+    height: 100%;
+    border-radius: 2px;
+    transition: width 0.6s ease;
+  }
+  .score-val {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    min-width: 30px;
+    text-align: right;
+  }
+
+  /* ─── FOOTER NOTE ─── */
+  .foot-note {
+    margin-top: 48px;
+    padding: 20px 24px;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 12px;
+    color: var(--mist);
+    line-height: 1.7;
+  }
+  .foot-note strong { color: var(--slate); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="eyebrow">Road Trip Alpino · Septiembre 2026</div>
+    <h1>Suiza · Francia · <em>Italia</em></h1>
+    <p class="header-sub">Guía de destinos para un viaje en familia: 2 adultos, 1 abuela y un bebé de ~14 meses. Bucle desde Zúrich, devolución en Suiza.</p>
+    <div class="header-meta">
+      <div class="meta-pill"><span>✦</span>20 destinos analizados</div>
+      <div class="meta-pill"><span>✦</span>Bebé + abuela mayor</div>
+      <div class="meta-pill"><span>✦</span>Auto devuelto en Suiza</div>
+      <div class="meta-pill"><span>✦</span>Umbral altitud: 2.000 m</div>
+    </div>
+  </div>
+</header>
+
+<div class="main-wrap">
+
+  <!-- LEGEND -->
+  <div class="legend-bar">
+    <div class="legend-item"><div class="legend-dot" style="background:#2f5a3a"></div> Muy recomendado</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#7ab8c4"></div> Suiza</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#b8923a"></div> Francia</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#8b3030"></div> Italia</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#9aa5b4"></div> Opcional / prescindible</div>
+    <div class="legend-item" style="margin-left:auto;font-size:12px;color:var(--mist)">Hover sobre un punto del mapa para ver detalles</div>
+  </div>
+
+  <!-- MAP -->
+  <div class="map-section">
+    <div class="section-label">Mapa del circuito</div>
+    <div id="map-wrap">
+      <svg viewBox="0 0 900 560" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="bg-grad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#eef3f0"/>
+            <stop offset="100%" stop-color="#e8e3d8"/>
+          </linearGradient>
+          <filter id="pin-shadow" x="-30%" y="-30%" width="160%" height="160%">
+            <feDropShadow dx="0" dy="1" stdDeviation="2" flood-color="rgba(0,0,0,0.25)"/>
+          </filter>
+        </defs>
+
+        <!-- Background -->
+        <rect width="900" height="560" fill="url(#bg-grad)"/>
+
+        <!-- Terrain bands (Alps suggestion) -->
+        <path d="M0,260 Q150,200 300,220 Q450,240 600,200 Q720,170 900,190 L900,560 L0,560 Z" fill="rgba(200,215,205,0.35)"/>
+        <path d="M0,300 Q200,270 400,280 Q600,290 900,260 L900,560 L0,560 Z" fill="rgba(210,220,210,0.25)"/>
+
+        <!-- Lake Leman -->
+        <ellipse cx="268" cy="310" rx="82" ry="20" fill="rgba(122,184,196,0.45)" stroke="rgba(122,184,196,0.7)" stroke-width="1"/>
+        <text x="268" y="313" text-anchor="middle" font-family="DM Sans" font-size="9" fill="rgba(70,100,120,0.7)" font-style="italic">Lac Léman</text>
+
+        <!-- Lake Como -->
+        <ellipse cx="650" cy="440" rx="14" ry="30" fill="rgba(122,184,196,0.4)" stroke="rgba(122,184,196,0.6)" stroke-width="1"/>
+        <text x="668" y="445" font-family="DM Sans" font-size="8" fill="rgba(70,100,120,0.7)" font-style="italic">Como</text>
+
+        <!-- Lago Maggiore -->
+        <ellipse cx="600" cy="430" rx="10" ry="22" fill="rgba(122,184,196,0.35)" stroke="rgba(122,184,196,0.5)" stroke-width="1"/>
+
+        <!-- Lake Lucerne (Vierwaldstättersee) -->
+        <path d="M520,215 Q535,210 545,218 Q555,222 548,230 Q540,238 525,232 Q512,225 520,215Z" fill="rgba(122,184,196,0.4)" stroke="rgba(122,184,196,0.6)" stroke-width="1"/>
+
+        <!-- Thun/Brienz hint -->
+        <ellipse cx="430" cy="288" rx="25" ry="8" fill="rgba(122,184,196,0.3)" stroke="rgba(122,184,196,0.5)" stroke-width="1"/>
+        <text x="430" y="291" text-anchor="middle" font-family="DM Sans" font-size="7.5" fill="rgba(70,100,120,0.65)" font-style="italic">Thun/Brienz</text>
+
+        <!-- Rhine (hint) -->
+        <path d="M680,80 Q690,100 700,130" stroke="rgba(122,184,196,0.5)" stroke-width="2" fill="none"/>
+
+        <!-- Route line (suggested circuit) -->
+        <path d="M680,130 L530,175 L420,256 L370,282 L310,292 L268,302 L215,340 L195,380 L220,415 L260,430 L300,420 L350,400 L390,430 L450,460 L520,450 L590,430 L645,390 L590,310 L560,260 L530,230 L530,175" 
+              stroke="rgba(47,90,58,0.25)" stroke-width="1.5" fill="none" stroke-dasharray="5,4"/>
+
+        <!-- Country labels -->
+        <text x="530" y="100" font-family="Playfair Display, serif" font-size="13" fill="rgba(74,85,104,0.4)" font-style="italic" font-weight="600">SUIZA</text>
+        <text x="150" y="380" font-family="Playfair Display, serif" font-size="13" fill="rgba(74,85,104,0.4)" font-style="italic" font-weight="600">FRANCIA</text>
+        <text x="640" y="480" font-family="Playfair Display, serif" font-size="13" fill="rgba(74,85,104,0.4)" font-style="italic" font-weight="600">ITALIA</text>
+
+        <!-- PINS -->
+        <!-- Each pin: circle + inner dot + label. Colors: CH=#2f5a3a, FR=#b8923a, IT=#8b3030, optional=#9aa5b4 -->
+
+        <!-- 1 Zurich -->
+        <g class="map-pin" data-name="Zúrich" data-type="Ciudad histórica" data-score="7" data-country="CH" data-verdict="Base logística ideal" filter="url(#pin-shadow)">
+          <circle cx="680" cy="130" r="9" fill="#2f5a3a" opacity="0.9"/>
+          <circle cx="680" cy="130" r="3.5" fill="white"/>
+          <text x="693" y="128" font-family="DM Sans" font-size="10.5" fill="#1a1f2e" font-weight="500">Zúrich</text>
+          <text x="693" y="140" font-family="DM Mono, monospace" font-size="8" fill="#9aa5b4">7.0</text>
+        </g>
+
+        <!-- 2 Berna -->
+        <g class="map-pin" data-name="Berna" data-type="Ciudad histórica" data-score="8.5" data-country="CH" data-verdict="Muy recomendado" filter="url(#pin-shadow)">
+          <circle cx="420" cy="256" r="9" fill="#2f5a3a" opacity="0.9"/>
+          <circle cx="420" cy="256" r="3.5" fill="white"/>
+          <text x="433" y="254" font-family="DM Sans" font-size="10.5" fill="#1a1f2e" font-weight="500">Berna</text>
+          <text x="433" y="266" font-family="DM Mono, monospace" font-size="8" fill="#9aa5b4">8.5</text>
+        </g>
+
+        <!-- 3 Gruyeres -->
+        <g class="map-pin" data-name="Gruyères" data-type="Pueblo medieval · Gastronomía" data-score="9" data-country="CH" data-verdict="Muy recomendado" filter="url(#pin-shadow)">
+          <circle cx="370" cy="282" r="9" fill="#2f5a3a" opacity="0.9"/>
+          <circle cx="370" cy="282" r="3.5" fill="white"/>
+          <text x="338" y="272" font-family="DM Sans" font-size="10.5" fill="#1a1f2e" font-weight="500">Gruyères</text>
+          <text x="344" y="284" font-family="DM Mono, monospace" font-size="8" fill="#9aa5b4">9.0</text>
+        </g>
+
+        <!-- 4 Montreux / Chillon -->
+        <g class="map-pin" data-name="Montreux · Chillon" data-type="Riviera · Castillo" data-score="8.5" data-country="CH" data-verdict="Muy recomendado" filter="url(#pin-shadow)">
+          <circle cx="310" cy="292" r="9" fill="#2f5a3a" opacity="0.9"/>
+          <circle cx="310" cy="292" r="3.5" fill="white"/>
+          <text x="316" y="280" font-family="DM Sans" font-size="10.5" fill="#1a1f2e" font-weight="500">Montreux</text>
+          <text x="316" y="292" font-family="DM Mono, monospace" font-size="8" fill="#9aa5b4">8.5</text>
+        </g>
+
+        <!-- 5 Vevey -->
+        <g class="map-pin" data-name="Vevey" data-type="Riviera · Chaplin's World" data-score="8.5" data-country="CH" data-verdict="Muy recomendado" filter="url(#pin-shadow)">
+          <circle cx="320" cy="308" r="7" fill="#2f5a3a" opacity="0.85"/>
+          <circle cx="320" cy="308" r="2.5" fill="white"/>
+          <text x="328" y="312" font-family="DM Sans" font-size="9.5" fill="#1a1f2e">Vevey</text>
+        </g>
+
+        <!-- 6 Lausana -->
+        <g class="map-pin" data-name="Lausana" data-type="Ciudad universitaria · Lago" data-score="6.5" data-country="CH" data-verdict="Opcional" filter="url(#pin-shadow)">
+          <circle cx="290" cy="315" r="7" fill="#9aa5b4" opacity="0.85"/>
+          <circle cx="290" cy="315" r="2.5" fill="white"/>
+          <text x="260" y="330" font-family="DM Sans" font-size="9.5" fill="#4a5568">Lausana</text>
+        </g>
+
+        <!-- 7 Evian -->
+        <g class="map-pin" data-name="Évian-les-Bains" data-type="Balneario francés" data-score="5.5" data-country="FR" data-verdict="Opcional/prescindible" filter="url(#pin-shadow)">
+          <circle cx="268" cy="328" r="7" fill="#9aa5b4" opacity="0.8"/>
+          <circle cx="268" cy="328" r="2.5" fill="white"/>
+          <text x="238" y="344" font-family="DM Sans" font-size="9.5" fill="#4a5568">Évian</text>
+        </g>
+
+        <!-- 8 Geneva -->
+        <g class="map-pin" data-name="Ginebra" data-type="Ciudad internacional" data-score="5" data-country="CH" data-verdict="Prescindible en este bucle" filter="url(#pin-shadow)">
+          <circle cx="215" cy="340" r="8" fill="#9aa5b4" opacity="0.85"/>
+          <circle cx="215" cy="340" r="3" fill="white"/>
+          <text x="188" y="356" font-family="DM Sans" font-size="10.5" fill="#4a5568">Ginebra</text>
+          <text x="188" y="368" font-family="DM Mono, monospace" font-size="8" fill="#9aa5b4">5.0</text>
+        </g>
+
+        <!-- 9 Interlaken -->
+        <g class="map-pin" data-name="Interlaken · Jungfrau" data-type="Alpes · Lagos · Montaña" data-score="8.5" data-country="CH" data-verdict="Muy recomendado (sin Jungfraujoch)" filter="url(#pin-shadow)">
+          <circle cx="450" cy="290" r="9" fill="#2f5a3a" opacity="0.9"/>
+          <circle cx="450" cy="290" r="3.5" fill="white"/>
+          <text x="458" y="286" font-family="DM Sans" font-size="10.5" fill="#1a1f2e" font-weight="500">Interlaken</text>
+          <text x="458" y="298" font-family="DM Mono, monospace" font-size="8" fill="#9aa5b4">8.5</text>
+        </g>
+
+        <!-- 10 Zermatt -->
+        <g class="map-pin" data-name="Zermatt · Cervino" data-type="Pueblo sin coches · Gornergrat" data-score="8" data-country="CH" data-verdict="Recomendado con prudencia" filter="url(#pin-shadow)">
+          <circle cx="390" cy="360" r="9" fill="#2f5a3a" opacity="0.9"/>
+          <circle cx="390" cy="360" r="3.5" fill="white"/>
+          <text x="399" y="358" font-family="DM Sans" font-size="10.5" fill="#1a1f2e" font-weight="500">Zermatt</text>
+          <text x="399" y="370" font-family="DM Mono, monospace" font-size="8" fill="#9aa5b4">8.0</text>
+        </g>
+
+        <!-- 11 Lucerna -->
+        <g class="map-pin" data-name="Lucerna" data-type="Ciudad medieval · Lago" data-score="9" data-country="CH" data-verdict="Muy recomendado" filter="url(#pin-shadow)">
+          <circle cx="530" cy="210" r="9" fill="#2f5a3a" opacity="0.9"/>
+          <circle cx="530" cy="210" r="3.5" fill="white"/>
+          <text x="540" y="208" font-family="DM Sans" font-size="10.5" fill="#1a1f2e" font-weight="500">Lucerna</text>
+          <text x="540" y="220" font-family="DM Mono, monospace" font-size="8" fill="#9aa5b4">9.0</text>
+        </g>
+
+        <!-- 12 Pilatus -->
+        <g class="map-pin" data-name="Monte Pilatus" data-type="Montaña · 2.132 m" data-score="7.5" data-country="CH" data-verdict="Recomendado con prudencia" filter="url(#pin-shadow)">
+          <circle cx="510" cy="238" r="7" fill="#2f5a3a" opacity="0.8"/>
+          <circle cx="510" cy="238" r="2.5" fill="white"/>
+          <text x="514" y="252" font-family="DM Sans" font-size="9.5" fill="#1a1f2e">Pilatus</text>
+        </g>
+
+        <!-- 13 Rigi -->
+        <g class="map-pin" data-name="Monte Rigi" data-type="Montaña · 1.798 m · La más segura" data-score="8.5" data-country="CH" data-verdict="Muy recomendado (altitud segura)" filter="url(#pin-shadow)">
+          <circle cx="548" cy="218" r="7" fill="#2f5a3a" opacity="0.8"/>
+          <circle cx="548" cy="218" r="2.5" fill="white"/>
+          <text x="554" y="232" font-family="DM Sans" font-size="9.5" fill="#1a1f2e">Rigi</text>
+        </g>
+
+        <!-- 14 Appenzell -->
+        <g class="map-pin" data-name="Appenzell" data-type="Pueblo rural auténtico" data-score="7.5" data-country="CH" data-verdict="Recomendado (autenticidad)" filter="url(#pin-shadow)">
+          <circle cx="660" cy="158" r="7" fill="#2f5a3a" opacity="0.8"/>
+          <circle cx="660" cy="158" r="2.5" fill="white"/>
+          <text x="638" y="172" font-family="DM Sans" font-size="9.5" fill="#1a1f2e">Appenzell</text>
+        </g>
+
+        <!-- 15 Sion / Valais -->
+        <g class="map-pin" data-name="Sion · Valais" data-type="Valle histórico · Castillos" data-score="6" data-country="CH" data-verdict="Opcional (de paso a Zermatt)" filter="url(#pin-shadow)">
+          <circle cx="350" cy="345" r="7" fill="#9aa5b4" opacity="0.85"/>
+          <circle cx="350" cy="345" r="2.5" fill="white"/>
+          <text x="354" y="359" font-family="DM Sans" font-size="9.5" fill="#4a5568">Sion</text>
+        </g>
+
+        <!-- 16 Col de la Forclaz -->
+        <g class="map-pin" data-name="Col de la Forclaz" data-type="Paso alpino panorámico" data-score="7" data-country="CH/FR" data-verdict="Recomendado como ruta escénica" filter="url(#pin-shadow)">
+          <circle cx="300" cy="360" r="6" fill="#7ab8c4" opacity="0.85"/>
+          <circle cx="300" cy="360" r="2" fill="white"/>
+          <text x="262" y="374" font-family="DM Sans" font-size="9" fill="#4a5568">Col Forclaz</text>
+        </g>
+
+        <!-- 17 Chamonix -->
+        <g class="map-pin" data-name="Chamonix" data-type="Pueblo alpino · Mont Blanc" data-score="8" data-country="FR" data-verdict="Recomendado (sin Aiguille du Midi)" filter="url(#pin-shadow)">
+          <circle cx="260" cy="400" r="9" fill="#b8923a" opacity="0.9"/>
+          <circle cx="260" cy="400" r="3.5" fill="white"/>
+          <text x="268" y="396" font-family="DM Sans" font-size="10.5" fill="#1a1f2e" font-weight="500">Chamonix</text>
+          <text x="268" y="408" font-family="DM Mono, monospace" font-size="8" fill="#9aa5b4">8.0</text>
+        </g>
+
+        <!-- 18 Annecy -->
+        <g class="map-pin" data-name="Annecy" data-type="Ciudad lacustre · Canales" data-score="9" data-country="FR" data-verdict="Muy recomendado" filter="url(#pin-shadow)">
+          <circle cx="220" cy="435" r="9" fill="#b8923a" opacity="0.9"/>
+          <circle cx="220" cy="435" r="3.5" fill="white"/>
+          <text x="228" y="431" font-family="DM Sans" font-size="10.5" fill="#1a1f2e" font-weight="500">Annecy</text>
+          <text x="228" y="443" font-family="DM Mono, monospace" font-size="8" fill="#9aa5b4">9.0</text>
+        </g>
+
+        <!-- 19 Lyon -->
+        <g class="map-pin" data-name="Lyon" data-type="Gran ciudad · Gastronomía" data-score="5.5" data-country="FR" data-verdict="Opcional (gran desvío)" filter="url(#pin-shadow)">
+          <circle cx="160" cy="480" r="8" fill="#9aa5b4" opacity="0.85"/>
+          <circle cx="160" cy="480" r="3" fill="white"/>
+          <text x="168" y="478" font-family="DM Sans" font-size="10.5" fill="#4a5568">Lyon</text>
+          <text x="168" y="490" font-family="DM Mono, monospace" font-size="8" fill="#9aa5b4">5.5</text>
+        </g>
+
+        <!-- 20 Ticino: Lugano/Ascona/Locarno -->
+        <g class="map-pin" data-name="Ticino · Lugano · Ascona" data-type="Suiza italiana · Lagos" data-score="8.5" data-country="CH" data-verdict="Muy recomendado" filter="url(#pin-shadow)">
+          <circle cx="590" cy="420" r="9" fill="#2f5a3a" opacity="0.9"/>
+          <circle cx="590" cy="420" r="3.5" fill="white"/>
+          <text x="598" y="416" font-family="DM Sans" font-size="10.5" fill="#1a1f2e" font-weight="500">Ticino</text>
+          <text x="598" y="428" font-family="DM Mono, monospace" font-size="8" fill="#9aa5b4">8.5</text>
+        </g>
+
+        <!-- 21 Lago Como -->
+        <g class="map-pin" data-name="Lago Como · Bellagio" data-type="Lago italiano · Villas" data-score="7.5" data-country="IT" data-verdict="Recomendado con planificación" filter="url(#pin-shadow)">
+          <circle cx="650" cy="460" r="8" fill="#8b3030" opacity="0.85"/>
+          <circle cx="650" cy="460" r="3" fill="white"/>
+          <text x="657" y="458" font-family="DM Sans" font-size="10.5" fill="#1a1f2e" font-weight="500">L. Como</text>
+          <text x="657" y="470" font-family="DM Mono, monospace" font-size="8" fill="#9aa5b4">7.5</text>
+        </g>
+
+        <!-- 22 Rheinfall -->
+        <g class="map-pin" data-name="Cataratas del Rin" data-type="Cascada · Excursión" data-score="7.5" data-country="CH" data-verdict="Buena excursión desde Zúrich" filter="url(#pin-shadow)">
+          <circle cx="680" cy="100" r="6" fill="#2f5a3a" opacity="0.75"/>
+          <circle cx="680" cy="100" r="2" fill="white"/>
+          <text x="688" y="104" font-family="DM Sans" font-size="9" fill="#1a1f2e">Rheinfall</text>
+        </g>
+
+      </svg>
+      <div class="map-tooltip" id="map-tip">
+        <div class="tt-type" id="tt-type"></div>
+        <div class="tt-name" id="tt-name"></div>
+        <div class="tt-score">
+          <span class="tt-stars" id="tt-stars"></span>
+          <span id="tt-score-val"></span>
+          <span style="opacity:0.5;font-size:11px">/ 10</span>
+        </div>
+        <div class="tt-verdict" id="tt-verdict"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FILTER TABS -->
+  <div class="filter-wrap">
+    <button class="filter-btn active" data-filter="all">Todos</button>
+    <button class="filter-btn" data-filter="rec">Recomendados</button>
+    <button class="filter-btn" data-filter="opt">Opcionales</button>
+    <button class="filter-btn" data-filter="CH">🇨🇭 Suiza</button>
+    <button class="filter-btn" data-filter="FR">🇫🇷 Francia</button>
+    <button class="filter-btn" data-filter="IT">🇮🇹 Italia</button>
+  </div>
+
+  <!-- DESTINATION CARDS -->
+  <div class="section-label" style="margin-bottom:16px">Destinos — análisis completo</div>
+  <div class="destinations-grid" id="dest-grid">
+
+    <!-- Card template structure:
+         data-verdict: rec | opt | no
+         data-country: CH | FR | IT
+    -->
+
+    <!-- 01 Zúrich -->
+    <div class="dest-card" data-verdict="rec" data-country="CH">
+      <div class="card-header" onclick="toggleCard(this.parentElement)">
+        <div class="card-number">01</div>
+        <div class="card-title-block">
+          <div class="card-title">Zúrich</div>
+          <div class="card-meta-row">
+            <span class="card-type">Ciudad histórica · Lago</span>
+            <span class="card-country">🇨🇭 Suiza</span>
+          </div>
+          <div class="verdict-badge badge-rec">✦ Base logística ideal</div>
+        </div>
+        <div class="card-score-block">
+          <div class="score-number" style="color:#2f5a3a">7.0</div>
+          <div class="score-label">/ 10</div>
+        </div>
+        <div class="card-chevron">▼</div>
+      </div>
+      <div class="card-body">
+        <div class="card-distance">
+          <span class="dist-item"><span class="dist-key">Desde Zúrich:</span> Punto de partida</span>
+          <span class="dist-item"><span class="dist-key">Tiempo recomendado:</span> Medio día</span>
+        </div>
+        <div class="pros-cons">
+          <div class="pc-block">
+            <div class="pc-title pros">Pros</div>
+            <ul class="pc-list pros">
+              <li>Paseos llanos junto al lago, ideales con cochecito</li>
+              <li>Punto de recogida del auto y aclimatación</li>
+              <li>Barcos en el lago para el bebé</li>
+              <li>Transporte público excelente</li>
+            </ul>
+          </div>
+          <div class="pc-block">
+            <div class="pc-title cons">Contras</div>
+            <ul class="pc-list cons">
+              <li>Aparcar en el centro es muy difícil y caro</li>
+              <li>Adoquines en el casco antiguo</li>
+              <li>Muy cara</li>
+              <li>No es el destino alpino que se busca</li>
+            </ul>
+          </div>
+        </div>
+        <div class="score-bar-wrap">
+          <span class="score-bar-label">Puntuación</span>
+          <div class="score-bar-track"><div class="score-bar-fill" style="width:70%;background:#2f5a3a"></div></div>
+          <span class="score-val" style="color:#2f5a3a">7.0</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 02 Lucerna -->
+    <div class="dest-card" data-verdict="rec" data-country="CH">
+      <div class="card-header" onclick="toggleCard(this.parentElement)">
+        <div class="card-number">02</div>
+        <div class="card-title-block">
+          <div class="card-title">Lucerna</div>
+          <div class="card-meta-row">
+            <span class="card-type">Ciudad medieval · Lago</span>
+            <span class="card-country">🇨🇭 Suiza</span>
+          </div>
+          <div class="verdict-badge badge-rec">✦ Muy recomendado</div>
+        </div>
+        <div class="card-score-block">
+          <div class="score-number" style="color:#2f5a3a">9.0</div>
+          <div class="score-label">/ 10</div>
+        </div>
+        <div class="card-chevron">▼</div>
+      </div>
+      <div class="card-body">
+        <div class="card-distance">
+          <span class="dist-item"><span class="dist-key">Desde Zúrich:</span> ~50 min (50 km)</span>
+          <span class="dist-item"><span class="dist-key">Tiempo recomendado:</span> 1–2 días</span>
+        </div>
+        <div class="pros-cons">
+          <div class="pc-block">
+            <div class="pc-title pros">Pros</div>
+            <ul class="pc-list pros">
+              <li>Casco antiguo precioso y compacto, paseos llanos junto al lago</li>
+              <li>Cruceros en barco por el lago que fascinan a los niños</li>
+              <li>Base ideal para Rigi y Pilatus</li>
+              <li>Muy cerca de Zúrich (50 min)</li>
+              <li>Puente de la Capilla (Kapellbrücke) emblemático</li>
+            </ul>
+          </div>
+          <div class="pc-block">
+            <div class="pc-title cons">Contras</div>
+            <ul class="pc-list cons">
+              <li>Centro peatonal: hay que aparcar en P+R</li>
+              <li>Adoquines en algunos tramos</li>
+              <li>Turística en temporada alta</li>
+            </ul>
+          </div>
+        </div>
+        <div class="score-bar-wrap">
+          <span class="score-bar-label">Puntuación</span>
+          <div class="score-bar-track"><div class="score-bar-fill" style="width:90%;background:#2f5a3a"></div></div>
+          <span class="score-val" style="color:#2f5a3a">9.0</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 03 Monte Rigi -->
+    <div class="dest-card" data-verdict="rec" data-country="CH">
+      <div class="card-header" onclick="toggleCard(this.parentElement)">
+        <div class="card-number">03</div>
+        <div class="card-title-block">
+          <div class="card-title">Monte Rigi</div>
+          <div class="card-meta-row">
+            <span class="card-type">Montaña · 1.798 m · Cremallera</span>
+            <span class="card-country">🇨🇭 Suiza</span>
+          </div>
+          <div class="verdict-badge badge-rec">✦ Montaña más segura del viaje</div>
+        </div>
+        <div class="card-score-block">
+          <div class="score-number" style="color:#2f5a3a">8.5</div>
+          <div class="score-label">/ 10</div>
+        </div>
+        <div class="card-chevron">▼</div>
+      </div>
+      <div class="card-body">
+        <div class="card-distance">
+          <span class="dist-item"><span class="dist-key">Desde Zúrich:</span> ~1h hasta embarcadero</span>
+          <span class="dist-item"><span class="dist-key">Tiempo recomendado:</span> Día completo</span>
+        </div>
+        <div class="pros-cons">
+          <div class="pc-block">
+            <div class="pc-title pros">Pros</div>
+            <ul class="pc-list pros">
+              <li><strong>1.798 m: por debajo del umbral de 2.000 m</strong> — la opción de montaña más segura para el bebé</li>
+              <li>Senderos suaves y llanos (ej. Rigi Kulm–Kaltbad, 4 km)</li>
+              <li>Gratuito con Swiss Travel Pass</li>
+              <li>Combinable con barco por el lago</li>
+              <li>Ambiente más tranquilo que el Pilatus</li>
+            </ul>
+          </div>
+          <div class="pc-block">
+            <div class="pc-title cons">Contras</div>
+            <ul class="pc-list cons">
+              <li>Menos "espectacular" visualmente que el Pilatus para algunos</li>
+              <li>Día completo si se incluye el barco</li>
+            </ul>
+          </div>
+        </div>
+        <div class="score-bar-wrap">
+          <span class="score-bar-label">Puntuación</span>
+          <div class="score-bar-track"><div class="score-bar-fill" style="width:85%;background:#2f5a3a"></div></div>
+          <span class="score-val" style="color:#2f5a3a">8.5</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 04 Monte Pilatus -->
+    <div class="dest-card" data-verdict="rec" data-country="CH">
+      <div class="card-header" onclick="toggleCard(this.parentElement)">
+        <div class="card-number">04</div>
+        <div class="card-title-block">
+          <div class="card-title">Monte Pilatus</div>
+          <div class="card-meta-row">
+            <span class="card-type">Montaña · 2.132 m · Funicular</span>
+            <span class="card-country">🇨🇭 Suiza</span>
+          </div>
+          <div class="verdict-badge badge-rec">✦ Recomendado con prudencia</div>
+        </div>
+        <div class="card-score-block">
+          <div class="score-number" style="color:#2f5a3a">7.5</div>
+          <div class="score-label">/ 10</div>
+        </div>
+        <div class="card-chevron">▼</div>
+      </div>
+      <div class="card-body">
+        <div class="card-distance">
+          <span class="dist-item"><span class="dist-key">Desde Zúrich:</span> ~1h (vía Lucerna)</span>
+          <span class="dist-item"><span class="dist-key">Tiempo recomendado:</span> Día completo</span>
+        </div>
+        <div class="pros-cons">
+          <div class="pc-block">
+            <div class="pc-title pros">Pros</div>
+            <ul class="pc-list pros">
+              <li>Trayecto variado: barco + cremallera + teleférico</li>
+              <li>Gran parque infantil en Krienseregg (estación intermedia)</li>
+              <li>Tobogán alpino de 1.350 m en Fräkmüntegg</li>
+              <li>Vistas espectaculares</li>
+            </ul>
+          </div>
+          <div class="pc-block">
+            <div class="pc-title cons">Contras</div>
+            <ul class="pc-list cons">
+              <li>Cima a 2.132 m: ligeramente por encima del umbral pediátrico</li>
+              <li>Tobogán y parque de cuerdas con edad mínima (no para el bebé)</li>
+              <li>No incluido en Swiss Travel Pass (hay descuento)</li>
+              <li>Muy turístico</li>
+            </ul>
+          </div>
+        </div>
+        <div class="card-alert"><strong>⚠ Altitud:</strong> Las estaciones intermedias (bajo los 2.000 m) son perfectas para la familia; la cima sólo con estancia muy corta.</div>
+        <div class="score-bar-wrap">
+          <span class="score-bar-label">Puntuación</span>
+          <div class="score-bar-track"><div class="score-bar-fill" style="width:75%;background:#2f5a3a"></div></div>
+          <span class="score-val" style="color:#2f5a3a">7.5</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 05 Berna -->
+    <div class="dest-card" data-verdict="rec" data-country="CH">
+      <div class="card-header" onclick="toggleCard(this.parentElement)">
+        <div class="card-number">05</div>
+        <div class="card-title-block">
+          <div class="card-title">Berna</div>
+          <div class="card-meta-row">
+            <span class="card-type">Capital histórica · UNESCO</span>
+            <span class="card-country">🇨🇭 Suiza</span>
+          </div>
+          <div class="verdict-badge badge-rec">✦ Muy recomendado</div>
+        </div>
+        <div class="card-score-block">
+          <div class="score-number" style="color:#2f5a3a">8.5</div>
+          <div class="score-label">/ 10</div>
+        </div>
+        <div class="card-chevron">▼</div>
+      </div>
+      <div class="card-body">
+        <div class="card-distance">
+          <span class="dist-item"><span class="dist-key">Desde Zúrich:</span> ~1h15 (125 km)</span>
+          <span class="dist-item"><span class="dist-key">Tiempo recomendado:</span> Medio día a 1 día</span>
+        </div>
+        <div class="pros-cons">
+          <div class="pc-block">
+            <div class="pc-title pros">Pros</div>
+            <ul class="pc-list pros">
+              <li>BärenPark (foso de osos) gratuito, accesible para cochecito con ascensor</li>
+              <li>Soportales medievales protegen del sol y la lluvia</li>
+              <li>Reloj Zytglogge con figuras animadas que encantan a niños</li>
+              <li>Ambiente auténtico y tranquilo, muy "suizo"</li>
+              <li>Funicular al Gurten (parque con juegos)</li>
+            </ul>
+          </div>
+          <div class="pc-block">
+            <div class="pc-title cons">Contras</div>
+            <ul class="pc-list cons">
+              <li>Adoquines en el casco (algo de traqueteo)</li>
+              <li>La bajada al foso tiene escaleras o rampa empinada</li>
+              <li>En invierno los osos hibernan (irrelevante en septiembre)</li>
+            </ul>
+          </div>
+        </div>
+        <div class="score-bar-wrap">
+          <span class="score-bar-label">Puntuación</span>
+          <div class="score-bar-track"><div class="score-bar-fill" style="width:85%;background:#2f5a3a"></div></div>
+          <span class="score-val" style="color:#2f5a3a">8.5</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 06 Gruyères -->
+    <div class="dest-card" data-verdict="rec" data-country="CH">
+      <div class="card-header" onclick="toggleCard(this.parentElement)">
+        <div class="card-number">06</div>
+        <div class="card-title-block">
+          <div class="card-title">Gruyères</div>
+          <div class="card-meta-row">
+            <span class="card-type">Pueblo medieval · Queso · Chocolate</span>
+            <span class="card-country">🇨🇭 Suiza</span>
+          </div>
+          <div class="verdict-badge badge-rec">✦ Muy recomendado</div>
+        </div>
+        <div class="card-score-block">
+          <div class="score-number" style="color:#2f5a3a">9.0</div>
+          <div class="score-label">/ 10</div>
+        </div>
+        <div class="card-chevron">▼</div>
+      </div>
+      <div class="card-body">
+        <div class="card-distance">
+          <span class="dist-item"><span class="dist-key">Desde Zúrich:</span> ~2h (vía Berna)</span>
+          <span class="dist-item"><span class="dist-key">Tiempo recomendado:</span> Medio día a 1 día</span>
+        </div>
+        <div class="pros-cons">
+          <div class="pc-block">
+            <div class="pc-title pros">Pros</div>
+            <ul class="pc-list pros">
+              <li>Pueblo peatonal sin coches, accesible con cochecito</li>
+              <li>La Maison du Gruyère: quesería interactiva con degustación (~1h)</li>
+              <li>Maison Cailler en Broc: fábrica de chocolate interactiva</li>
+              <li>Vistas a los Prealpes, postre de merengue con doble crema</li>
+            </ul>
+          </div>
+          <div class="pc-block">
+            <div class="pc-title cons">Contras</div>
+            <ul class="pc-list cons">
+              <li>Adoquines en la calle principal</li>
+              <li>Interior del castillo con escaleras (no ideal con cochecito)</li>
+              <li>Parking con vigilancia estricta y multas rápidas</li>
+              <li>Maison Cailler puede estar masificada (colas)</li>
+            </ul>
+          </div>
+        </div>
+        <div class="score-bar-wrap">
+          <span class="score-bar-label">Puntuación</span>
+          <div class="score-bar-track"><div class="score-bar-fill" style="width:90%;background:#2f5a3a"></div></div>
+          <span class="score-val" style="color:#2f5a3a">9.0</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 07 Lago Léman: Vevey -->
+    <div class="dest-card" data-verdict="rec" data-country="CH">
+      <div class="card-header" onclick="toggleCard(this.parentElement)">
+        <div class="card-number">07</div>
+        <div class="card-title-block">
+          <div class="card-title">Vevey</div>
+          <div class="card-meta-row">
+            <span class="card-type">Riviera suiza · Chaplin's World</span>
+            <span class="card-country">🇨🇭 Suiza</span>
+          </div>
+          <div class="verdict-badge badge-rec">✦ Muy recomendado</div>
+        </div>
+        <div class="card-score-block">
+          <div class="score-number" style="color:#2f5a3a">8.5</div>
+          <div class="score-label">/ 10</div>
+        </div>
+        <div class="card-chevron">▼</div>
+      </div>
+      <div class="card-body">
+        <div class="card-distance">
+          <span class="dist-item"><span class="dist-key">Desde Zúrich:</span> ~2h45</span>
+          <span class="dist-item"><span class="dist-key">Tiempo recomendado:</span> Medio día a 1 día</span>
+        </div>
+        <div class="pros-cons">
+          <div class="pc-block">
+            <div class="pc-title pros">Pros</div>
+            <ul class="pc-list pros">
+              <li>Más tranquilo y auténtico que Montreux</li>
+              <li>Paseo lacustre llano (3 km), ideal con cochecito</li>
+              <li>Chaplin's World: jardines amplios, gratis para menores de 6</li>
+              <li>Parques con juegos (Parc Charlie Chaplin)</li>
+              <li>Tenedor gigante en el lago, icónico y gratuito</li>
+            </ul>
+          </div>
+          <div class="pc-block">
+            <div class="pc-title cons">Contras</div>
+            <ul class="pc-list cons">
+              <li>Chaplin's World está 2 km cuesta arriba (hay shuttle gratuito)</li>
+              <li>Interior del museo con tramos de escaleras</li>
+              <li>Entrada al museo relativamente cara</li>
+            </ul>
+          </div>
+        </div>
+        <div class="score-bar-wrap">
+          <span class="score-bar-label">Puntuación</span>
+          <div class="score-bar-track"><div class="score-bar-fill" style="width:85%;background:#2f5a3a"></div></div>
+          <span class="score-val" style="color:#2f5a3a">8.5</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 08 Montreux + Chillon -->
+    <div class="dest-card" data-verdict="rec" data-country="CH">
+      <div class="card-header" onclick="toggleCard(this.parentElement)">
+        <div class="card-number">08</div>
+        <div class="card-title-block">
+          <div class="card-title">Montreux · Château de Chillon</div>
+          <div class="card-meta-row">
+            <span class="card-type">Riviera · Castillo medieval sobre el agua</span>
+            <span class="card-country">🇨🇭 Suiza</span>
+          </div>
+          <div class="verdict-badge badge-rec">✦ Recomendado (paseo + exterior)</div>
+        </div>
+        <div class="card-score-block">
+          <div class="score-number" style="color:#2f5a3a">8.5</div>
+          <div class="score-label">/ 10</div>
+        </div>
+        <div class="card-chevron">▼</div>
+      </div>
+      <div class="card-body">
+        <div class="card-distance">
+          <span class="dist-item"><span class="dist-key">Desde Zúrich:</span> ~2h45</span>
+          <span class="dist-item"><span class="dist-key">Tiempo recomendado:</span> Medio día</span>
+        </div>
+        <div class="pros-cons">
+          <div class="pc-block">
+            <div class="pc-title pros">Pros</div>
+            <ul class="pc-list pros">
+              <li>Castillo más visitado de Suiza, localización espectacular</li>
+              <li>Paseo llano Montreux–Chillon apto para cochecito (~40 min)</li>
+              <li>Mesa para cambiar bebés, consigna y pequeña playa al lado</li>
+              <li>Folleto infantil para niños</li>
+            </ul>
+          </div>
+          <div class="pc-block">
+            <div class="pc-title cons">Contras</div>
+            <ul class="pc-list cons">
+              <li><strong>Cochecito PROHIBIDO dentro del castillo</strong> — hay que dejarlo en la cafetería</li>
+              <li>Interior con numerosas escaleras y suelos irregulares</li>
+              <li>No cómodo para abuela mayor en el interior</li>
+            </ul>
+          </div>
+        </div>
+        <div class="card-alert"><strong>⚠ Nota:</strong> El paseo exterior y el entorno son los protagonistas para este grupo. El interior del castillo puede hacerlo un adulto por turnos con mochila portabebés.</div>
+        <div class="score-bar-wrap">
+          <span class="score-bar-label">Puntuación</span>
+          <div class="score-bar-track"><div class="score-bar-fill" style="width:85%;background:#2f5a3a"></div></div>
+          <span class="score-val" style="color:#2f5a3a">8.5</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 09 Interlaken + Jungfrau -->
+    <div class="dest-card" data-verdict="rec" data-country="CH">
+      <div class="card-header" onclick="toggleCard(this.parentElement)">
+        <div class="card-number">09</div>
+        <div class="card-title-block">
+          <div class="card-title">Interlaken · Región Jungfrau</div>
+          <div class="card-meta-row">
+            <span class="card-type">Alpes berneses · Cascadas · Lagos</span>
+            <span class="card-country">🇨🇭 Suiza</span>
+          </div>
+          <div class="verdict-badge badge-rec">✦ Muy recomendado (sin Jungfraujoch)</div>
+        </div>
+        <div class="card-score-block">
+          <div class="score-number" style="color:#2f5a3a">8.5</div>
+          <div class="score-label">/ 10</div>
+        </div>
+        <div class="card-chevron">▼</div>
+      </div>
+      <div class="card-body">
+        <div class="card-distance">
+          <span class="dist-item"><span class="dist-key">Desde Zúrich:</span> ~1h30 (120 km)</span>
+          <span class="dist-item"><span class="dist-key">Tiempo recomendado:</span> 1–2 días</span>
+        </div>
+        <div class="pros-cons">
+          <div class="pc-block">
+            <div class="pc-title pros">Pros</div>
+            <ul class="pc-list pros">
+              <li>Valle Lauterbrunnen: cascada Staubbach espectacular, llano con cochecito</li>
+              <li>Cascadas Trümmelbach (dentro de la montaña): único e impresionante</li>
+              <li>Harder Kulm (1.322 m): funicular, mirador, apto bebé</li>
+              <li>Paisaje de tarjeta postal sin igual</li>
+              <li>Cerca de Berna y Gruyères</li>
+            </ul>
+          </div>
+          <div class="pc-block">
+            <div class="pc-title cons">Contras</div>
+            <ul class="pc-list cons">
+              <li>Jungfraujoch (3.454 m) desaconsejado por altitud</li>
+              <li>Tren al Jungfraujoch caro y largo (puede hacerlo 1 adulto solo)</li>
+              <li>Masificado en temporada</li>
+              <li>Grindelwald tiene tramos con pendiente</li>
+            </ul>
+          </div>
+        </div>
+        <div class="card-alert"><strong>⚠ Jungfraujoch desaconsejado</strong> para el bebé por altitud (3.454 m). Sustitúyelo por Harder Kulm, Lauterbrunnen o Kleine Scheidegg (2.061 m, límite tolerable con estancia corta).</div>
+        <div class="score-bar-wrap">
+          <span class="score-bar-label">Puntuación</span>
+          <div class="score-bar-track"><div class="score-bar-fill" style="width:85%;background:#2f5a3a"></div></div>
+          <span class="score-val" style="color:#2f5a3a">8.5</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 10 Zermatt -->
+    <div class="dest-card" data-verdict="rec" data-country="CH">
+      <div class="card-header" onclick="toggleCard(this.parentElement)">
+        <div class="card-number">10</div>
+        <div class="card-title-block">
+          <div class="card-title">Zermatt · Cervino</div>
+          <div class="card-meta-row">
+            <span class="card-type">Pueblo sin coches · Gornergrat</span>
+            <span class="card-country">🇨🇭 Suiza</span>
+          </div>
+          <div class="verdict-badge badge-rec">✦ Recomendado con prudencia</div>
+        </div>
+        <div class="card-score-block">
+          <div class="score-number" style="color:#2f5a3a">8.0</div>
+          <div class="score-label">/ 10</div>
+        </div>
+        <div class="card-chevron">▼</div>
+      </div>
+      <div class="card-body">
+        <div class="card-distance">
+          <span class="dist-item"><span class="dist-key">Desde Zúrich:</span> ~3h30 hasta Täsch + tren</span>
+          <span class="dist-item"><span class="dist-key">Tiempo recomendado:</span> 1–2 noches</span>
+        </div>
+        <div class="pros-cons">
+          <div class="pc-block">
+            <div class="pc-title pros">Pros</div>
+            <ul class="pc-list pros">
+              <li>Pueblo sin tráfico: muy seguro y tranquilo con bebé</li>
+              <li>Vistas del Cervino desde el propio pueblo (gratuitas)</li>
+              <li>Gornergrat (3.089 m): andén con plataforma accesible en verano</li>
+              <li>Menores de 6 años gratis en Gornergratbahn</li>
+              <li>Se pueden alquilar cochecitos todo-terreno</li>
+            </ul>
+          </div>
+          <div class="pc-block">
+            <div class="pc-title cons">Contras</div>
+            <ul class="pc-list cons">
+              <li>Gornergrat a 3.089 m: por encima del umbral; subida corta y vigilada</li>
+              <li>Matterhorn Glacier Paradise (3.883 m): desaconsejado totalmente</li>
+              <li>Hay que dejar el auto en Täsch (parking pagado)</li>
+              <li>Caro para pernoctar</li>
+            </ul>
+          </div>
+        </div>
+        <div class="card-alert"><strong>⚠ Altitud:</strong> Si el bebé muestra signos de incomodidad, bajar a Riffelalp (2.220 m) o quedarse en el pueblo. Klein Matterhorn totalmente descartado con bebé.</div>
+        <div class="score-bar-wrap">
+          <span class="score-bar-label">Puntuación</span>
+          <div class="score-bar-track"><div class="score-bar-fill" style="width:80%;background:#2f5a3a"></div></div>
+          <span class="score-val" style="color:#2f5a3a">8.0</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 11 Appenzell -->
+    <div class="dest-card" data-verdict="rec" data-country="CH">
+      <div class="card-header" onclick="toggleCard(this.parentElement)">
+        <div class="card-number">11</div>
+        <div class="card-title-block">
+          <div class="card-title">Appenzell</div>
+          <div class="card-meta-row">
+            <span class="card-type">Pueblo rural auténtico · Cultura alpina</span>
+            <span class="card-country">🇨🇭 Suiza</span>
+          </div>
+          <div class="verdict-badge badge-rec">✦ Recomendado (autenticidad)</div>
+        </div>
+        <div class="card-score-block">
+          <div class="score-number" style="color:#2f5a3a">7.5</div>
+          <div class="score-label">/ 10</div>
+        </div>
+        <div class="card-chevron">▼</div>
+      </div>
+      <div class="card-body">
+        <div class="card-distance">
+          <span class="dist-item"><span class="dist-key">Desde Zúrich:</span> ~1h20</span>
+          <span class="dist-item"><span class="dist-key">Tiempo recomendado:</span> 1 día</span>
+        </div>
+        <div class="pros-cons">
+          <div class="pc-block">
+            <div class="pc-title pros">Pros</div>
+            <ul class="pc-list pros">
+              <li>La Suiza más auténtica y menos masificada</li>
+              <li>Pueblo peatonal, colorido y compacto</li>
+              <li>Quesería de Stein con zona de juegos (cuña de queso gigante)</li>
+              <li>Septiembre puede coincidir con la bajada ceremonial del ganado (Alpabzug)</li>
+              <li>Vacas, prados y ambiente que encanta a los niños</li>
+            </ul>
+          </div>
+          <div class="pc-block">
+            <div class="pc-title cons">Contras</div>
+            <ul class="pc-list cons">
+              <li>Ebenalp/Äscher requieren caminatas de montaña: no aptas para cochecito</li>
+              <li>Exigente para la abuela en las rutas de altura</li>
+              <li>Algo apartado del eje sur del itinerario</li>
+              <li>Tiempo cambia rápido</li>
+            </ul>
+          </div>
+        </div>
+        <div class="score-bar-wrap">
+          <span class="score-bar-label">Puntuación</span>
+          <div class="score-bar-track"><div class="score-bar-fill" style="width:75%;background:#2f5a3a"></div></div>
+          <span class="score-val" style="color:#2f5a3a">7.5</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 12 Ticino -->
+    <div class="dest-card" data-verdict="rec" data-country="CH">
+      <div class="card-header" onclick="toggleCard(this.parentElement)">
+        <div class="card-number">12</div>
+        <div class="card-title-block">
+          <div class="card-title">Ticino · Lugano · Ascona · Locarno</div>
+          <div class="card-meta-row">
+            <span class="card-type">Suiza italiana · Lagos mediterráneos</span>
+            <span class="card-country">🇨🇭 Suiza</span>
+          </div>
+          <div class="verdict-badge badge-rec">✦ Muy recomendado</div>
+        </div>
+        <div class="card-score-block">
+          <div class="score-number" style="color:#2f5a3a">8.5</div>
+          <div class="score-label">/ 10</div>
+        </div>
+        <div class="card-chevron">▼</div>
+      </div>
+      <div class="card-body">
+        <div class="card-distance">
+          <span class="dist-item"><span class="dist-key">Desde Zúrich:</span> ~2h15 (vía Gotardo)</span>
+          <span class="dist-item"><span class="dist-key">Tiempo recomendado:</span> 1–2 días</span>
+        </div>
+        <div class="pros-cons">
+          <div class="pc-block">
+            <div class="pc-title pros">Pros</div>
+            <ul class="pc-list pros">
+              <li>Sabor italiano con eficiencia y seguridad suiza</li>
+              <li>Ascona: paseo lacustre peatonal y llano, parque infantil con vistas</li>
+              <li>Locarno: Falconeria (espectáculo de rapaces) que encanta a los niños</li>
+              <li>Lugano: Parco Ciani, uno de los más bellos de Suiza</li>
+              <li>Sin restricciones de frontera (sigue siendo Suiza)</li>
+              <li>Puerta natural al lago Como</li>
+            </ul>
+          </div>
+          <div class="pc-block">
+            <div class="pc-title cons">Contras</div>
+            <ul class="pc-list cons">
+              <li>Cascos antiguos con adoquines</li>
+              <li>Algo de tráfico en Lugano</li>
+            </ul>
+          </div>
+        </div>
+        <div class="score-bar-wrap">
+          <span class="score-bar-label">Puntuación</span>
+          <div class="score-bar-track"><div class="score-bar-fill" style="width:85%;background:#2f5a3a"></div></div>
+          <span class="score-val" style="color:#2f5a3a">8.5</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 13 Lago Como -->
+    <div class="dest-card" data-verdict="rec" data-country="IT">
+      <div class="card-header" onclick="toggleCard(this.parentElement)">
+        <div class="card-number">13</div>
+        <div class="card-title-block">
+          <div class="card-title">Lago Como · Bellagio</div>
+          <div class="card-meta-row">
+            <span class="card-type">Lago glaciar italiano · Villas</span>
+            <span class="card-country">🇮🇹 Italia</span>
+          </div>
+          <div class="verdict-badge badge-rec">✦ Recomendado con planificación</div>
+        </div>
+        <div class="card-score-block">
+          <div class="score-number" style="color:#8b3030">7.5</div>
+          <div class="score-label">/ 10</div>
+        </div>
+        <div class="card-chevron">▼</div>
+      </div>
+      <div class="card-body">
+        <div class="card-distance">
+          <span class="dist-item"><span class="dist-key">Desde Zúrich:</span> ~2h30 (o ~1h desde Lugano)</span>
+          <span class="dist-item"><span class="dist-key">Tiempo recomendado:</span> 1 día a 1 noche</span>
+        </div>
+        <div class="pros-cons">
+          <div class="pc-block">
+            <div class="pc-title pros">Pros</div>
+            <ul class="pc-list pros">
+              <li>Paisaje espectacular y clima suave en septiembre</li>
+              <li>Sistema de ferris excelente para moverse entre pueblos</li>
+              <li>Menaggio es más llano y familiar</li>
+              <li>Jardines de Villa Melzi y Villa Carlotta en parte accesibles</li>
+              <li>Los ferris son una actividad en sí mismos para el bebé</li>
+            </ul>
+          </div>
+          <div class="pc-block">
+            <div class="pc-title cons">Contras</div>
+            <ul class="pc-list cons">
+              <li>Bellagio y Varenna: escaleras y adoquines empinados, no aptos para cochecito</li>
+              <li>ZTL (zonas de tráfico limitado) en Como y Bellagio: multas de €80–300+</li>
+              <li>Carreteras estrechas y autobuses abarrotados</li>
+              <li>Muy turístico en temporada</li>
+            </ul>
+          </div>
+        </div>
+        <div class="card-alert"><strong>⚠ ZTL italiana:</strong> Aparcar fuera de la zona restringida y moverse en ferry. El GPS no siempre avisa las ZTL. Usar portabebés en lugar de cochecito en Bellagio.</div>
+        <div class="score-bar-wrap">
+          <span class="score-bar-label">Puntuación</span>
+          <div class="score-bar-track"><div class="score-bar-fill" style="width:75%;background:#8b3030"></div></div>
+          <span class="score-val" style="color:#8b3030">7.5</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 14 Chamonix -->
+    <div class="dest-card" data-verdict="rec" data-country="FR">
+      <div class="card-header" onclick="toggleCard(this.parentElement)">
+        <div class="card-number">14</div>
+        <div class="card-title-block">
+          <div class="card-title">Chamonix · Mont Blanc</div>
+          <div class="card-meta-row">
+            <span class="card-type">Pueblo alpino · Montenvers · Mer de Glace</span>
+            <span class="card-country">🇫🇷 Francia</span>
+          </div>
+          <div class="verdict-badge badge-rec">✦ Recomendado (sin Aiguille du Midi)</div>
+        </div>
+        <div class="card-score-block">
+          <div class="score-number" style="color:#b8923a">8.0</div>
+          <div class="score-label">/ 10</div>
+        </div>
+        <div class="card-chevron">▼</div>
+      </div>
+      <div class="card-body">
+        <div class="card-distance">
+          <span class="dist-item"><span class="dist-key">Desde Zúrich:</span> ~4h (vía Col de la Forclaz)</span>
+          <span class="dist-item"><span class="dist-key">Tiempo recomendado:</span> 1–2 días</span>
+        </div>
+        <div class="pros-cons">
+          <div class="pc-block">
+            <div class="pc-title pros">Pros</div>
+            <ul class="pc-list pros">
+              <li>Tren del Montenvers (cremallera roja) a la Mer de Glace: los niños adoran el trayecto</li>
+              <li>Parque de animales Merlet (rebecos, íbices)</li>
+              <li>Parque Les Planards: tobogán alpino y trampolines</li>
+              <li>El "Petit Train" turístico por el pueblo gusta a los pequeños</li>
+              <li>Pueblo animado con vistas a los picos del Mont Blanc</li>
+            </ul>
+          </div>
+          <div class="pc-block">
+            <div class="pc-title cons">Contras</div>
+            <ul class="pc-list cons">
+              <li>Gruta de hielo de la Mer de Glace: ~430 escalones — no apta con cochecito</li>
+              <li>Requiere autorización de frontera del alquiler</li>
+              <li>Adhesivo Crit'Air necesario para circular en Francia</li>
+              <li>Col de la Forclaz: tramos estrechos en la carretera</li>
+            </ul>
+          </div>
+        </div>
+        <div class="card-alert"><strong>🚫 Aiguille du Midi PROHIBIDA</strong> para menores de 3 años (restricción formal de la operadora). Totalmente inadecuada para un bebé de 14 meses. Un adulto puede subir solo por turnos.</div>
+        <div class="score-bar-wrap">
+          <span class="score-bar-label">Puntuación</span>
+          <div class="score-bar-track"><div class="score-bar-fill" style="width:80%;background:#b8923a"></div></div>
+          <span class="score-val" style="color:#b8923a">8.0</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 15 Annecy -->
+    <div class="dest-card" data-verdict="rec" data-country="FR">
+      <div class="card-header" onclick="toggleCard(this.parentElement)">
+        <div class="card-number">15</div>
+        <div class="card-title-block">
+          <div class="card-title">Annecy</div>
+          <div class="card-meta-row">
+            <span class="card-type">Venecia de los Alpes · Lago · Canales</span>
+            <span class="card-country">🇫🇷 Francia</span>
+          </div>
+          <div class="verdict-badge badge-rec">✦ Muy recomendado</div>
+        </div>
+        <div class="card-score-block">
+          <div class="score-number" style="color:#b8923a">9.0</div>
+          <div class="score-label">/ 10</div>
+        </div>
+        <div class="card-chevron">▼</div>
+      </div>
+      <div class="card-body">
+        <div class="card-distance">
+          <span class="dist-item"><span class="dist-key">Desde Zúrich:</span> ~4h (o 35 min desde Ginebra)</span>
+          <span class="dist-item"><span class="dist-key">Tiempo recomendado:</span> Medio día a 1 día</span>
+        </div>
+        <div class="pros-cons">
+          <div class="pc-block">
+            <div class="pc-title pros">Pros</div>
+            <ul class="pc-list pros">
+              <li>Paseo lacustre y Jardins de l'Europe: llanos, perfectos con cochecito</li>
+              <li>Consistentemente premiada como uno de los mejores lugares de Francia para familias</li>
+              <li>Carrusel de 1871 y barcos: el bebé lo disfrutará</li>
+              <li>Promenade du Thiou: llana, arbolada y menos turística</li>
+              <li>Casco antiguo encantador con canales</li>
+            </ul>
+          </div>
+          <div class="pc-block">
+            <div class="pc-title cons">Contras</div>
+            <ul class="pc-list cons">
+              <li>Adoquines en el casco antiguo (traqueteo con cochecito)</li>
+              <li>Masificada en temporada alta en el centro</li>
+              <li>Gorges du Fier cercano: no admite cochecito</li>
+              <li>Requiere Crit'Air y autorización de frontera del alquiler</li>
+            </ul>
+          </div>
+        </div>
+        <div class="score-bar-wrap">
+          <span class="score-bar-label">Puntuación</span>
+          <div class="score-bar-track"><div class="score-bar-fill" style="width:90%;background:#b8923a"></div></div>
+          <span class="score-val" style="color:#b8923a">9.0</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 16 Col de la Forclaz -->
+    <div class="dest-card" data-verdict="rec" data-country="CH">
+      <div class="card-header" onclick="toggleCard(this.parentElement)">
+        <div class="card-number">16</div>
+        <div class="card-title-block">
+          <div class="card-title">Col de la Forclaz</div>
+          <div class="card-meta-row">
+            <span class="card-type">Paso alpino panorámico · 1.527 m</span>
+            <span class="card-country">🇨🇭/🇫🇷 Paso fronterizo</span>
+          </div>
+          <div class="verdict-badge badge-rec">✦ Recomendado como ruta escénica</div>
+        </div>
+        <div class="card-score-block">
+          <div class="score-number" style="color:#2f5a3a">7.0</div>
+          <div class="score-label">/ 10</div>
+        </div>
+        <div class="card-chevron">▼</div>
+      </div>
+      <div class="card-body">
+        <div class="card-distance">
+          <span class="dist-item"><span class="dist-key">Ubicación:</span> Entre Martigny y Chamonix</span>
+          <span class="dist-item"><span class="dist-key">Tiempo recomendado:</span> Parada de 1–2h</span>
+        </div>
+        <div class="pros-cons">
+          <div class="pc-block">
+            <div class="pc-title pros">Pros</div>
+            <ul class="pc-list pros">
+              <li>Ruta escénica para enlazar el Valais con Chamonix</li>
+              <li>Paseo llano junto al bisse du Trient hasta el glaciar (3,3 km) apto para cochecito todo-terreno</li>
+              <li>Restaurante y tienda en el col</li>
+              <li>Vistas del valle del Ródano en la bajada</li>
+            </ul>
+          </div>
+          <div class="pc-block">
+            <div class="pc-title cons">Contras</div>
+            <ul class="pc-list cons">
+              <li>Carretera estrecha con curvas en tramos</li>
+              <li>Puede cerrarse con mal tiempo (poco habitual en septiembre)</li>
+              <li>El paseo completo al glaciar es largo (6,5 km ida y vuelta)</li>
+            </ul>
+          </div>
+        </div>
+        <div class="score-bar-wrap">
+          <span class="score-bar-label">Puntuación</span>
+          <div class="score-bar-track"><div class="score-bar-fill" style="width:70%;background:#2f5a3a"></div></div>
+          <span class="score-val" style="color:#2f5a3a">7.0</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 17 Cataratas del Rin -->
+    <div class="dest-card" data-verdict="rec" data-country="CH">
+      <div class="card-header" onclick="toggleCard(this.parentElement)">
+        <div class="card-number">17</div>
+        <div class="card-title-block">
+          <div class="card-title">Cataratas del Rin · Stein am Rhein</div>
+          <div class="card-meta-row">
+            <span class="card-type">Cascada · Pueblo medieval pintado</span>
+            <span class="card-country">🇨🇭 Suiza</span>
+          </div>
+          <div class="verdict-badge badge-rec">✦ Buena excursión desde Zúrich</div>
+        </div>
+        <div class="card-score-block">
+          <div class="score-number" style="color:#2f5a3a">7.5</div>
+          <div class="score-label">/ 10</div>
+        </div>
+        <div class="card-chevron">▼</div>
+      </div>
+      <div class="card-body">
+        <div class="card-distance">
+          <span class="dist-item"><span class="dist-key">Desde Zúrich:</span> ~50 min</span>
+          <span class="dist-item"><span class="dist-key">Tiempo recomendado:</span> Medio día</span>
+        </div>
+        <div class="pros-cons">
+          <div class="pc-block">
+            <div class="pc-title pros">Pros</div>
+            <ul class="pc-list pros">
+              <li>Las cataratas más caudalosas de Europa: espectaculares</li>
+              <li>Paseos llanos junto al agua, aptos con cochecito</li>
+              <li>Paseos en barco admiten bebés en brazos</li>
+              <li>Pueblo de Stein am Rhein: casas medievales pintadas únicas</li>
+              <li>Muy cerca de Zúrich: perfecta de inicio o fin</li>
+            </ul>
+          </div>
+          <div class="pc-block">
+            <div class="pc-title cons">Contras</div>
+            <ul class="pc-list cons">
+              <li>Fuera del eje alpino sur del viaje</li>
+              <li>Masificado en verano</li>
+              <li>Las plataformas sobre el agua tienen escaleras</li>
+            </ul>
+          </div>
+        </div>
+        <div class="score-bar-wrap">
+          <span class="score-bar-label">Puntuación</span>
+          <div class="score-bar-track"><div class="score-bar-fill" style="width:75%;background:#2f5a3a"></div></div>
+          <span class="score-val" style="color:#2f5a3a">7.5</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 18 Lausana (opcional) -->
+    <div class="dest-card" data-verdict="opt" data-country="CH">
+      <div class="card-header" onclick="toggleCard(this.parentElement)">
+        <div class="card-number">18</div>
+        <div class="card-title-block">
+          <div class="card-title">Lausana</div>
+          <div class="card-meta-row">
+            <span class="card-type">Ciudad universitaria · Museo Olímpico</span>
+            <span class="card-country">🇨🇭 Suiza</span>
+          </div>
+          <div class="verdict-badge badge-opt">◈ Opcional</div>
+        </div>
+        <div class="card-score-block">
+          <div class="score-number" style="color:#9a7820">6.5</div>
+          <div class="score-label">/ 10</div>
+        </div>
+        <div class="card-chevron">▼</div>
+      </div>
+      <div class="card-body">
+        <div class="card-distance">
+          <span class="dist-item"><span class="dist-key">Desde Zúrich:</span> ~2h30</span>
+          <span class="dist-item"><span class="dist-key">Tiempo recomendado:</span> Medio día</span>
+        </div>
+        <div class="pros-cons">
+          <div class="pc-block">
+            <div class="pc-title pros">Pros</div>
+            <ul class="pc-list pros">
+              <li>Ouchy (orilla del lago): llano y agradable</li>
+              <li>Metro accesible desde el lago al centro</li>
+              <li>Museo Olímpico con jardines</li>
+            </ul>
+          </div>
+          <div class="pc-block">
+            <div class="pc-title cons">Contras</div>
+            <ul class="pc-list cons">
+              <li>Centro con cuestas pronunciadas: cansado para la abuela y difícil con cochecito</li>
+              <li>Menos imprescindible que Vevey/Montreux para este perfil</li>
+              <li>Conviene usar el metro en lugar de subir caminando</li>
+            </ul>
+          </div>
+        </div>
+        <div class="score-bar-wrap">
+          <span class="score-bar-label">Puntuación</span>
+          <div class="score-bar-track"><div class="score-bar-fill" style="width:65%;background:#9a7820"></div></div>
+          <span class="score-val" style="color:#9a7820">6.5</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 19 Sion -->
+    <div class="dest-card" data-verdict="opt" data-country="CH">
+      <div class="card-header" onclick="toggleCard(this.parentElement)">
+        <div class="card-number">19</div>
+        <div class="card-title-block">
+          <div class="card-title">Sion · Valais</div>
+          <div class="card-meta-row">
+            <span class="card-type">Valle histórico · Castillos · Viñedos</span>
+            <span class="card-country">🇨🇭 Suiza</span>
+          </div>
+          <div class="verdict-badge badge-opt">◈ Opcional (de paso a Zermatt)</div>
+        </div>
+        <div class="card-score-block">
+          <div class="score-number" style="color:#9a7820">6.0</div>
+          <div class="score-label">/ 10</div>
+        </div>
+        <div class="card-chevron">▼</div>
+      </div>
+      <div class="card-body">
+        <div class="card-distance">
+          <span class="dist-item"><span class="dist-key">Desde Zúrich:</span> ~3h</span>
+          <span class="dist-item"><span class="dist-key">Tiempo recomendado:</span> Medio día (parada)</span>
+        </div>
+        <div class="pros-cons">
+          <div class="pc-block">
+            <div class="pc-title pros">Pros</div>
+            <ul class="pc-list pros">
+              <li>Lago subterráneo de St-Léonard: paseo en barca único</li>
+              <li>Parque Les Îles: parque infantil, mini-tren, rocódromo</li>
+              <li>Happy Land (Granges/Sierre): parque familiar manejable</li>
+              <li>Casco medieval con encanto</li>
+            </ul>
+          </div>
+          <div class="pc-block">
+            <div class="pc-title cons">Contras</div>
+            <ul class="pc-list cons">
+              <li>Subir a los castillos (Tourbillon/Valère): empinado y rocoso — no apto para cochecito ni abuela</li>
+              <li>Calor fuerte en el valle en verano</li>
+              <li>Algo lejos del eje principal</li>
+            </ul>
+          </div>
+        </div>
+        <div class="score-bar-wrap">
+          <span class="score-bar-label">Puntuación</span>
+          <div class="score-bar-track"><div class="score-bar-fill" style="width:60%;background:#9a7820"></div></div>
+          <span class="score-val" style="color:#9a7820">6.0</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 20 Evian -->
+    <div class="dest-card" data-verdict="opt" data-country="FR">
+      <div class="card-header" onclick="toggleCard(this.parentElement)">
+        <div class="card-number">20</div>
+        <div class="card-title-block">
+          <div class="card-title">Évian-les-Bains</div>
+          <div class="card-meta-row">
+            <span class="card-type">Balneario francés · Orilla sur del Léman</span>
+            <span class="card-country">🇫🇷 Francia</span>
+          </div>
+          <div class="verdict-badge badge-opt">◈ Opcional / prescindible</div>
+        </div>
+        <div class="card-score-block">
+          <div class="score-number" style="color:#9a7820">5.5</div>
+          <div class="score-label">/ 10</div>
+        </div>
+        <div class="card-chevron">▼</div>
+      </div>
+      <div class="card-body">
+        <div class="card-distance">
+          <span class="dist-item"><span class="dist-key">Desde Zúrich:</span> ~3h en auto (o ferry desde Lausana)</span>
+          <span class="dist-item"><span class="dist-key">Tiempo recomendado:</span> Medio día</span>
+        </div>
+        <div class="pros-cons">
+          <div class="pc-block">
+            <div class="pc-title pros">Pros</div>
+            <ul class="pc-list pros">
+              <li>Paseo lacustre elegante y ambiente termal tranquilo</li>
+              <li>El cruce en ferry desde Lausana es atractivo para los niños</li>
+              <li>Fuentes de agua gratis</li>
+            </ul>
+          </div>
+          <div class="pc-block">
+            <div class="pc-title cons">Contras</div>
+            <ul class="pc-list cons">
+              <li>Poco diferencial frente a las localidades suizas del lago</li>
+              <li>Cruzar a Francia añade burocracia (autorización, Crit'Air)</li>
+              <li>Desvío que aporta poco para un bebé</li>
+            </ul>
+          </div>
+        </div>
+        <div class="score-bar-wrap">
+          <span class="score-bar-label">Puntuación</span>
+          <div class="score-bar-track"><div class="score-bar-fill" style="width:55%;background:#9a7820"></div></div>
+          <span class="score-val" style="color:#9a7820">5.5</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 21 Ginebra -->
+    <div class="dest-card" data-verdict="opt" data-country="CH">
+      <div class="card-header" onclick="toggleCard(this.parentElement)">
+        <div class="card-number">21</div>
+        <div class="card-title-block">
+          <div class="card-title">Ginebra</div>
+          <div class="card-meta-row">
+            <span class="card-type">Ciudad internacional · Jet d'Eau · Lago</span>
+            <span class="card-country">🇨🇭 Suiza</span>
+          </div>
+          <div class="verdict-badge badge-opt">◈ Prescindible en este bucle</div>
+        </div>
+        <div class="card-score-block">
+          <div class="score-number" style="color:#9a7820">5.0</div>
+          <div class="score-label">/ 10</div>
+        </div>
+        <div class="card-chevron">▼</div>
+      </div>
+      <div class="card-body">
+        <div class="card-distance">
+          <span class="dist-item"><span class="dist-key">Desde Zúrich:</span> ~2h45 (extremo suroeste)</span>
+          <span class="dist-item"><span class="dist-key">Tiempo recomendado:</span> Medio día a 1 día</span>
+        </div>
+        <div class="pros-cons">
+          <div class="pc-block">
+            <div class="pc-title pros">Pros</div>
+            <ul class="pc-list pros">
+              <li>Parques y zonas verdes llanas junto al lago (Jardin Anglais)</li>
+              <li>Jet d'Eau: la fuente fascina a los niños</li>
+              <li>Baby-Plage con juegos</li>
+              <li>Carrusel, barquitos "mouettes"</li>
+              <li>Transporte público con menores de 6 gratis</li>
+            </ul>
+          </div>
+          <div class="pc-block">
+            <div class="pc-title cons">Contras</div>
+            <ul class="pc-list cons">
+              <li>Uno de los lugares más caros del planeta</li>
+              <li>La menos "suiza" de las ciudades: menos diferencial</li>
+              <li>Está en el extremo opuesto a Zúrich: alarga mucho el bucle</li>
+              <li>Atracciones dispersas (requiere transporte)</li>
+            </ul>
+          </div>
+        </div>
+        <div class="score-bar-wrap">
+          <span class="score-bar-label">Puntuación</span>
+          <div class="score-bar-track"><div class="score-bar-fill" style="width:50%;background:#9a7820"></div></div>
+          <span class="score-val" style="color:#9a7820">5.0</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 22 Lyon -->
+    <div class="dest-card" data-verdict="opt" data-country="FR">
+      <div class="card-header" onclick="toggleCard(this.parentElement)">
+        <div class="card-number">22</div>
+        <div class="card-title-block">
+          <div class="card-title">Lyon</div>
+          <div class="card-meta-row">
+            <span class="card-type">Gran ciudad francesa · Gastronomía</span>
+            <span class="card-country">🇫🇷 Francia</span>
+          </div>
+          <div class="verdict-badge badge-opt">◈ Gran desvío — solo con tiempo específico</div>
+        </div>
+        <div class="card-score-block">
+          <div class="score-number" style="color:#9a7820">5.5</div>
+          <div class="score-label">/ 10</div>
+        </div>
+        <div class="card-chevron">▼</div>
+      </div>
+      <div class="card-body">
+        <div class="card-distance">
+          <span class="dist-item"><span class="dist-key">Desde Zúrich:</span> ~5h (el más alejado)</span>
+          <span class="dist-item"><span class="dist-key">Tiempo recomendado:</span> 1–2 días</span>
+        </div>
+        <div class="pros-cons">
+          <div class="pc-block">
+            <div class="pc-title pros">Pros</div>
+            <ul class="pc-list pros">
+              <li>Parc de la Tête d'Or: zoo gratuito, llano, "paraíso para cochecitos"</li>
+              <li>Riberas del Ródano cerradas al tráfico en fines de semana</li>
+              <li>Gastronomía excepcional (bouchons lyonnais)</li>
+              <li>Teatro de marionetas Guignol: típico de Lyon</li>
+            </ul>
+          </div>
+          <div class="pc-block">
+            <div class="pc-title cons">Contras</div>
+            <ul class="pc-list cons">
+              <li>Gran desvío al sur, lejos del eje alpino</li>
+              <li>Vieux Lyon y Fourvière: adoquines y cuestas pronunciadas</li>
+              <li>ZFE/Crit'Air obligatorio en el centro</li>
+              <li>Difícil de justificar para un viaje de montaña con bebé</li>
+            </ul>
+          </div>
+        </div>
+        <div class="score-bar-wrap">
+          <span class="score-bar-label">Puntuación</span>
+          <div class="score-bar-track"><div class="score-bar-fill" style="width:55%;background:#9a7820"></div></div>
+          <span class="score-val" style="color:#9a7820">5.5</span>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /grid -->
+
+  <!-- FOOTER NOTE -->
+  <div class="foot-note">
+    <strong>Logística imprescindible antes de salir:</strong> (1) Autorizar cruce de frontera a Francia e Italia al reservar el auto en Zúrich. (2) Verificar que la viñeta suiza (CHF 40) está incluida en el alquiler. (3) Comprar el adhesivo Crit'Air (~€3,70) en <em>certificat-air.gouv.fr</em> si se visita Francia. (4) Evitar las ZTL italianas en Como/Bellagio: aparcar fuera y moverse en ferry. (5) Consultar al pediatra sobre la altitud antes del viaje.
+    <br><br>
+    <strong>Umbral de altitud para el bebé:</strong> No superar ~2.000 m de forma prolongada. Montaña más segura: Rigi (1.798 m). Desaconsejado: Jungfraujoch (3.454 m), Aiguille du Midi (3.842 m, prohibida &lt;3 años), Klein Matterhorn (3.883 m).
+  </div>
+
+</div><!-- /main-wrap -->
+
+<script>
+// Toggle card
+function toggleCard(card) {
+  card.classList.toggle('open');
+}
+
+// Filter buttons
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const filter = btn.dataset.filter;
+    document.querySelectorAll('.dest-card').forEach(card => {
+      const verdict = card.dataset.verdict;
+      const country = card.dataset.country;
+      if (filter === 'all') {
+        card.classList.remove('hidden');
+      } else if (filter === 'rec') {
+        card.classList.toggle('hidden', verdict !== 'rec');
+      } else if (filter === 'opt') {
+        card.classList.toggle('hidden', verdict !== 'opt');
+      } else {
+        card.classList.toggle('hidden', country !== filter);
+      }
+    });
+  });
+});
+
+// Map tooltip
+const tooltip = document.getElementById('map-tip');
+document.querySelectorAll('.map-pin').forEach(pin => {
+  function showTip(e) {
+    const score = parseFloat(pin.dataset.score);
+    const stars = '★'.repeat(Math.round(score / 2));
+    document.getElementById('tt-type').textContent = pin.dataset.type || '';
+    document.getElementById('tt-name').textContent = pin.dataset.name || '';
+    document.getElementById('tt-stars').textContent = stars;
+    document.getElementById('tt-score-val').textContent = score.toFixed(1);
+    document.getElementById('tt-verdict').textContent = pin.dataset.verdict || '';
+    tooltip.style.display = 'block';
+    moveTip(e);
+  }
+  function moveTip(e) {
+    const wrap = document.getElementById('map-wrap');
+    const r = wrap.getBoundingClientRect();
+    let x = e.clientX - r.left + 14;
+    let y = e.clientY - r.top - 14;
+    if (x + 260 > r.width) x = e.clientX - r.left - 260 - 10;
+    if (y < 0) y = 5;
+    tooltip.style.left = x + 'px';
+    tooltip.style.top = y + 'px';
+  }
+  pin.addEventListener('mouseenter', showTip);
+  pin.addEventListener('mousemove', moveTip);
+  pin.addEventListener('mouseleave', () => tooltip.style.display = 'none');
+  pin.addEventListener('click', e => {
+    if (tooltip.style.display === 'block') { tooltip.style.display = 'none'; return; }
+    showTip(e); e.stopPropagation();
+  });
+  pin.style.cursor = 'pointer';
+});
+document.addEventListener('click', () => {
+  if (tooltip) tooltip.style.display = 'none';
+});
+</script>
+</body>
+</html>
