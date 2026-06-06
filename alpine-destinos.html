@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Road Trip Alpino · Guía de Destinos</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" crossorigin=""/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" crossorigin=""></script>
 <style>
   :root {
     --ink:     #1a1f2e;
@@ -151,52 +153,50 @@
     position: relative;
     box-shadow: 0 4px 24px rgba(26,31,46,0.07);
   }
-  #map-wrap svg {
+  #leaflet-map {
     width: 100%;
-    height: auto;
+    height: 520px;
     display: block;
   }
-  .map-tooltip {
-    display: none;
-    position: absolute;
-    background: var(--ink);
-    color: var(--snow);
-    border-radius: 6px;
-    padding: 12px 16px;
-    pointer-events: none;
-    z-index: 100;
-    min-width: 200px;
-    max-width: 260px;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+  /* Leaflet popup dark theme */
+  .leaflet-popup-content-wrapper {
+    background: var(--ink) !important;
+    color: var(--snow) !important;
+    border-radius: 8px !important;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4) !important;
+    padding: 0 !important;
+    border: none !important;
   }
-  .tt-name {
-    font-family: 'Playfair Display', serif;
-    font-size: 14px;
-    font-weight: 600;
-    margin-bottom: 4px;
-    line-height: 1.3;
+  .leaflet-popup-tip-container { display: none; }
+  .leaflet-popup-content { margin: 0 !important; width: auto !important; }
+  .leaflet-popup-close-button {
+    color: rgba(240,237,230,0.55) !important;
+    font-size: 18px !important;
+    top: 6px !important; right: 8px !important;
   }
-  .tt-type {
+  .leaflet-popup-close-button:hover { color: white !important; }
+  .popup-inner {
+    padding: 14px 18px 16px;
+    min-width: 210px;
+    max-width: 265px;
+    position: relative;
+  }
+  .popup-flag { font-size: 15px; position: absolute; top: 12px; right: 14px; }
+  .popup-type {
     font-family: 'DM Mono', monospace;
-    font-size: 10px;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    margin-bottom: 6px;
-    opacity: 0.7;
+    font-size: 10px; letter-spacing: 1.5px;
+    text-transform: uppercase; opacity: 0.6; margin-bottom: 4px;
   }
-  .tt-score {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 12px;
+  .popup-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 15px; font-weight: 600; line-height: 1.25;
+    margin-bottom: 8px; padding-right: 20px;
   }
-  .tt-stars { color: var(--amber); letter-spacing: -1px; }
-  .tt-verdict {
-    font-size: 11px;
-    margin-top: 5px;
-    opacity: 0.75;
-    font-style: italic;
-  }
+  .popup-score-row { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+  .popup-stars { color: #d4a843; letter-spacing: -1px; font-size: 13px; }
+  .popup-score-num { font-family: 'DM Mono', monospace; font-size: 13px; font-weight: 500; }
+  .popup-score-denom { font-size: 11px; opacity: 0.4; }
+  .popup-verdict { font-size: 11px; opacity: 0.7; font-style: italic; line-height: 1.4; }
 
   /* ─── FILTER TABS ─── */
   .filter-wrap {
@@ -490,235 +490,7 @@
   <div class="map-section">
     <div class="section-label">Mapa del circuito</div>
     <div id="map-wrap">
-      <svg viewBox="0 0 900 560" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <linearGradient id="bg-grad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="#eef3f0"/>
-            <stop offset="100%" stop-color="#e8e3d8"/>
-          </linearGradient>
-          <filter id="pin-shadow" x="-30%" y="-30%" width="160%" height="160%">
-            <feDropShadow dx="0" dy="1" stdDeviation="2" flood-color="rgba(0,0,0,0.25)"/>
-          </filter>
-        </defs>
-
-        <!-- Background -->
-        <rect width="900" height="560" fill="url(#bg-grad)"/>
-
-        <!-- Terrain bands (Alps suggestion) -->
-        <path d="M0,260 Q150,200 300,220 Q450,240 600,200 Q720,170 900,190 L900,560 L0,560 Z" fill="rgba(200,215,205,0.35)"/>
-        <path d="M0,300 Q200,270 400,280 Q600,290 900,260 L900,560 L0,560 Z" fill="rgba(210,220,210,0.25)"/>
-
-        <!-- Lake Leman -->
-        <ellipse cx="268" cy="310" rx="82" ry="20" fill="rgba(122,184,196,0.45)" stroke="rgba(122,184,196,0.7)" stroke-width="1"/>
-        <text x="268" y="313" text-anchor="middle" font-family="DM Sans" font-size="9" fill="rgba(70,100,120,0.7)" font-style="italic">Lac Léman</text>
-
-        <!-- Lake Como -->
-        <ellipse cx="650" cy="440" rx="14" ry="30" fill="rgba(122,184,196,0.4)" stroke="rgba(122,184,196,0.6)" stroke-width="1"/>
-        <text x="668" y="445" font-family="DM Sans" font-size="8" fill="rgba(70,100,120,0.7)" font-style="italic">Como</text>
-
-        <!-- Lago Maggiore -->
-        <ellipse cx="600" cy="430" rx="10" ry="22" fill="rgba(122,184,196,0.35)" stroke="rgba(122,184,196,0.5)" stroke-width="1"/>
-
-        <!-- Lake Lucerne (Vierwaldstättersee) -->
-        <path d="M520,215 Q535,210 545,218 Q555,222 548,230 Q540,238 525,232 Q512,225 520,215Z" fill="rgba(122,184,196,0.4)" stroke="rgba(122,184,196,0.6)" stroke-width="1"/>
-
-        <!-- Thun/Brienz hint -->
-        <ellipse cx="430" cy="288" rx="25" ry="8" fill="rgba(122,184,196,0.3)" stroke="rgba(122,184,196,0.5)" stroke-width="1"/>
-        <text x="430" y="291" text-anchor="middle" font-family="DM Sans" font-size="7.5" fill="rgba(70,100,120,0.65)" font-style="italic">Thun/Brienz</text>
-
-        <!-- Rhine (hint) -->
-        <path d="M680,80 Q690,100 700,130" stroke="rgba(122,184,196,0.5)" stroke-width="2" fill="none"/>
-
-        <!-- Route line (suggested circuit) -->
-        <path d="M680,130 L530,175 L420,256 L370,282 L310,292 L268,302 L215,340 L195,380 L220,415 L260,430 L300,420 L350,400 L390,430 L450,460 L520,450 L590,430 L645,390 L590,310 L560,260 L530,230 L530,175" 
-              stroke="rgba(47,90,58,0.25)" stroke-width="1.5" fill="none" stroke-dasharray="5,4"/>
-
-        <!-- Country labels -->
-        <text x="530" y="100" font-family="Playfair Display, serif" font-size="13" fill="rgba(74,85,104,0.4)" font-style="italic" font-weight="600">SUIZA</text>
-        <text x="150" y="380" font-family="Playfair Display, serif" font-size="13" fill="rgba(74,85,104,0.4)" font-style="italic" font-weight="600">FRANCIA</text>
-        <text x="640" y="480" font-family="Playfair Display, serif" font-size="13" fill="rgba(74,85,104,0.4)" font-style="italic" font-weight="600">ITALIA</text>
-
-        <!-- PINS -->
-        <!-- Each pin: circle + inner dot + label. Colors: CH=#2f5a3a, FR=#b8923a, IT=#8b3030, optional=#9aa5b4 -->
-
-        <!-- 1 Zurich -->
-        <g class="map-pin" data-name="Zúrich" data-type="Ciudad histórica" data-score="7" data-country="CH" data-verdict="Base logística ideal" filter="url(#pin-shadow)">
-          <circle cx="680" cy="130" r="9" fill="#2f5a3a" opacity="0.9"/>
-          <circle cx="680" cy="130" r="3.5" fill="white"/>
-          <text x="693" y="128" font-family="DM Sans" font-size="10.5" fill="#1a1f2e" font-weight="500">Zúrich</text>
-          <text x="693" y="140" font-family="DM Mono, monospace" font-size="8" fill="#9aa5b4">7.0</text>
-        </g>
-
-        <!-- 2 Berna -->
-        <g class="map-pin" data-name="Berna" data-type="Ciudad histórica" data-score="8.5" data-country="CH" data-verdict="Muy recomendado" filter="url(#pin-shadow)">
-          <circle cx="420" cy="256" r="9" fill="#2f5a3a" opacity="0.9"/>
-          <circle cx="420" cy="256" r="3.5" fill="white"/>
-          <text x="433" y="254" font-family="DM Sans" font-size="10.5" fill="#1a1f2e" font-weight="500">Berna</text>
-          <text x="433" y="266" font-family="DM Mono, monospace" font-size="8" fill="#9aa5b4">8.5</text>
-        </g>
-
-        <!-- 3 Gruyeres -->
-        <g class="map-pin" data-name="Gruyères" data-type="Pueblo medieval · Gastronomía" data-score="9" data-country="CH" data-verdict="Muy recomendado" filter="url(#pin-shadow)">
-          <circle cx="370" cy="282" r="9" fill="#2f5a3a" opacity="0.9"/>
-          <circle cx="370" cy="282" r="3.5" fill="white"/>
-          <text x="338" y="272" font-family="DM Sans" font-size="10.5" fill="#1a1f2e" font-weight="500">Gruyères</text>
-          <text x="344" y="284" font-family="DM Mono, monospace" font-size="8" fill="#9aa5b4">9.0</text>
-        </g>
-
-        <!-- 4 Montreux / Chillon -->
-        <g class="map-pin" data-name="Montreux · Chillon" data-type="Riviera · Castillo" data-score="8.5" data-country="CH" data-verdict="Muy recomendado" filter="url(#pin-shadow)">
-          <circle cx="310" cy="292" r="9" fill="#2f5a3a" opacity="0.9"/>
-          <circle cx="310" cy="292" r="3.5" fill="white"/>
-          <text x="316" y="280" font-family="DM Sans" font-size="10.5" fill="#1a1f2e" font-weight="500">Montreux</text>
-          <text x="316" y="292" font-family="DM Mono, monospace" font-size="8" fill="#9aa5b4">8.5</text>
-        </g>
-
-        <!-- 5 Vevey -->
-        <g class="map-pin" data-name="Vevey" data-type="Riviera · Chaplin's World" data-score="8.5" data-country="CH" data-verdict="Muy recomendado" filter="url(#pin-shadow)">
-          <circle cx="320" cy="308" r="7" fill="#2f5a3a" opacity="0.85"/>
-          <circle cx="320" cy="308" r="2.5" fill="white"/>
-          <text x="328" y="312" font-family="DM Sans" font-size="9.5" fill="#1a1f2e">Vevey</text>
-        </g>
-
-        <!-- 6 Lausana -->
-        <g class="map-pin" data-name="Lausana" data-type="Ciudad universitaria · Lago" data-score="6.5" data-country="CH" data-verdict="Opcional" filter="url(#pin-shadow)">
-          <circle cx="290" cy="315" r="7" fill="#9aa5b4" opacity="0.85"/>
-          <circle cx="290" cy="315" r="2.5" fill="white"/>
-          <text x="260" y="330" font-family="DM Sans" font-size="9.5" fill="#4a5568">Lausana</text>
-        </g>
-
-        <!-- 7 Evian -->
-        <g class="map-pin" data-name="Évian-les-Bains" data-type="Balneario francés" data-score="5.5" data-country="FR" data-verdict="Opcional/prescindible" filter="url(#pin-shadow)">
-          <circle cx="268" cy="328" r="7" fill="#9aa5b4" opacity="0.8"/>
-          <circle cx="268" cy="328" r="2.5" fill="white"/>
-          <text x="238" y="344" font-family="DM Sans" font-size="9.5" fill="#4a5568">Évian</text>
-        </g>
-
-        <!-- 8 Geneva -->
-        <g class="map-pin" data-name="Ginebra" data-type="Ciudad internacional" data-score="5" data-country="CH" data-verdict="Prescindible en este bucle" filter="url(#pin-shadow)">
-          <circle cx="215" cy="340" r="8" fill="#9aa5b4" opacity="0.85"/>
-          <circle cx="215" cy="340" r="3" fill="white"/>
-          <text x="188" y="356" font-family="DM Sans" font-size="10.5" fill="#4a5568">Ginebra</text>
-          <text x="188" y="368" font-family="DM Mono, monospace" font-size="8" fill="#9aa5b4">5.0</text>
-        </g>
-
-        <!-- 9 Interlaken -->
-        <g class="map-pin" data-name="Interlaken · Jungfrau" data-type="Alpes · Lagos · Montaña" data-score="8.5" data-country="CH" data-verdict="Muy recomendado (sin Jungfraujoch)" filter="url(#pin-shadow)">
-          <circle cx="450" cy="290" r="9" fill="#2f5a3a" opacity="0.9"/>
-          <circle cx="450" cy="290" r="3.5" fill="white"/>
-          <text x="458" y="286" font-family="DM Sans" font-size="10.5" fill="#1a1f2e" font-weight="500">Interlaken</text>
-          <text x="458" y="298" font-family="DM Mono, monospace" font-size="8" fill="#9aa5b4">8.5</text>
-        </g>
-
-        <!-- 10 Zermatt -->
-        <g class="map-pin" data-name="Zermatt · Cervino" data-type="Pueblo sin coches · Gornergrat" data-score="8" data-country="CH" data-verdict="Recomendado con prudencia" filter="url(#pin-shadow)">
-          <circle cx="390" cy="360" r="9" fill="#2f5a3a" opacity="0.9"/>
-          <circle cx="390" cy="360" r="3.5" fill="white"/>
-          <text x="399" y="358" font-family="DM Sans" font-size="10.5" fill="#1a1f2e" font-weight="500">Zermatt</text>
-          <text x="399" y="370" font-family="DM Mono, monospace" font-size="8" fill="#9aa5b4">8.0</text>
-        </g>
-
-        <!-- 11 Lucerna -->
-        <g class="map-pin" data-name="Lucerna" data-type="Ciudad medieval · Lago" data-score="9" data-country="CH" data-verdict="Muy recomendado" filter="url(#pin-shadow)">
-          <circle cx="530" cy="210" r="9" fill="#2f5a3a" opacity="0.9"/>
-          <circle cx="530" cy="210" r="3.5" fill="white"/>
-          <text x="540" y="208" font-family="DM Sans" font-size="10.5" fill="#1a1f2e" font-weight="500">Lucerna</text>
-          <text x="540" y="220" font-family="DM Mono, monospace" font-size="8" fill="#9aa5b4">9.0</text>
-        </g>
-
-        <!-- 12 Pilatus -->
-        <g class="map-pin" data-name="Monte Pilatus" data-type="Montaña · 2.132 m" data-score="7.5" data-country="CH" data-verdict="Recomendado con prudencia" filter="url(#pin-shadow)">
-          <circle cx="510" cy="238" r="7" fill="#2f5a3a" opacity="0.8"/>
-          <circle cx="510" cy="238" r="2.5" fill="white"/>
-          <text x="514" y="252" font-family="DM Sans" font-size="9.5" fill="#1a1f2e">Pilatus</text>
-        </g>
-
-        <!-- 13 Rigi -->
-        <g class="map-pin" data-name="Monte Rigi" data-type="Montaña · 1.798 m · La más segura" data-score="8.5" data-country="CH" data-verdict="Muy recomendado (altitud segura)" filter="url(#pin-shadow)">
-          <circle cx="548" cy="218" r="7" fill="#2f5a3a" opacity="0.8"/>
-          <circle cx="548" cy="218" r="2.5" fill="white"/>
-          <text x="554" y="232" font-family="DM Sans" font-size="9.5" fill="#1a1f2e">Rigi</text>
-        </g>
-
-        <!-- 14 Appenzell -->
-        <g class="map-pin" data-name="Appenzell" data-type="Pueblo rural auténtico" data-score="7.5" data-country="CH" data-verdict="Recomendado (autenticidad)" filter="url(#pin-shadow)">
-          <circle cx="660" cy="158" r="7" fill="#2f5a3a" opacity="0.8"/>
-          <circle cx="660" cy="158" r="2.5" fill="white"/>
-          <text x="638" y="172" font-family="DM Sans" font-size="9.5" fill="#1a1f2e">Appenzell</text>
-        </g>
-
-        <!-- 15 Sion / Valais -->
-        <g class="map-pin" data-name="Sion · Valais" data-type="Valle histórico · Castillos" data-score="6" data-country="CH" data-verdict="Opcional (de paso a Zermatt)" filter="url(#pin-shadow)">
-          <circle cx="350" cy="345" r="7" fill="#9aa5b4" opacity="0.85"/>
-          <circle cx="350" cy="345" r="2.5" fill="white"/>
-          <text x="354" y="359" font-family="DM Sans" font-size="9.5" fill="#4a5568">Sion</text>
-        </g>
-
-        <!-- 16 Col de la Forclaz -->
-        <g class="map-pin" data-name="Col de la Forclaz" data-type="Paso alpino panorámico" data-score="7" data-country="CH/FR" data-verdict="Recomendado como ruta escénica" filter="url(#pin-shadow)">
-          <circle cx="300" cy="360" r="6" fill="#7ab8c4" opacity="0.85"/>
-          <circle cx="300" cy="360" r="2" fill="white"/>
-          <text x="262" y="374" font-family="DM Sans" font-size="9" fill="#4a5568">Col Forclaz</text>
-        </g>
-
-        <!-- 17 Chamonix -->
-        <g class="map-pin" data-name="Chamonix" data-type="Pueblo alpino · Mont Blanc" data-score="8" data-country="FR" data-verdict="Recomendado (sin Aiguille du Midi)" filter="url(#pin-shadow)">
-          <circle cx="260" cy="400" r="9" fill="#b8923a" opacity="0.9"/>
-          <circle cx="260" cy="400" r="3.5" fill="white"/>
-          <text x="268" y="396" font-family="DM Sans" font-size="10.5" fill="#1a1f2e" font-weight="500">Chamonix</text>
-          <text x="268" y="408" font-family="DM Mono, monospace" font-size="8" fill="#9aa5b4">8.0</text>
-        </g>
-
-        <!-- 18 Annecy -->
-        <g class="map-pin" data-name="Annecy" data-type="Ciudad lacustre · Canales" data-score="9" data-country="FR" data-verdict="Muy recomendado" filter="url(#pin-shadow)">
-          <circle cx="220" cy="435" r="9" fill="#b8923a" opacity="0.9"/>
-          <circle cx="220" cy="435" r="3.5" fill="white"/>
-          <text x="228" y="431" font-family="DM Sans" font-size="10.5" fill="#1a1f2e" font-weight="500">Annecy</text>
-          <text x="228" y="443" font-family="DM Mono, monospace" font-size="8" fill="#9aa5b4">9.0</text>
-        </g>
-
-        <!-- 19 Lyon -->
-        <g class="map-pin" data-name="Lyon" data-type="Gran ciudad · Gastronomía" data-score="5.5" data-country="FR" data-verdict="Opcional (gran desvío)" filter="url(#pin-shadow)">
-          <circle cx="160" cy="480" r="8" fill="#9aa5b4" opacity="0.85"/>
-          <circle cx="160" cy="480" r="3" fill="white"/>
-          <text x="168" y="478" font-family="DM Sans" font-size="10.5" fill="#4a5568">Lyon</text>
-          <text x="168" y="490" font-family="DM Mono, monospace" font-size="8" fill="#9aa5b4">5.5</text>
-        </g>
-
-        <!-- 20 Ticino: Lugano/Ascona/Locarno -->
-        <g class="map-pin" data-name="Ticino · Lugano · Ascona" data-type="Suiza italiana · Lagos" data-score="8.5" data-country="CH" data-verdict="Muy recomendado" filter="url(#pin-shadow)">
-          <circle cx="590" cy="420" r="9" fill="#2f5a3a" opacity="0.9"/>
-          <circle cx="590" cy="420" r="3.5" fill="white"/>
-          <text x="598" y="416" font-family="DM Sans" font-size="10.5" fill="#1a1f2e" font-weight="500">Ticino</text>
-          <text x="598" y="428" font-family="DM Mono, monospace" font-size="8" fill="#9aa5b4">8.5</text>
-        </g>
-
-        <!-- 21 Lago Como -->
-        <g class="map-pin" data-name="Lago Como · Bellagio" data-type="Lago italiano · Villas" data-score="7.5" data-country="IT" data-verdict="Recomendado con planificación" filter="url(#pin-shadow)">
-          <circle cx="650" cy="460" r="8" fill="#8b3030" opacity="0.85"/>
-          <circle cx="650" cy="460" r="3" fill="white"/>
-          <text x="657" y="458" font-family="DM Sans" font-size="10.5" fill="#1a1f2e" font-weight="500">L. Como</text>
-          <text x="657" y="470" font-family="DM Mono, monospace" font-size="8" fill="#9aa5b4">7.5</text>
-        </g>
-
-        <!-- 22 Rheinfall -->
-        <g class="map-pin" data-name="Cataratas del Rin" data-type="Cascada · Excursión" data-score="7.5" data-country="CH" data-verdict="Buena excursión desde Zúrich" filter="url(#pin-shadow)">
-          <circle cx="680" cy="100" r="6" fill="#2f5a3a" opacity="0.75"/>
-          <circle cx="680" cy="100" r="2" fill="white"/>
-          <text x="688" y="104" font-family="DM Sans" font-size="9" fill="#1a1f2e">Rheinfall</text>
-        </g>
-
-      </svg>
-      <div class="map-tooltip" id="map-tip">
-        <div class="tt-type" id="tt-type"></div>
-        <div class="tt-name" id="tt-name"></div>
-        <div class="tt-score">
-          <span class="tt-stars" id="tt-stars"></span>
-          <span id="tt-score-val"></span>
-          <span style="opacity:0.5;font-size:11px">/ 10</span>
-        </div>
-        <div class="tt-verdict" id="tt-verdict"></div>
-      </div>
+      <div id="leaflet-map"></div>
     </div>
   </div>
 
@@ -1907,42 +1679,134 @@ document.querySelectorAll('.filter-btn').forEach(btn => {
   });
 });
 
-// Map tooltip
-const tooltip = document.getElementById('map-tip');
-document.querySelectorAll('.map-pin').forEach(pin => {
-  function showTip(e) {
-    const score = parseFloat(pin.dataset.score);
-    const stars = '★'.repeat(Math.round(score / 2));
-    document.getElementById('tt-type').textContent = pin.dataset.type || '';
-    document.getElementById('tt-name').textContent = pin.dataset.name || '';
-    document.getElementById('tt-stars').textContent = stars;
-    document.getElementById('tt-score-val').textContent = score.toFixed(1);
-    document.getElementById('tt-verdict').textContent = pin.dataset.verdict || '';
-    tooltip.style.display = 'block';
-    moveTip(e);
-  }
-  function moveTip(e) {
-    const wrap = document.getElementById('map-wrap');
-    const r = wrap.getBoundingClientRect();
-    let x = e.clientX - r.left + 14;
-    let y = e.clientY - r.top - 14;
-    if (x + 260 > r.width) x = e.clientX - r.left - 260 - 10;
-    if (y < 0) y = 5;
-    tooltip.style.left = x + 'px';
-    tooltip.style.top = y + 'px';
-  }
-  pin.addEventListener('mouseenter', showTip);
-  pin.addEventListener('mousemove', moveTip);
-  pin.addEventListener('mouseleave', () => tooltip.style.display = 'none');
-  pin.addEventListener('click', e => {
-    if (tooltip.style.display === 'block') { tooltip.style.display = 'none'; return; }
-    showTip(e); e.stopPropagation();
+// ── LEAFLET MAP ────────────────────────────────────────────────────────────
+
+// Fix default icon path issues (preventive, even though we use divIcon)
+delete L.Icon.Default.prototype._getIconUrl;
+L.Icon.Default.mergeOptions({ iconUrl: '', shadowUrl: '' });
+
+const destinations = [
+  { name: "Zúrich",                lat: 47.3769, lng: 8.5417,  type: "Ciudad histórica · Lago",               score: 7.0,  country: "CH", flag: "🇨🇭", verdict: "Base logística ideal",                         color: "#2f5a3a" },
+  { name: "Lucerna",               lat: 47.0502, lng: 8.3093,  type: "Ciudad medieval · Lago",                score: 9.0,  country: "CH", flag: "🇨🇭", verdict: "Muy recomendado",                              color: "#2f5a3a" },
+  { name: "Monte Rigi",            lat: 47.0567, lng: 8.4841,  type: "Montaña · 1.798 m · La más segura",    score: 8.5,  country: "CH", flag: "🇨🇭", verdict: "Montaña más segura del viaje",                  color: "#2f5a3a" },
+  { name: "Monte Pilatus",         lat: 46.9791, lng: 8.2525,  type: "Montaña · 2.132 m · Funicular",        score: 7.5,  country: "CH", flag: "🇨🇭", verdict: "Recomendado con prudencia (altitud)",           color: "#2f5a3a" },
+  { name: "Berna",                 lat: 46.9480, lng: 7.4474,  type: "Capital histórica · UNESCO",            score: 8.5,  country: "CH", flag: "🇨🇭", verdict: "Muy recomendado",                              color: "#2f5a3a" },
+  { name: "Gruyères",              lat: 46.5855, lng: 7.0817,  type: "Pueblo medieval · Queso · Chocolate",   score: 9.0,  country: "CH", flag: "🇨🇭", verdict: "Muy recomendado",                              color: "#2f5a3a" },
+  { name: "Vevey",                 lat: 46.4631, lng: 6.8441,  type: "Riviera suiza · Chaplin's World",       score: 8.5,  country: "CH", flag: "🇨🇭", verdict: "Muy recomendado",                              color: "#2f5a3a" },
+  { name: "Montreux · Chillon",    lat: 46.4312, lng: 6.9107,  type: "Riviera · Castillo medieval",           score: 8.5,  country: "CH", flag: "🇨🇭", verdict: "Recomendado — interior del castillo sin cochecito", color: "#2f5a3a" },
+  { name: "Lausana",               lat: 46.5197, lng: 6.6323,  type: "Ciudad universitaria · Museo Olímpico", score: 6.5,  country: "CH", flag: "🇨🇭", verdict: "Opcional — centro con cuestas pronunciadas",   color: "#9aa5b4" },
+  { name: "Évian-les-Bains",       lat: 46.4005, lng: 6.5910,  type: "Balneario francés · Orilla del Léman", score: 5.5,  country: "FR", flag: "🇫🇷", verdict: "Opcional / prescindible",                      color: "#9aa5b4" },
+  { name: "Ginebra",               lat: 46.2044, lng: 6.1432,  type: "Ciudad internacional · Jet d'Eau",     score: 5.0,  country: "CH", flag: "🇨🇭", verdict: "Prescindible en este bucle",                   color: "#9aa5b4" },
+  { name: "Interlaken · Jungfrau", lat: 46.6863, lng: 7.8632,  type: "Alpes berneses · Cascadas · Lagos",    score: 8.5,  country: "CH", flag: "🇨🇭", verdict: "Muy recomendado (sin Jungfraujoch)",            color: "#2f5a3a" },
+  { name: "Zermatt · Cervino",     lat: 46.0207, lng: 7.7491,  type: "Pueblo sin coches · Gornergrat",       score: 8.0,  country: "CH", flag: "🇨🇭", verdict: "Recomendado con prudencia (altitud Gornergrat)", color: "#2f5a3a" },
+  { name: "Appenzell",             lat: 47.3314, lng: 9.4094,  type: "Pueblo rural auténtico · Cultura alpina", score: 7.5, country: "CH", flag: "🇨🇭", verdict: "Recomendado — lo más auténtico del viaje",    color: "#2f5a3a" },
+  { name: "Sion · Valais",         lat: 46.2330, lng: 7.3582,  type: "Valle histórico · Castillos · Viñedos", score: 6.0, country: "CH", flag: "🇨🇭", verdict: "Opcional — de paso hacia Zermatt",             color: "#9aa5b4" },
+  { name: "Col de la Forclaz",     lat: 46.0569, lng: 7.0096,  type: "Paso alpino panorámico · 1.527 m",     score: 7.0,  country: "CH", flag: "🇨🇭🇫🇷", verdict: "Recomendado como ruta escénica",              color: "#2f5a3a" },
+  { name: "Chamonix · Mont Blanc", lat: 45.9237, lng: 6.8694,  type: "Pueblo alpino · Montenvers · Mer de Glace", score: 8.0, country: "FR", flag: "🇫🇷", verdict: "Recomendado — ⚠ Aiguille du Midi prohibida <3 años", color: "#b8923a" },
+  { name: "Annecy",                lat: 45.8992, lng: 6.1294,  type: "Venecia de los Alpes · Lago · Canales", score: 9.0,  country: "FR", flag: "🇫🇷", verdict: "Muy recomendado",                             color: "#b8923a" },
+  { name: "Lyon",                  lat: 45.7640, lng: 4.8357,  type: "Gran ciudad francesa · Gastronomía",   score: 5.5,  country: "FR", flag: "🇫🇷", verdict: "Opcional — gran desvío al sur",                color: "#9aa5b4" },
+  { name: "Ticino · Lugano · Ascona", lat: 46.0037, lng: 8.9511, type: "Suiza italiana · Lagos mediterráneos", score: 8.5, country: "CH", flag: "🇨🇭", verdict: "Muy recomendado",                             color: "#2f5a3a" },
+  { name: "Lago Como · Bellagio",  lat: 45.9800, lng: 9.2597,  type: "Lago glaciar italiano · Villas",       score: 7.5,  country: "IT", flag: "🇮🇹", verdict: "Recomendado con planificación — cuidado ZTL",  color: "#8b3030" },
+  { name: "Cataratas del Rin",     lat: 47.6779, lng: 8.6142,  type: "Cascada · Pueblo medieval pintado",    score: 7.5,  country: "CH", flag: "🇨🇭", verdict: "Buena excursión desde Zúrich",                 color: "#2f5a3a" },
+];
+
+function makeIcon(color, score) {
+  const size = score >= 8.5 ? 34 : score >= 7 ? 28 : 23;
+  const fs   = size <= 23 ? 8 : 9;
+  return L.divIcon({
+    className: '',
+    html: `<div style="
+      width:${size}px;height:${size}px;
+      background:${color};border-radius:50%;
+      border:2.5px solid rgba(255,255,255,0.95);
+      box-shadow:0 2px 8px rgba(0,0,0,0.35);
+      display:flex;align-items:center;justify-content:center;
+      font-family:'DM Mono',monospace;font-size:${fs}px;font-weight:600;
+      color:#fff;cursor:pointer;
+    ">${score.toFixed(1)}</div>`,
+    iconSize:   [size, size],
+    iconAnchor: [size/2, size/2],
+    popupAnchor:[0, -(size/2 + 6)]
   });
-  pin.style.cursor = 'pointer';
+}
+
+function makePopup(d) {
+  const filled = Math.round(d.score / 2);
+  const stars  = '★'.repeat(filled) + '☆'.repeat(5 - filled);
+  return `<div class="popup-inner">
+    <div class="popup-flag">${d.flag}</div>
+    <div class="popup-type">${d.type}</div>
+    <div class="popup-name">${d.name}</div>
+    <div class="popup-score-row">
+      <span class="popup-stars">${stars}</span>
+      <span class="popup-score-num">${d.score.toFixed(1)}</span>
+      <span class="popup-score-denom">/ 10</span>
+    </div>
+    <div class="popup-verdict">${d.verdict}</div>
+  </div>`;
+}
+
+// Init map
+const map = L.map('leaflet-map', {
+  center: [46.7, 7.8],
+  zoom: 7,
+  zoomControl: true,
+  scrollWheelZoom: true
 });
-document.addEventListener('click', () => {
-  if (tooltip) tooltip.style.display = 'none';
+
+// CARTO Voyager tiles via cdnjs — correct CORS headers, clean aesthetic
+L.tileLayer(
+  'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
+  {
+    attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors © <a href="https://carto.com/">CARTO</a>',
+    subdomains: 'abcd',
+    maxZoom: 19,
+    crossOrigin: true
+  }
+).addTo(map);
+
+// Markers
+destinations.forEach(d => {
+  const marker = L.marker([d.lat, d.lng], {
+    icon: makeIcon(d.color, d.score),
+    title: d.name
+  }).addTo(map);
+
+  marker.bindPopup(makePopup(d), { maxWidth: 290, minWidth: 210 });
+  marker.on('mouseover', function() { this.openPopup(); });
 });
+
+// Circuit route (dashed)
+const route = [
+  [47.6779, 8.6142],  // Rheinfall
+  [47.3769, 8.5417],  // Zurich
+  [47.3314, 9.4094],  // Appenzell
+  [47.3769, 8.5417],  // Zurich
+  [47.0502, 8.3093],  // Lucerna
+  [47.0567, 8.4841],  // Rigi
+  [46.9791, 8.2525],  // Pilatus
+  [47.0502, 8.3093],  // Lucerna
+  [46.9480, 7.4474],  // Berna
+  [46.5855, 7.0817],  // Gruyères
+  [46.4631, 6.8441],  // Vevey
+  [46.4312, 6.9107],  // Montreux/Chillon
+  [46.5197, 6.6323],  // Lausana
+  [46.2044, 6.1432],  // Ginebra
+  [45.8992, 6.1294],  // Annecy
+  [45.9237, 6.8694],  // Chamonix
+  [46.0569, 7.0096],  // Col Forclaz
+  [46.2330, 7.3582],  // Sion
+  [46.0207, 7.7491],  // Zermatt
+  [46.6863, 7.8632],  // Interlaken
+  [47.0502, 8.3093],  // Lucerna
+  [46.0037, 8.9511],  // Ticino
+  [45.9800, 9.2597],  // Lago Como
+  [46.0037, 8.9511],  // Ticino
+  [47.3769, 8.5417],  // Zurich return
+];
+L.polyline(route, { color:'#2f5a3a', weight:2, opacity:0.3, dashArray:'6,5' }).addTo(map);
+
+// ── END LEAFLET ─────────────────────────────────────────────────────────────
 </script>
 </body>
 </html>
