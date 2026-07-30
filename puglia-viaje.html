@@ -1,0 +1,1192 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Puglia en 7 días · Guía familiar</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --terra: #c4622d;
+    --ocre: #e8a84c;
+    --trullo: #1a3a4a;
+    --crema: #fdf6ec;
+    --oliva: #6b7c47;
+    --mar: #2a7ea6;
+    --blanco: #ffffff;
+    --gris: #7a7065;
+    --borde: #e8ddd0;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--crema);
+    color: var(--trullo);
+    overflow-x: hidden;
+  }
+
+  /* HERO */
+  .hero {
+    background: var(--trullo);
+    color: var(--crema);
+    padding: 80px 40px 60px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 80% 50%, rgba(196,98,45,0.3) 0%, transparent 60%),
+                radial-gradient(ellipse at 20% 80%, rgba(42,126,166,0.2) 0%, transparent 50%);
+  }
+  .hero-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+  .hero-tag {
+    display: inline-block;
+    background: var(--terra);
+    color: var(--blanco);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 5px 14px;
+    border-radius: 2px;
+    margin-bottom: 20px;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(38px, 6vw, 68px);
+    line-height: 1.1;
+    margin-bottom: 16px;
+    font-weight: 700;
+  }
+  .hero h1 em {
+    font-style: italic;
+    color: var(--ocre);
+  }
+  .hero-sub {
+    font-size: 16px;
+    font-weight: 300;
+    color: rgba(253,246,236,0.75);
+    max-width: 500px;
+    line-height: 1.6;
+    margin-bottom: 32px;
+  }
+  .hero-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .pill {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: var(--crema);
+    padding: 6px 16px;
+    border-radius: 100px;
+    font-size: 13px;
+    font-weight: 400;
+  }
+  .pill span { margin-right: 6px; }
+
+  /* NAV TABS */
+  .nav-tabs {
+    background: var(--blanco);
+    border-bottom: 1px solid var(--borde);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  }
+  .tabs-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    display: flex;
+    gap: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .tabs-inner::-webkit-scrollbar { display: none; }
+  .tab-btn {
+    background: none;
+    border: none;
+    padding: 16px 22px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--gris);
+    cursor: pointer;
+    white-space: nowrap;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+    letter-spacing: 0.3px;
+  }
+  .tab-btn.active, .tab-btn:hover {
+    color: var(--terra);
+    border-bottom-color: var(--terra);
+  }
+
+  /* MAIN */
+  .main { max-width: 900px; margin: 0 auto; padding: 0 24px; }
+
+  .section { display: none; padding: 40px 0 60px; }
+  .section.active { display: block; }
+
+  /* SECTION HEADERS */
+  .sec-header {
+    margin-bottom: 36px;
+  }
+  .sec-header h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 32px;
+    color: var(--trullo);
+    margin-bottom: 8px;
+  }
+  .sec-header p {
+    color: var(--gris);
+    font-size: 15px;
+    font-weight: 300;
+    line-height: 1.6;
+  }
+
+  /* MAP */
+  #map-wrap {
+    width: 100%;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--borde);
+    margin-bottom: 28px;
+    background: #e8f4f8;
+    position: relative;
+  }
+  #map-wrap svg { display: block; width: 100%; height: auto; }
+  .map-pin { cursor: pointer; transition: transform 0.15s; transform-origin: center bottom; }
+  .map-pin:hover { transform: scale(1.25); }
+  .map-tooltip {
+    position: absolute;
+    background: white;
+    border: 1px solid var(--borde);
+    border-radius: 10px;
+    padding: 12px 15px;
+    font-size: 13px;
+    max-width: 220px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    pointer-events: none;
+    display: none;
+    z-index: 10;
+    line-height: 1.45;
+  }
+  .map-tooltip .tt-type { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 3px; }
+  .map-tooltip .tt-name { font-family: 'Playfair Display', serif; font-size: 15px; color: var(--trullo); margin-bottom: 3px; }
+  .map-tooltip .tt-desc { font-size: 12px; color: var(--gris); font-weight: 300; }
+  .map-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 32px;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--gris);
+  }
+  .legend-dot {
+    width: 10px; height: 10px; border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* CARDS */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 20px;
+    margin-bottom: 32px;
+  }
+  .card {
+    background: var(--blanco);
+    border: 1px solid var(--borde);
+    border-radius: 12px;
+    padding: 22px;
+    transition: box-shadow 0.2s, transform 0.2s;
+  }
+  .card:hover {
+    box-shadow: 0 8px 28px rgba(0,0,0,0.09);
+    transform: translateY(-2px);
+  }
+  .card-icon { font-size: 28px; margin-bottom: 12px; }
+  .card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 17px;
+    margin-bottom: 8px;
+    color: var(--trullo);
+  }
+  .card p {
+    font-size: 13px;
+    color: var(--gris);
+    line-height: 1.6;
+    font-weight: 300;
+  }
+  .card-badge {
+    display: inline-block;
+    margin-top: 12px;
+    font-size: 11px;
+    font-weight: 500;
+    padding: 3px 10px;
+    border-radius: 100px;
+    background: var(--crema);
+    color: var(--terra);
+    border: 1px solid rgba(196,98,45,0.2);
+  }
+
+  /* ITINERARY */
+  .day-block {
+    background: var(--blanco);
+    border: 1px solid var(--borde);
+    border-radius: 14px;
+    margin-bottom: 18px;
+    overflow: hidden;
+  }
+  .day-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 20px 24px;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.15s;
+  }
+  .day-header:hover { background: rgba(196,98,45,0.04); }
+  .day-num {
+    width: 40px; height: 40px;
+    background: var(--terra);
+    color: var(--blanco);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .day-info { flex: 1; }
+  .day-info h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    color: var(--trullo);
+  }
+  .day-info p {
+    font-size: 12px;
+    color: var(--gris);
+    margin-top: 2px;
+    font-weight: 300;
+  }
+  .day-chevron {
+    font-size: 18px;
+    color: var(--gris);
+    transition: transform 0.3s;
+  }
+  .day-block.open .day-chevron { transform: rotate(180deg); }
+  .day-body {
+    padding: 0 24px;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease, padding 0.3s;
+  }
+  .day-block.open .day-body {
+    max-height: 600px;
+    padding: 0 24px 24px;
+  }
+
+  .timeline { border-left: 2px solid var(--borde); padding-left: 20px; margin-top: 4px; }
+  .tl-item { position: relative; margin-bottom: 16px; }
+  .tl-item:last-child { margin-bottom: 0; }
+  .tl-item::before {
+    content: '';
+    position: absolute;
+    left: -25px;
+    top: 5px;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--ocre);
+    border: 2px solid var(--blanco);
+    box-shadow: 0 0 0 1px var(--ocre);
+  }
+  .tl-time {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--terra);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 3px;
+  }
+  .tl-text {
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--trullo);
+  }
+  .tl-text strong { font-weight: 500; }
+  .tl-tip {
+    margin-top: 5px;
+    font-size: 12px;
+    color: var(--oliva);
+    background: rgba(107,124,71,0.08);
+    padding: 5px 10px;
+    border-radius: 6px;
+    border-left: 2px solid var(--oliva);
+  }
+
+  /* LOGISTICS */
+  .logistics-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 24px;
+  }
+  @media (max-width: 560px) { .logistics-grid { grid-template-columns: 1fr; } }
+  .log-card {
+    background: var(--blanco);
+    border: 1px solid var(--borde);
+    border-radius: 12px;
+    padding: 22px;
+  }
+  .log-card h3 {
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--terra);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .log-card ul {
+    list-style: none;
+  }
+  .log-card ul li {
+    font-size: 13px;
+    color: var(--trullo);
+    line-height: 1.5;
+    padding: 6px 0;
+    border-bottom: 1px solid var(--borde);
+    font-weight: 300;
+  }
+  .log-card ul li:last-child { border-bottom: none; }
+  .log-card ul li strong { font-weight: 500; }
+
+  /* WARNING BOX */
+  .warn-box {
+    background: rgba(196,98,45,0.07);
+    border: 1px solid rgba(196,98,45,0.2);
+    border-left: 4px solid var(--terra);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-bottom: 20px;
+  }
+  .warn-box h4 { font-size: 14px; font-weight: 600; color: var(--terra); margin-bottom: 6px; }
+  .warn-box p { font-size: 13px; color: var(--trullo); line-height: 1.55; font-weight: 300; }
+
+  /* BUDGET */
+  .budget-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--blanco);
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--borde);
+    margin-bottom: 24px;
+  }
+  .budget-table thead {
+    background: var(--trullo);
+    color: var(--crema);
+  }
+  .budget-table th {
+    padding: 14px 20px;
+    font-size: 12px;
+    font-weight: 500;
+    text-align: left;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+  .budget-table td {
+    padding: 13px 20px;
+    font-size: 14px;
+    border-bottom: 1px solid var(--borde);
+    color: var(--trullo);
+    font-weight: 300;
+  }
+  .budget-table tr:last-child td { border-bottom: none; }
+  .budget-table tr:hover td { background: rgba(196,98,45,0.03); }
+  .budget-table .total td {
+    font-weight: 700;
+    color: var(--terra);
+    border-top: 2px solid var(--borde);
+    font-size: 16px;
+    background: rgba(196,98,45,0.04);
+  }
+  .amt { text-align: right; font-variant-numeric: tabular-nums; }
+
+  /* ZTL TABLE */
+  .ztl-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--blanco);
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--borde);
+    margin-bottom: 20px;
+  }
+  .ztl-table th {
+    background: rgba(26,58,74,0.08);
+    padding: 10px 16px;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    text-align: left;
+    color: var(--trullo);
+  }
+  .ztl-table td {
+    padding: 10px 16px;
+    font-size: 13px;
+    border-bottom: 1px solid var(--borde);
+    font-weight: 300;
+  }
+  .ztl-table tr:last-child td { border-bottom: none; }
+
+  /* FOOD SECTION */
+  .food-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 14px;
+    margin-bottom: 28px;
+  }
+  .food-item {
+    background: var(--blanco);
+    border: 1px solid var(--borde);
+    border-radius: 10px;
+    padding: 16px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .food-emoji { font-size: 24px; flex-shrink: 0; }
+  .food-info h4 { font-size: 14px; font-weight: 500; color: var(--trullo); margin-bottom: 3px; }
+  .food-info p { font-size: 12px; color: var(--gris); line-height: 1.4; font-weight: 300; }
+
+  /* FOOTER */
+  .page-footer {
+    background: var(--trullo);
+    color: rgba(253,246,236,0.6);
+    text-align: center;
+    padding: 32px 20px;
+    font-size: 12px;
+    margin-top: 40px;
+  }
+  .page-footer strong { color: var(--ocre); }
+
+  /* RESPONSIVE */
+  @media (max-width: 600px) {
+    .hero { padding: 48px 20px 40px; }
+    .main { padding: 0 16px; }
+    .cards-grid { grid-template-columns: 1fr; }
+    .food-grid { grid-template-columns: 1fr 1fr; }
+  }
+  .popup-type {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .popup-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    color: #1a3a4a;
+    margin-bottom: 4px;
+  }
+  .popup-desc { color: #7a7065; font-size: 12px; font-weight: 300; }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-tag">✈ Ámsterdam → Puglia · Septiembre</div>
+    <h1>Una semana en<br><em>Puglia</em></h1>
+    <p class="hero-sub">Guía completa para 2 adultos, 1 abuela y 1 bebé de 1 año. Playas, trulli, gastronomía y un ritmo pensado para todos.</p>
+    <div class="hero-pills">
+      <div class="pill"><span>🗓</span> 7 días</div>
+      <div class="pill"><span>👶</span> Apto bebé</div>
+      <div class="pill"><span>🏖</span> Mar + Historia</div>
+      <div class="pill"><span>🚗</span> Auto alquilado</div>
+      <div class="pill"><span>≈ 4.450€</span> total</div>
+    </div>
+  </div>
+</div>
+
+<nav class="nav-tabs">
+  <div class="tabs-inner">
+    <button class="tab-btn active" onclick="showTab('mapa')">🗺 Mapa</button>
+    <button class="tab-btn" onclick="showTab('itinerario')">📅 Itinerario</button>
+    <button class="tab-btn" onclick="showTab('logistica')">🚗 Logística</button>
+    <button class="tab-btn" onclick="showTab('playas')">🏖 Playas</button>
+    <button class="tab-btn" onclick="showTab('gastronomia')">🍝 Gastronomía</button>
+    <button class="tab-btn" onclick="showTab('presupuesto')">💶 Presupuesto</button>
+  </div>
+</nav>
+
+<div class="main">
+
+  <!-- MAPA -->
+  <div id="tab-mapa" class="section active">
+    <div class="sec-header">
+      <h2>Los puntos del viaje</h2>
+      <p>Base única en el Valle d'Itria · Hacé clic en cada marcador para ver detalles</p>
+    </div>
+    <div id="map-wrap">
+      <svg viewBox="0 0 900 500" xmlns="http://www.w3.org/2000/svg" id="puglia-svg">
+        <defs>
+          <linearGradient id="seaGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#b8dff0"/>
+            <stop offset="100%" style="stop-color:#7ec8e3"/>
+          </linearGradient>
+          <linearGradient id="landGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#f0ece2"/>
+            <stop offset="100%" style="stop-color:#e4ddd0"/>
+          </linearGradient>
+          <filter id="lshadow">
+            <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="rgba(0,0,0,0.15)"/>
+          </filter>
+        </defs>
+        <rect width="900" height="500" fill="url(#seaGrad)"/>
+        <path d="M 170,30 L 230,18 L 300,22 L 360,38 L 400,55 L 435,75 L 460,100 L 478,128 L 490,158 L 496,190 L 498,222 L 498,252 L 500,278 L 506,298 L 516,316 L 530,333 L 548,350 L 568,366 L 590,382 L 610,396 L 628,408 L 642,420 L 652,432 L 656,444 L 650,456 L 638,462 L 622,464 L 604,460 L 584,452 L 562,440 L 540,426 L 518,410 L 496,393 L 474,376 L 452,360 L 430,346 L 406,334 L 380,326 L 354,322 L 328,322 L 304,327 L 280,337 L 256,350 L 234,367 L 214,387 L 196,408 L 180,430 L 166,450 L 150,464 L 132,470 L 114,468 L 96,460 L 80,448 L 68,432 L 60,414 L 56,394 L 56,372 L 62,350 L 72,330 L 86,311 L 102,294 L 116,278 L 126,260 L 132,242 L 132,222 L 126,200 L 116,180 L 103,160 L 88,141 L 74,122 L 64,102 L 58,82 L 57,62 L 62,44 L 74,30 L 92,20 L 128,14 Z"
+          fill="url(#landGrad)" stroke="#c8bfb0" stroke-width="1.5" filter="url(#lshadow)"/>
+        <text x="690" y="68" font-size="11" fill="#4488aa" font-family="Georgia,serif" font-style="italic" opacity="0.8" transform="rotate(-35,690,68)">Mar Adriatico</text>
+        <text x="88" y="487" font-size="11" fill="#4488aa" font-family="Georgia,serif" font-style="italic" opacity="0.8">Mar Jonico</text>
+        <path d="M 322,96 L 390,218" stroke="#c4622d" stroke-width="1.5" stroke-dasharray="5,5" fill="none" opacity="0.45"/>
+        <path d="M 390,218 L 500,178" stroke="#2a7ea6" stroke-width="1.5" stroke-dasharray="4,5" fill="none" opacity="0.35"/>
+        <path d="M 390,218 L 426,137" stroke="#6b7c47" stroke-width="1.5" stroke-dasharray="4,5" fill="none" opacity="0.35"/>
+        <path d="M 390,218 L 420,340 L 605,368" stroke="#2a7ea6" stroke-width="1.5" stroke-dasharray="4,5" fill="none" opacity="0.35"/>
+        <g class="map-pin" data-type="AEROPUERTO" data-name="Aeropuerto de Bari (BRI)" data-desc="Vuelo directo Transavia desde Amsterdam. 2h30. Recoger el auto aqui al llegar.">
+          <circle cx="322" cy="96" r="14" fill="#8b5cf6" opacity="0.18"/>
+          <circle cx="322" cy="96" r="9" fill="#8b5cf6" stroke="white" stroke-width="2.5"/>
+          <text x="322" y="101" text-anchor="middle" font-size="11" fill="white" font-family="sans-serif">+</text>
+          <text x="322" y="84" text-anchor="middle" font-size="10" fill="#5b3fa0" font-weight="700" font-family="sans-serif">Bari BRI</text>
+        </g>
+        <g class="map-pin" data-type="PLAYA - DIA 2" data-name="Torre Canne" data-desc="Mejor playa Adriatico para bebe. Arena finisima, fondo bajisimo, Bandera Verde pediatrica. 25 min de la base.">
+          <circle cx="500" cy="178" r="13" fill="#2a7ea6" opacity="0.18"/>
+          <circle cx="500" cy="178" r="8" fill="#2a7ea6" stroke="white" stroke-width="2.5"/>
+          <text x="520" y="173" font-size="10" fill="#1a5f82" font-weight="700" font-family="sans-serif">Torre Canne</text>
+        </g>
+        <g class="map-pin" data-type="PUEBLO - DIA 5" data-name="Polignano a Mare" data-desc="Miradores sobre acantilados. Pescaria (mejor street food de Puglia). ZTL activa - no entrar con auto.">
+          <circle cx="426" cy="137" r="13" fill="#6b7c47" opacity="0.18"/>
+          <circle cx="426" cy="137" r="8" fill="#6b7c47" stroke="white" stroke-width="2.5"/>
+          <text x="438" y="132" font-size="10" fill="#445030" font-weight="700" font-family="sans-serif">Polignano</text>
+        </g>
+        <g class="map-pin" data-type="PUEBLO - DIA 5" data-name="Monopoli" data-desc="El casco mas llano y apto para cochecito. Cala Porta Vecchia justo al lado del centro.">
+          <circle cx="450" cy="155" r="8" fill="#6b7c47" stroke="white" stroke-width="2" opacity="0.9"/>
+          <text x="462" y="152" font-size="9" fill="#445030" font-family="sans-serif">Monopoli</text>
+        </g>
+        <g class="map-pin" data-type="PUEBLO - DIA 3" data-name="Alberobello" data-desc="Trulli UNESCO. Salir a las 8:00 AM. ZTL activa - estacionar en Largo Martellotta. Helado en Arte Fredda.">
+          <circle cx="435" cy="198" r="14" fill="#c4622d" opacity="0.18"/>
+          <circle cx="435" cy="198" r="9" fill="#c4622d" stroke="white" stroke-width="2.5"/>
+          <text x="447" y="193" font-size="10" fill="#8a3a10" font-weight="700" font-family="sans-serif">Alberobello</text>
+        </g>
+        <g class="map-pin" data-type="BASE - ALOJAMIENTO" data-name="Valle d Itria" data-desc="Trullo con piscina privada. 180-220 EUR/noche. Sin cambios de alojamiento en toda la semana.">
+          <circle cx="390" cy="218" r="20" fill="#c4622d" opacity="0.2"/>
+          <circle cx="390" cy="218" r="13" fill="#c4622d" stroke="white" stroke-width="3"/>
+          <text x="390" y="224" text-anchor="middle" font-size="15" fill="white" font-family="sans-serif">*</text>
+          <text x="390" y="244" text-anchor="middle" font-size="11" fill="#8a3a10" font-weight="700" font-family="sans-serif">BASE</text>
+        </g>
+        <g class="map-pin" data-type="PUEBLO - DIA 2" data-name="Locorotondo" data-desc="Casco circular, llano, accesible con cochecito. Cena al atardecer. Osteria Il Rosone.">
+          <circle cx="460" cy="210" r="8" fill="#6b7c47" stroke="white" stroke-width="2"/>
+          <text x="444" y="228" font-size="9" fill="#445030" font-family="sans-serif">Locorotondo</text>
+        </g>
+        <g class="map-pin" data-type="PUEBLO - DIA 6" data-name="Cisternino" data-desc="Bombette al horno. Macelleria D Onghia o L Antico Borgo. El mejor atardecer del Valle.">
+          <circle cx="492" cy="214" r="8" fill="#6b7c47" stroke="white" stroke-width="2"/>
+          <text x="498" y="230" font-size="9" fill="#445030" font-family="sans-serif">Cisternino</text>
+        </g>
+        <g class="map-pin" data-type="PUEBLO - OPCIONAL" data-name="Ostuni" data-desc="La Ciudad Blanca. Tour en Ape Calessino (20-30 EUR). ZTL activa, pendientes fuertes.">
+          <circle cx="538" cy="218" r="9" fill="#6b7c47" stroke="white" stroke-width="2" opacity="0.88"/>
+          <text x="550" y="214" font-size="9" fill="#445030" font-family="sans-serif">Ostuni</text>
+        </g>
+        <g class="map-pin" data-type="PUEBLO - DIA 7" data-name="Martina Franca" data-desc="Barroco elegante y llano. Ultimo paseo antes de volar. Capocollo local imperdible.">
+          <circle cx="466" cy="236" r="8" fill="#6b7c47" stroke="white" stroke-width="2" opacity="0.88"/>
+          <text x="476" y="252" font-size="9" fill="#445030" font-family="sans-serif">Martina Franca</text>
+        </g>
+        <g class="map-pin" data-type="PLAYA - DIA 6" data-name="Punta Prosciutto" data-desc="Mar Jonico. Arena blanca, agua turquesa, fondo bajisimo. Estilo Caribe, 1h15 desde la base.">
+          <circle cx="605" cy="368" r="14" fill="#2a7ea6" opacity="0.18"/>
+          <circle cx="605" cy="368" r="9" fill="#2a7ea6" stroke="white" stroke-width="2.5"/>
+          <text x="618" y="364" font-size="10" fill="#1a5f82" font-weight="700" font-family="sans-serif">Punta Prosciutto</text>
+        </g>
+        <g transform="translate(855,52)">
+          <circle r="22" fill="white" opacity="0.75"/>
+          <text text-anchor="middle" y="-8" font-size="9" fill="#888" font-family="sans-serif">N</text>
+          <text text-anchor="middle" y="16" font-size="9" fill="#888" font-family="sans-serif">S</text>
+          <text x="-14" y="4" font-size="9" fill="#888" font-family="sans-serif" text-anchor="middle">O</text>
+          <text x="14" y="4" font-size="9" fill="#888" font-family="sans-serif" text-anchor="middle">E</text>
+          <line x1="0" y1="-16" x2="0" y2="16" stroke="#ccc" stroke-width="1"/>
+          <line x1="-16" y1="0" x2="16" y2="0" stroke="#ccc" stroke-width="1"/>
+          <polygon points="0,-16 -4,-6 4,-6" fill="#c4622d"/>
+          <polygon points="0,16 -4,6 4,6" fill="#ccc"/>
+        </g>
+        <g transform="translate(30,475)">
+          <rect x="0" y="-3" width="64" height="5" fill="#888" rx="2"/>
+          <text x="0" y="-8" font-size="9" fill="#555" font-family="sans-serif">0</text>
+          <text x="58" y="-8" font-size="9" fill="#555" font-family="sans-serif">~50km</text>
+        </g>
+      </svg>
+      <div class="map-tooltip" id="map-tooltip">
+        <div class="tt-type" id="tt-type"></div>
+        <div class="tt-name" id="tt-name"></div>
+        <div class="tt-desc" id="tt-desc"></div>
+      </div>
+    </div>
+    <div class="map-legend">
+      <div class="legend-item"><div class="legend-dot" style="background:#c4622d"></div> Base / Alojamiento</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#2a7ea6"></div> Playa</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#6b7c47"></div> Pueblo / Historia</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#8b5cf6"></div> Aeropuerto</div>
+    </div>
+    <div class="cards-grid">
+      <div class="card">
+        <div class="card-icon">🏠</div>
+        <h3>Base recomendada</h3>
+        <p>Trullo con piscina privada en la campiña entre Cisternino, Locorotondo y Ostuni. Equidistante de todo.</p>
+        <span class="card-badge">180–220€/noche</span>
+      </div>
+      <div class="card">
+        <div class="card-icon">✈️</div>
+        <h3>Aeropuerto Bari (BRI)</h3>
+        <p>Transavia directo desde Amsterdam Schiphol. 2h30 de vuelo. Aprox. 180–260€ ida y vuelta por adulto.</p>
+        <span class="card-badge">Reservar con 2-3 meses</span>
+      </div>
+      <div class="card">
+        <div class="card-icon">📍</div>
+        <h3>Radio de acción</h3>
+        <p>Desde la base: Alberobello 20 min · Torre Canne 25 min · Polignano 45 min · Punta Prosciutto 1h15.</p>
+        <span class="card-badge">Sin cambios de base</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ITINERARIO -->
+  <div id="tab-itinerario" class="section">
+    <div class="sec-header">
+      <h2>Día a día</h2>
+      <p>Ritmo lento: una actividad de mañana, siesta 13–16h, una actividad de tarde. Hacé clic en cada día.</p>
+    </div>
+
+    <div class="day-block open">
+      <div class="day-header" onclick="toggleDay(this)">
+        <div class="day-num">1</div>
+        <div class="day-info">
+          <h3>Llegada y primer aterrizaje</h3>
+          <p>Bari → Valle d'Itria · Descanso total</p>
+        </div>
+        <div class="day-chevron">▾</div>
+      </div>
+      <div class="day-body">
+        <div class="timeline">
+          <div class="tl-item">
+            <div class="tl-time">Mañana</div>
+            <div class="tl-text">Vuelo Transavia AMS → BRI. Llegada al mediodía. Recoger el auto ya reservado en Bari Airport.</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-time">Tarde</div>
+            <div class="tl-text">Traslado al trullo (~1h15). Llegada, desempacar, almuerzo ligero en casa.</div>
+            <div class="tl-tip">💡 Comprá lo básico en el Conad de Fasano o Cisternino de camino. Evitá conducir cansados al atardecer.</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-time">Noche</div>
+            <div class="tl-text">Cena ligera en casa o trattoria a 5 min. El bebé y la abuela deben recuperar ritmo.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="day-block">
+      <div class="day-header" onclick="toggleDay(this)">
+        <div class="day-num">2</div>
+        <div class="day-info">
+          <h3>Torre Canne + Locorotondo</h3>
+          <p>Mar Adriático familiar · Pueblo blanco al atardecer</p>
+        </div>
+        <div class="day-chevron">▾</div>
+      </div>
+      <div class="day-body">
+        <div class="timeline">
+          <div class="tl-item">
+            <div class="tl-time">8:30 → 13:00</div>
+            <div class="tl-text"><strong>Torre Canne</strong> — Arena dorada finísima, fondo bajísimo, Bandera Verde pediátrica. <strong>Lido Bizzarro o Lido Tavernese</strong> (sombrilla + 2 tumbonas 25–40€). Almuerzo de pescado en el lido.</div>
+            <div class="tl-tip">🐚 Elegí el tramo norte de Torre Canne: más tranquilo y menos oleaje. El agua llega a los 50 cm a 10 metros de la orilla.</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-time">13:00 → 17:00</div>
+            <div class="tl-text">Vuelta al trullo · Siesta del bebé · Piscina para adultos</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-time">18:00 → 21:00</div>
+            <div class="tl-text"><strong>Locorotondo</strong> al atardecer: casco circular llano, accesible con cochecito, "lungomare" panorámico con vista a los trulli. Cena en <strong>Osteria Il Rosone</strong> o <strong>Goodo</strong>.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="day-block">
+      <div class="day-header" onclick="toggleDay(this)">
+        <div class="day-num">3</div>
+        <div class="day-info">
+          <h3>Alberobello al amanecer</h3>
+          <p>Los trulli · Patrimonio UNESCO · Salida 8:00 AM</p>
+        </div>
+        <div class="day-chevron">▾</div>
+      </div>
+      <div class="day-body">
+        <div class="timeline">
+          <div class="tl-item">
+            <div class="tl-time">8:00 → 12:00</div>
+            <div class="tl-text"><strong>Alberobello</strong> — Llegar a las 8:30, antes del calor y las hordas. Estacionar en <strong>Largo Martellotta</strong>. Recorrer primero <strong>Aia Piccola</strong> (más auténtica y plana), luego Rione Monti. Belvedere Santa Lucia (tiene rampa). Trullo Sovrano 2,50€. Helado en <strong>Arte Fredda</strong>.</div>
+            <div class="tl-tip">⚠️ ¡No entrar con el auto al casco! ZTL activa. El itinerario "Trulli senza barriere" está diseñado para cochecitos.</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-time">12:00 → 17:00</div>
+            <div class="tl-text">Regreso al trullo · Almuerzo · Siesta larga · Piscina</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-time">17:00 → 21:00</div>
+            <div class="tl-text">Tarde libre. Cena en la masseria o visita corta a <strong>Cisternino</strong> para las primeras <em>bombette</em>.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="day-block">
+      <div class="day-header" onclick="toggleDay(this)">
+        <div class="day-num">4</div>
+        <div class="day-info">
+          <h3>Día de descanso total</h3>
+          <p>Piscina · Sin coche · Recarga de energías</p>
+        </div>
+        <div class="day-chevron">▾</div>
+      </div>
+      <div class="day-body">
+        <div class="timeline">
+          <div class="tl-item">
+            <div class="tl-time">Todo el día</div>
+            <div class="tl-text">Ningún desplazamiento. Piscina, lectura, paseo entre olivos. Si la masseria lo ofrece: <strong>tour del frantoio</strong> (almazara) y degustación de aceite y Primitivo.</div>
+            <div class="tl-tip">💆 Este día es clave. A mitad de semana, recuperar fuerzas prolonga la energía de los últimos días.</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-time">Noche</div>
+            <div class="tl-text">Comer y cenar en casa. Compras en el súper local.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="day-block">
+      <div class="day-header" onclick="toggleDay(this)">
+        <div class="day-num">5</div>
+        <div class="day-info">
+          <h3>Polignano a Mare + Monopoli</h3>
+          <p>Acantilados · Pescado fresco · Casco histórico llano</p>
+        </div>
+        <div class="day-chevron">▾</div>
+      </div>
+      <div class="day-body">
+        <div class="timeline">
+          <div class="tl-item">
+            <div class="tl-time">9:00 → 13:30</div>
+            <div class="tl-text"><strong>Polignano a Mare</strong> — Aparcar en Via San Vito. Miradores sobre Lama Monachile, estatua de Domenico Modugno, Ponte Borbonico. Almuerzo en <strong>Pescaria</strong> (street food de pescado) o <strong>Trattoria dal Monaco</strong>. Helado en <strong>Il Super Mago del Gelo</strong>.</div>
+            <div class="tl-tip">⚠️ No bajar a la playa de Lama Monachile: escaleras empinadas y cantos rodados. Malo para bebé y abuela.</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-time">14:00 → 17:00</div>
+            <div class="tl-text">Siesta en el auto o vuelta al trullo.</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-time">17:00 → 20:00</div>
+            <div class="tl-text">Parada opcional en <strong>Monopoli</strong>: casco más llano y stroller-friendly de Puglia. <strong>Cala Porta Vecchia</strong> justo al lado del centro.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="day-block">
+      <div class="day-header" onclick="toggleDay(this)">
+        <div class="day-num">6</div>
+        <div class="day-info">
+          <h3>Mar Jónico + Cisternino</h3>
+          <p>Punta Prosciutto · Bombette al horno · Atardecer</p>
+        </div>
+        <div class="day-chevron">▾</div>
+      </div>
+      <div class="day-body">
+        <div class="timeline">
+          <div class="tl-item">
+            <div class="tl-time">8:30 → 14:00</div>
+            <div class="tl-text"><strong>Punta Prosciutto</strong> o Torre Lapillo (1h15) — Arena blanca polvorienta y agua turquesa estilo Caribe. Fondo bajísimo perfecto para bebé. Almuerzo en <strong>Peschería 3.0</strong> o chiringuito del lido.</div>
+            <div class="tl-tip">🌊 El Jónico tiene menos oleaje y agua más cálida que el Adriático en septiembre. Vale la excursión larga.</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-time">15:00 → 17:30</div>
+            <div class="tl-text">Siesta en casa · Piscina.</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-time">19:00 → 22:00</div>
+            <div class="tl-text"><strong>Cisternino</strong> al atardecer: las <em>macellerie-bracerie</em> del centro. Se elige la carne en el mostrador y la asan al horno. <strong>Macelleria D'Onghia</strong> o <strong>L'Antico Borgo</strong>. Las <strong>bombette</strong> (rollito de capocollo con caciocavallo) son la especialidad.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="day-block">
+      <div class="day-header" onclick="toggleDay(this)">
+        <div class="day-num">7</div>
+        <div class="day-info">
+          <h3>Martina Franca + Vuelo</h3>
+          <p>Barroco elegante · Último capocollo · Regreso a Amsterdam</p>
+        </div>
+        <div class="day-chevron">▾</div>
+      </div>
+      <div class="day-body">
+        <div class="timeline">
+          <div class="tl-item">
+            <div class="tl-time">Mañana</div>
+            <div class="tl-text">Paseo tranquilo por <strong>Martina Franca</strong>: barroco elegante, muy plano, sin multitudes. Panificio local del <em>capocollo</em>. Compras de últimas provisiones.</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-time">Mediodía</div>
+            <div class="tl-text">Último almuerzo pugliese. Cargar el auto y salir hacia Bari Airport con suficiente margen (≥2h antes del vuelo).</div>
+            <div class="tl-tip">📋 Filmá el auto antes de devolverlo. Pedí firma del agente sobre el estado. Evita cargos sorpresa.</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-time">Tarde/noche</div>
+            <div class="tl-text">Vuelo Transavia BRI → AMS. Regreso a Amsterdam.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- LOGISTICA -->
+  <div id="tab-logistica" class="section">
+    <div class="sec-header">
+      <h2>Logística del viaje</h2>
+      <p>Vuelos, auto, ZTL, bebé — todo lo que hay que resolver antes de salir.</p>
+    </div>
+
+    <div class="warn-box">
+      <h4>⚠️ ZTL: la trampa más cara de Puglia</h4>
+      <p>Las Zone a Traffico Limitato tienen cámaras que leen matrículas. La multa (~100€) llega meses después y la cobra la rental automáticamente. <strong>Nunca entren al casco histórico con el auto</strong> en Alberobello, Ostuni, Locorotondo, Polignano, Monopoli, Cisternino, Martina Franca, Lecce ni Bari Vecchia.</p>
+    </div>
+
+    <table class="ztl-table">
+      <thead><tr><th>Pueblo</th><th>Dónde estacionar</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Alberobello</strong></td><td>Largo Martellotta o Piazzale Indipendenza (~6€/día)</td></tr>
+        <tr><td><strong>Ostuni</strong></td><td>Parcheggio Via G. Pinto o Parco Rimembranze</td></tr>
+        <tr><td><strong>Locorotondo</strong></td><td>Parking subterráneo en la entrada del casco</td></tr>
+        <tr><td><strong>Polignano</strong></td><td>Parcheggio Via San Vito</td></tr>
+        <tr><td><strong>Monopoli</strong></td><td>Parking del puerto</td></tr>
+        <tr><td><strong>Lecce</strong></td><td>Parking gratuito junto a la estación</td></tr>
+      </tbody>
+    </table>
+
+    <div class="logistics-grid">
+      <div class="log-card">
+        <h3>✈️ Vuelo</h3>
+        <ul>
+          <li><strong>Aerolínea:</strong> Transavia (KLM low-cost)</li>
+          <li><strong>Ruta:</strong> AMS → BRI directo</li>
+          <li><strong>Duración:</strong> 2h25–2h40</li>
+          <li><strong>Precio adulto ida/vuelta:</strong> 180–260€</li>
+          <li><strong>Bebé (infant in lap):</strong> ~30€ por trayecto</li>
+          <li><strong>Carrito y silla de auto:</strong> gratis en bodega</li>
+          <li>Reservar con 2–3 meses de anticipación</li>
+        </ul>
+      </div>
+      <div class="log-card">
+        <h3>🚗 Auto alquilado</h3>
+        <ul>
+          <li><strong>Categoría:</strong> Compacta-plus (Golf, Tipo)</li>
+          <li><strong>Empresas recomendadas:</strong> Europcar, Hertz, Sixt</li>
+          <li><strong>Evitar:</strong> Sicily by Car, Goldcar</li>
+          <li><strong>Precio estimado:</strong> 450–650€ la semana</li>
+          <li>Seguro full coverage incluido</li>
+          <li>Caja automática: reservar ya (se agota)</li>
+          <li>Filmar el auto antes de devolver</li>
+        </ul>
+      </div>
+      <div class="log-card">
+        <h3>👶 Silla de bebé</h3>
+        <ul>
+          <li><strong>Lo mejor:</strong> traer la suya desde Amsterdam</li>
+          <li>Vuela gratis en todas las aerolíneas</li>
+          <li>Alquiler en rental: 8–15€/día (calidad variable)</li>
+          <li><strong>Alternativa:</strong> Babonbo.com entrega en BRI</li>
+          <li>Grupo 1 (9–18kg) obligatorio por ley italiana</li>
+        </ul>
+      </div>
+      <div class="log-card">
+        <h3>🏠 Alojamiento ideal</h3>
+        <ul>
+          <li>Trullo o lamia con piscina privada</li>
+          <li>Zona: entre Cisternino, Locorotondo y Ostuni</li>
+          <li><strong>Confirmar:</strong> jardín cercado + cuna + AC</li>
+          <li><strong>Confirmar:</strong> planta baja + mosquiteras</li>
+          <li>Precio: 180–220€/noche</li>
+          <li>Cuidado: costos ocultos (limpieza, electricidad)</li>
+        </ul>
+      </div>
+      <div class="log-card">
+        <h3>🛒 Bebé en Puglia</h3>
+        <ul>
+          <li>Pañales Pampers T4: 10–13€ en Conad/farmacia</li>
+          <li>Fórmula Aptamil/Plasmon: 15–20€ el bote</li>
+          <li>Tarritos Plasmon/Hipp: 0,80–1,50€</li>
+          <li>SPF 50+ bebé + camiseta UV + sombrero</li>
+          <li>Mochila portabebés (para empedrados)</li>
+          <li>Repelente Chicco Anti-Mosquito</li>
+          <li>Emergencias: marcar el 118</li>
+        </ul>
+      </div>
+      <div class="log-card">
+        <h3>🏥 Salud y seguros</h3>
+        <ul>
+          <li><strong>EHIC holandesa</strong> (Europese gezondheidskaart) para cada integrante</li>
+          <li>Gratis a través del zorgverzekeraar</li>
+          <li>Seguro de viaje complementario: ~50€ familia</li>
+          <li>Farmacias: abren 8:30–13h y 16:30–20h</li>
+          <li>Controra (cierre): 13:30–16:30 en pueblos pequeños</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="warn-box">
+      <h4>❌ Lo que dejamos fuera</h4>
+      <p><strong>Matera:</strong> los Sassi son escaleras y piedra resbaladiza — agotador con bebé y abuela, 1h15 de auto. <strong>Grotte di Castellana:</strong> prohiben cochecitos, 70 escalones al inicio y 16°C bajo tierra. <strong>Lecce:</strong> 1h45 desde la base, sacrifica un día entero. Solo incluirla si la abuela tolera bien el coche (reemplaza el día 6).</p>
+    </div>
+  </div>
+
+  <!-- PLAYAS -->
+  <div id="tab-playas" class="section">
+    <div class="sec-header">
+      <h2>Las playas del viaje</h2>
+      <p>Todas elegidas por aguas tranquilas y fondos bajos, ideales para bebé de 1 año.</p>
+    </div>
+    <div class="cards-grid">
+      <div class="card">
+        <div class="card-icon">🏖️</div>
+        <h3>Torre Canne</h3>
+        <p>La mejor para el bebé en el Adriático. Arena dorada finísima, fondo bajísimo (50 cm a 10 metros), Bandera Verde pediátrica. Lidos con buena infraestructura. A 25 min desde la base.</p>
+        <span class="card-badge">⭐ Recomendada día 2</span>
+      </div>
+      <div class="card">
+        <div class="card-icon">🌊</div>
+        <h3>Punta Prosciutto</h3>
+        <p>Mar Jónico, agua turquesa y arena blanca polvorienta. Fondo bajísimo como Caribe. Menos oleaje y más cálida que el Adriático. Vale la excursión de 1h15. Lidos con buena cocina.</p>
+        <span class="card-badge">⭐ Recomendada día 6</span>
+      </div>
+      <div class="card">
+        <div class="card-icon">🌅</div>
+        <h3>Capitolo / Coccaro</h3>
+        <p>Al sur de Monopoli, varios lidos en arena fina. Más cómodo y cercano si la abuela prefiere no hacer viaje largo. Coccaro Beach y Lido Pellerossa son los mejor organizados.</p>
+        <span class="card-badge">Opción alternativa día 6</span>
+      </div>
+      <div class="card">
+        <div class="card-icon">🚫</div>
+        <h3>Lama Monachile (Polignano)</h3>
+        <p>Hermosísima pero no apta para este grupo. Acceso por escaleras empinadas y empedradas, cantos rodados en la orilla. Quedarse en los miradores de arriba.</p>
+        <span class="card-badge">❌ No recomendada</span>
+      </div>
+    </div>
+
+    <div class="warn-box" style="background:rgba(42,126,166,0.07); border-color:rgba(42,126,166,0.2); border-left-color:var(--mar);">
+      <h4 style="color:var(--mar)">🌡 El mar en septiembre</h4>
+      <p>Temperatura del agua: 23–25°C en el Adriático, 25–26°C en el Jónico. Los lidos operan hasta mediados de septiembre con sombrillas y servicio completo. Protector solar SPF 50+ para el bebé en todas las salidas, incluso nublado. Evitar sol directo entre 12:00 y 16:00.</p>
+    </div>
+  </div>
+
+  <!-- GASTRONOMIA -->
+  <div id="tab-gastronomia" class="section">
+    <div class="sec-header">
+      <h2>Gastronomía pugliese</h2>
+      <p>Una de las mejores cocinas regionales de Italia. Septiembre es temporada de tomate, uva, higos, almendras y pescado fresco.</p>
+    </div>
+
+    <div class="food-grid">
+      <div class="food-item"><div class="food-emoji">🌿</div><div class="food-info"><h4>Orecchiette cime di rapa</h4><p>En Bari Vecchia las señoras las hacen a mano en la calle. Pasta obligatoria.</p></div></div>
+      <div class="food-item"><div class="food-emoji">🧀</div><div class="food-info"><h4>Burrata di Andria DOP</h4><p>Fresca del día, con tomate o sola. La mejor del mundo.</p></div></div>
+      <div class="food-item"><div class="food-emoji">🫓</div><div class="food-info"><h4>Focaccia barese</h4><p>Con tomate, orégano y aceitunas. Perfecta para el desayuno en el trullo.</p></div></div>
+      <div class="food-item"><div class="food-emoji">🥩</div><div class="food-info"><h4>Bombette di Cisternino</h4><p>Rollitos de capocollo con caciocavallo, asados al horno. La especialidad del Valle d'Itria.</p></div></div>
+      <div class="food-item"><div class="food-emoji">🦐</div><div class="food-info"><h4>Frutti di mare crudi</h4><p>Gambero rosso de Gallipoli, ostras y ricci di mare en los lidos del Jónico.</p></div></div>
+      <div class="food-item"><div class="food-emoji">🥟</div><div class="food-info"><h4>Panzerotti</h4><p>Fritos rellenos de mozzarella y tomate. Street food obligatorio en Bari.</p></div></div>
+      <div class="food-item"><div class="food-emoji">🍷</div><div class="food-info"><h4>Primitivo y Negroamaro</h4><p>Los vinos locales. Robustos y asequibles. Excelentes con carnes y quesos.</p></div></div>
+      <div class="food-item"><div class="food-emoji">🧁</div><div class="food-info"><h4>Pasticciotto</h4><p>Hojaldre con crema custard. El desayuno clásico de Lecce y el Salento.</p></div></div>
+      <div class="food-item"><div class="food-emoji">🫒</div><div class="food-info"><h4>Aceite extra virgen DOP</h4><p>Puglia produce el 40% del aceite de Italia. Comprar directamente en las masserías.</p></div></div>
+    </div>
+
+    <div class="log-card" style="margin-bottom:20px">
+      <h3>🍽️ Restaurantes recomendados</h3>
+      <ul>
+        <li><strong>Pescaria (Polignano):</strong> street food de pescado revolucionario. Siempre hay fila, vale la pena.</li>
+        <li><strong>Trattoria dal Monaco (Polignano):</strong> familiar, pescado fresco del día, sin sorpresas.</li>
+        <li><strong>Osteria Il Rosone (Locorotondo):</strong> cucina casalinga, orecchiette y carnes locales.</li>
+        <li><strong>Macelleria D'Onghia (Cisternino):</strong> referencia de las bombette. Elegís en el mostrador.</li>
+        <li><strong>L'Antico Borgo (Cisternino):</strong> braceria en el centro histórico, muy familiar.</li>
+        <li><strong>Osteria del Tempo Perso (Ostuni):</strong> ambiente íntimo en gruta, cocina refinada.</li>
+        <li><strong>Peschería 3.0 (Torre Lapillo):</strong> pescado fresco a pie de playa, precios razonables.</li>
+        <li><strong>Arte Fredda (Alberobello):</strong> helados artesanales reconocidos por Gambero Rosso.</li>
+      </ul>
+    </div>
+
+    <div class="warn-box" style="background:rgba(107,124,71,0.07); border-color:rgba(107,124,71,0.2); border-left-color:var(--oliva);">
+      <h4 style="color:var(--oliva)">👶 Comer con bebé en Italia</h4>
+      <p>Los italianos adoran a los bebés — los camareros calientan biberones y lo entretienen sin pedirlo. Llevá un booster portátil con correas (tronas no siempre disponibles). Los restaurantes turísticos abren desde las 19:00; pedí mesa a las 19:30 para adaptarse al horario del bebé. En casa o lido para el mediodía es más cómodo y económico.</p>
+    </div>
+  </div>
+
+  <!-- PRESUPUESTO -->
+  <div id="tab-presupuesto" class="section">
+    <div class="sec-header">
+      <h2>Presupuesto estimado</h2>
+      <p>Para 2 adultos + 1 abuela + 1 bebé de 1 año. Septiembre, presupuesto medio.</p>
+    </div>
+
+    <table class="budget-table">
+      <thead>
+        <tr>
+          <th>Categoría</th>
+          <th class="amt">Estimado (€)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>✈️ Vuelos AMS–BRI Transavia (3 adultos + bebé, ida y vuelta)</td><td class="amt">750</td></tr>
+        <tr><td>🚗 Alquiler auto compacto + seguro full + silla bebé, 7 días</td><td class="amt">550</td></tr>
+        <tr><td>⛽ Combustible y peajes (~700 km)</td><td class="amt">130</td></tr>
+        <tr><td>🏠 Trullo con piscina, 7 noches (180–220€/noche)</td><td class="amt">1.450</td></tr>
+        <tr><td>🍽️ Comidas (desayunos en casa + almuerzos + 4 cenas restaurante)</td><td class="amt">950</td></tr>
+        <tr><td>🏖️ Lidos y playa (4–5 días con sombrilla, 2 tumbonas)</td><td class="amt">150</td></tr>
+        <tr><td>🎟️ Entradas y actividades (Alberobello, tours, etc.)</td><td class="amt">150</td></tr>
+        <tr><td>🍦 Miscelánea (helados, cafés, parking, souvenirs, tasa estancia)</td><td class="amt">320</td></tr>
+        <tr class="total">
+          <td>💰 TOTAL ESTIMADO</td>
+          <td class="amt">≈ 4.450€</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="cards-grid">
+      <div class="card">
+        <div class="card-icon">📉</div>
+        <h3>Para ahorrar</h3>
+        <p>Reservar vuelos 3+ meses antes · Trullo sin piscina privada · Comer en mercados y supermercados locales · Playas libres (sin lido).</p>
+        <span class="card-badge">Desde ~3.100€</span>
+      </div>
+      <div class="card">
+        <div class="card-icon">✨</div>
+        <h3>Si querés más comfort</h3>
+        <p>Masseria boutique tipo Il Frantoio o Torre Coccaro · Cenas en restaurantes todos los días · Coche de categoría superior.</p>
+        <span class="card-badge">Hasta ~6.000€+</span>
+      </div>
+      <div class="card">
+        <div class="card-icon">📅</div>
+        <h3>Mejor momento</h3>
+        <p>Segunda quincena de septiembre (15–25). Precios 20–30% más bajos que agosto, mar a 24°C, sin multitudes, lidos abiertos.</p>
+        <span class="card-badge">Sep 15–25 ideal</span>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /main -->
+
+<footer class="page-footer">
+  Guía preparada para <strong>Guido</strong> · Puglia, septiembre 2025/2026 · Generado con Claude ✦ Anthropic
+</footer>
+
+<script>
+// TAB NAVIGATION
+function showTab(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  event.target.classList.add('active');
+
+}
+
+// ACCORDION
+function toggleDay(header) {
+  const block = header.parentElement;
+  block.classList.toggle('open');
+}
+
+// SVG MAP TOOLTIPS
+document.querySelectorAll('.map-pin').forEach(pin => {
+  pin.addEventListener('mouseenter', function(e) {
+    const tooltip = document.getElementById('map-tooltip');
+    document.getElementById('tt-type').textContent = this.dataset.type || '';
+    document.getElementById('tt-name').textContent = this.dataset.name || '';
+    document.getElementById('tt-desc').textContent = this.dataset.desc || '';
+    const color = this.querySelector('circle') ? this.querySelector('circle').getAttribute('fill') : '#c4622d';
+    document.getElementById('tt-type').style.color = color;
+    tooltip.style.display = 'block';
+    const wrap = document.getElementById('map-wrap');
+    const wRect = wrap.getBoundingClientRect();
+    const x = e.clientX - wRect.left + 12;
+    const y = e.clientY - wRect.top - 10;
+    tooltip.style.left = Math.min(x, wRect.width - 240) + 'px';
+    tooltip.style.top = Math.max(y, 5) + 'px';
+  });
+  pin.addEventListener('mouseleave', function() {
+    document.getElementById('map-tooltip').style.display = 'none';
+  });
+  pin.addEventListener('mousemove', function(e) {
+    const wrap = document.getElementById('map-wrap');
+    const wRect = wrap.getBoundingClientRect();
+    const tooltip = document.getElementById('map-tooltip');
+    const x = e.clientX - wRect.left + 12;
+    const y = e.clientY - wRect.top - 10;
+    tooltip.style.left = Math.min(x, wRect.width - 240) + 'px';
+    tooltip.style.top = Math.max(y, 5) + 'px';
+  });
+  // Touch support
+  pin.addEventListener('click', function(e) {
+    const tooltip = document.getElementById('map-tooltip');
+    if (tooltip.style.display === 'block') {
+      tooltip.style.display = 'none';
+      return;
+    }
+    document.getElementById('tt-type').textContent = this.dataset.type || '';
+    document.getElementById('tt-name').textContent = this.dataset.name || '';
+    document.getElementById('tt-desc').textContent = this.dataset.desc || '';
+    const color = this.querySelector('circle') ? this.querySelector('circle').getAttribute('fill') : '#c4622d';
+    document.getElementById('tt-type').style.color = color;
+    const wrap = document.getElementById('map-wrap');
+    const wRect = wrap.getBoundingClientRect();
+    const svgEl = document.getElementById('puglia-svg');
+    const svgRect = svgEl.getBoundingClientRect();
+    const x = e.clientX - wRect.left + 12;
+    const y = e.clientY - wRect.top - 60;
+    tooltip.style.left = Math.min(Math.max(x, 5), wRect.width - 240) + 'px';
+    tooltip.style.top = Math.max(y, 5) + 'px';
+    tooltip.style.display = 'block';
+    e.stopPropagation();
+  });
+});
+document.addEventListener('click', function() {
+  const tooltip = document.getElementById('map-tooltip');
+  if (tooltip) tooltip.style.display = 'none';
+});
+</script>
+
+</body>
+</html>
