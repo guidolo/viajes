@@ -93,6 +93,8 @@
   .loc-row{display:flex;gap:11px;padding:11px 0;border-top:1px solid var(--borde);font-size:13.5px;line-height:1.6;color:#4a4f4a}
   .loc-row .ic{flex:none;font-size:15px;line-height:1.5}
   .loc-row .lbl{font-weight:700;color:var(--sea-deep);margin-right:5px}
+  .loc-row-muted{color:var(--muted)}
+  .beach-badge{font-size:14px;vertical-align:-1px}
   .loc-map-btn{margin-top:15px;display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;color:#fff;background:var(--sea);border:none;border-radius:9px;padding:9px 15px;cursor:pointer;font-family:inherit;transition:background .15s}
   .loc-map-btn:hover{background:var(--sea-deep)}
 
@@ -169,204 +171,238 @@ const PUNTOS = [
    d:`Capital de los trulli, casas cónicas de piedra seca. Patrimonio de la Humanidad.`,
    larga:`La capital mundial de los trulli. El Rione Monti concentra más de 1.000 de estas casitas cónicas de piedra seca: subí por sus callecitas hasta los Trulli Siamesi y la iglesia-trullo de Sant'Antonio. Cruzá al Rione Aia Piccola, más residencial y auténtico, y no te pierdas el Trullo Sovrano, el único de dos plantas. Al atardecer, cuando bajan los tours en bus, el pueblo se vuelve mágico.`,
    park:`El centro es ZTL (tránsito restringido). Dejá el auto en el parking de pago de Largo Martellotta, al pie del Rione Monti, y subí a pie.`,
+   pl:false, playa:``,
    comer:`Trullo d'Oro o La Cantina para cocina tradicional dentro de un trullo; Il Poeta Contadino para una cena más refinada.`},
 
   {n:`Polignano a Mare`, lat:40.9958, lng:17.2186, cat:'costa', p:4.8,
    d:`Casco antiguo sobre acantilados y la cala de Lama Monachile.`,
    larga:`La postal más famosa de Puglia. Asomate a la Terrazza Santo Stefano sobre el acantilado y bajá a la cala de Lama Monachile, encajada entre las rocas. Recorré el casco antiguo con sus versos pintados en escaleras y balcones (homenaje a Domenico Modugno, el autor de "Volare", que nació acá). Un helado o un espresso en la plaza y listo.`,
    park:`Casco peatonal. Estacioná en los parkings de pago cerca de Piazza Aldo Moro o en las calles del borde del centro.`,
+   pl:true, playa:`la cala de Lama Monachile es preciosa pero chica, de piedra y siempre llena, con agua honda. Más para la foto y un chapuzón rápido que para pasar el día; poco cómoda con nenes.`,
    comer:`Pescaria en Piazza Aldo Moro para panini de mar de culto (hay cola, vale la pena); Grotta Palazzese para cenar dentro de una gruta sobre el mar (carísimo y espectacular, reservá sí o sí).`},
 
   {n:`Ostuni`, lat:40.7304, lng:17.5772, cat:'ciudad', p:4.7,
    d:`La "Ciudad Blanca": callejones encalados sobre una colina.`,
    larga:`La "Città Bianca", un laberinto de callejones encalados trepando una colina, coronado por la Concattedrale gótica. Perdete sin rumbo, buscá los miradores sobre el mar y los olivares, y quedate para el atardecer, que es cuando mejor se ve. Base ideal para todo el Valle d'Itria y la zona de Rosa Marina.`,
    park:`ZTL en el casco. Estacioná en los parkings de pago alrededor de Piazza della Libertà y subí caminando.`,
+   pl:true, playa:`el pueblo está en una colina, pero su marina (Rosa Marina, Pilone, Costa Merlata) tiene buenas playas de arena y roca. Cerca, la reserva de Torre Guaceto ofrece agua baja y limpia, ideal para los chicos.`,
    comer:`Osteria Piazzetta Cattedrale (Bib Gourmand, chico y muy rico — mejor para adultos, reservá) para una cena especial; Drogheria Pugliese, Trattoria Sapere e Sapori o La Taverna da Maurizio para algo más casual.`},
 
   {n:`Locorotondo`, lat:40.7546, lng:17.3265, cat:'ciudad', p:4.5,
    d:`Pueblo circular de casas blancas, de los más bonitos de Italia.`,
    larga:`Uno de "I Borghi più belli d'Italia", de planta circular (de ahí el nombre) y casas blancas con techos a dos aguas llamados cummerse. Callejeá sin apuro, asomate a los miradores sobre el Valle d'Itria salpicado de trulli, y probá el vino blanco local, un DOC muy rico.`,
    park:`Centro peatonal. Estacionamiento en el anillo exterior, cerca de la Villa Comunale.`,
+   pl:false, playa:``,
    comer:`La Taverna del Duca o Quartino Rosso para cocina de la zona en el casco histórico.`},
 
   {n:`Martina Franca`, lat:40.7050, lng:17.3370, cat:'ciudad', p:4.5,
    d:`Capital barroca del Valle d'Itria, con balcones de hierro forjado.`,
    larga:`La joya barroca del Valle d'Itria: el Palazzo Ducale, la Basílica de San Martino y una sucesión de balcones de hierro forjado y fachadas ornamentadas. En julio y agosto se llena con el Festival della Valle d'Itria, de ópera. Probá el capocollo di Martina Franca, un embutido local con IGP.`,
    park:`Estacioná fuera del casco (ZTL) y entrá a pie por Piazza XX Settembre / Corso Italia.`,
+   pl:false, playa:``,
    comer:`Trattorias con carnes y embutidos de la zona; buscá el capocollo y las bombette (rollitos de carne rellenos).`},
 
   {n:`Cisternino`, lat:40.7420, lng:17.4230, cat:'ciudad', p:4.4,
    d:`Pueblo tranquilo, famoso por sus asadores "fornello pronto".`,
    larga:`Otro de los pueblos más lindos de Italia, tranquilo y sin las multitudes de Alberobello. Su especialidad son los "fornello pronto": carnicerías donde elegís la carne en la vitrina (bombette, salchichas, costillas) y te la asan al momento para comerla ahí mismo. Callejeá el casco blanco y disfrutá la calma.`,
    park:`Estacionamiento en el borde del centro histórico, que es peatonal.`,
+   pl:false, playa:``,
    comer:`Cualquier fornello del centro para la experiencia de carne a la brasa; es la razón para venir.`},
 
   {n:`Monopoli`, lat:40.9509, lng:17.3001, cat:'ciudad', p:4.5,
    d:`Puerto de barcas de colores, murallas y calas urbanas.`,
    larga:`Un puerto vivo con barcas de pesca de colores (gozzi), murallas, el castillo de Carlos V y un casco histórico blanco lleno de iglesias. Tiene además calas urbanas como Cala Porta Vecchia para meter los pies en el agua sin salir del pueblo. Menos concurrida y más "de verdad" que Polignano.`,
    park:`Parkings de pago junto al puerto o cerca de Largo Fontanelle; el casco es peatonal.`,
+   pl:true, playa:`calas urbanas (Cala Porta Vecchia) y, hacia el sur (zona Capitolo), muy buenas playas de arena. Vale la pena, y varias son cómodas para chicos.`,
    comer:`Osteria Perricci, clásico de pescado; abundan las trattorias de mar en el casco antiguo.`},
 
   {n:`Grotte di Castellana`, lat:40.8790, lng:17.1680, cat:'gruta', p:4.6,
    d:`Cuevas subterráneas de 3 km con la deslumbrante Grotta Bianca.`,
    larga:`El sistema de cuevas más espectacular de Italia. Se visita con guía en dos recorridos: el corto (1 km, ~50 min) o el completo (3 km, ~2 h) que termina en la Grotta Bianca, de alabastro blanco reluciente. Abajo hay ~15 °C todo el año, así que llevá algo de abrigo. Reservá el turno online.`,
    park:`Amplio estacionamiento gratuito en el complejo de las grutas.`,
+   pl:false, playa:``,
    comer:`Hay bar/restaurante en el complejo; para comer mejor, combiná con Alberobello o Putignano, a 15 min.`},
 
   {n:`Egnazia`, lat:40.8883, lng:17.3922, cat:'historia', p:4.3,
    d:`Yacimiento messapio-romano junto al mar.`,
    larga:`Una ciudad messapia y luego romana junto al mar, con muralla, foro, vía Traiana, basílicas paleocristianas y un buen museo arqueológico. Se camina entre ruinas con el Adriático de fondo. Tranquila, buena para una media mañana con algo de historia.`,
    park:`Estacionamiento gratuito en el propio área arqueológica.`,
+   pl:true, playa:`la costa de al lado (Savelletri) es sobre todo rocosa, con calas y lidos: linda para nadar, pero no de arena.`,
    comer:`Muy cerca está Savelletri, con excelentes restaurantes de pescado frente al puertito (ideal para combinar con la visita).`},
 
   {n:`Fasano (Zoosafari)`, lat:40.8370, lng:17.3610, cat:'naturaleza', p:4.0,
    d:`El mayor parque de fauna de Italia, se recorre en auto.`,
    larga:`El safari en auto más grande de Italia: recorrés con tu propio vehículo un circuito entre leones, jirafas, cebras y elefantes, y después hay una zona tipo parque de atracciones, delfinario y espectáculos. Muy pensado para chicos; dale medio día si viajás con peques.`,
    park:`Estacionamiento amplio y gratuito en la entrada del parque.`,
+   pl:false, playa:``,
    comer:`Hay puestos de comida dentro del parque; para algo mejor bajá a Savelletri o al centro de Fasano.`},
 
   {n:`Grottaglie`, lat:40.5370, lng:17.4340, cat:'historia', p:4.2,
    d:`La ciudad de la cerámica, con barrio de alfareros.`,
    larga:`La capital de la cerámica pugliese. El Quartiere delle Ceramiche está lleno de talleres excavados donde ves a los alfareros trabajar y comprás las típicas pumi (piñas de la buena suerte) y platos pintados a mano. Sumá el Castello Episcopio. Buen lugar para llevarte un recuerdo auténtico.`,
    park:`Estacioná cerca del Castello Episcopio; el barrio de los talleres se recorre a pie.`,
+   pl:false, playa:``,
    comer:`Trattorias del centro; zona de buenas orecchiette y carnes.`},
 
   {n:`Bari`, lat:41.1258, lng:16.8698, cat:'ciudad', p:4.3,
    d:`La capital: Bari Vecchia, San Nicola y el paseo marítimo.`,
    larga:`La capital, con una Bari Vecchia que es puro teatro callejero: mirá a las señoras haciendo orecchiette a mano en Arco Basso ("la strada delle orecchiette"), entrá a la Basílica de San Nicola (gran peregrinación ortodoxa) y a la Catedral, y caminá el imponente Lungomare. Comé focaccia barese recién salida del horno.`,
    park:`El casco es ZTL. Usá parkings de pago (por ejemplo cerca del Teatro Petruzzelli o del puerto) y entrá a pie.`,
+   pl:true, playa:`tiene la playa urbana Pane e Pomodoro, práctica pero nada especial. Para playa de verdad conviene salir de la ciudad.`,
    comer:`Panificio Fiore para focaccia barese; orecchiette caseras al toque en Arco Basso; Le Travi – "Da Nonna Rosa" para cocina barese tradicional.`},
 
   {n:`Trani`, lat:41.2775, lng:16.4172, cat:'historia', p:4.6,
    d:`Catedral románica blanca asomada al Adriático.`,
    larga:`Su catedral románica de piedra blanca, plantada casi sobre el mar, es de las más bellas de Italia — imperdible al atardecer. Rodeá el puerto pesquero lleno de barquitas, el Castello Svevo y el antiguo barrio judío (la Giudecca) con su sinagoga-iglesia. Un pueblo elegante y luminoso.`,
    park:`Parkings de pago junto al puerto; la zona de la catedral es peatonal.`,
+   pl:true, playa:`solo una playita (Spiaggia Colonna) junto a la catedral y algún tramo de roca. Alcanza para un chapuzón, no para un día entero.`,
    comer:`Restaurantes de pescado alrededor del porto; buena movida gastronómica al caer la tarde.`},
 
   {n:`Castel del Monte`, lat:41.0840, lng:16.2710, cat:'historia', p:4.7,
    d:`El enigmático castillo octogonal de Federico II.`,
    larga:`El castillo octogonal de Federico II, solo en lo alto de una colina: geometría perfecta, ocho torres, ocho salas, una obsesión con el número 8, y sin una función militar clara — un misterio que sigue fascinando. Reservá entrada online. Aparece en la moneda italiana de 1 céntimo.`,
    park:`No se accede en auto hasta el castillo: se estaciona abajo (parking de pago) y sube un bus lanzadera, o se camina.`,
+   pl:false, playa:``,
    comer:`En el sitio hay poco; almorzá en Andria (cuna de la burrata) o en Trani.`},
 
   {n:`Bisceglie`, lat:41.2430, lng:16.5050, cat:'costa', p:4.0,
    d:`Casco medieval y la cala de Ripalta sobre el mar.`,
    larga:`Pueblo costero con casco medieval, catedral, torre normanda y un puerto tranquilo con buen paseo de mar. Tiene calas como Ripalta para un baño. Una parada relajada entre Trani y Bari, sin grandes multitudes.`,
    park:`Estacionamiento junto al puerto y el lungomare.`,
+   pl:true, playa:`calas y playas (Ripalta, Salsello), algunas de arena. Decentes, sin ser espectaculares.`,
    comer:`Trattorias de pescado en el puerto.`},
 
   {n:`Barletta`, lat:41.3190, lng:16.2840, cat:'ciudad', p:4.0,
    d:`Castillo suabo y el "Coloso", bronce romano de 5 m.`,
    larga:`Sus íconos son el Colosso di Barletta (una estatua de bronce romana de más de 5 metros, en plena calle) y el gran Castello svevo-angioino. Tiene catedral, casco histórico y la leyenda de la Disfida di Barletta, un duelo caballeresco del s. XVI que se recrea cada año.`,
    park:`Parkings cerca del castillo y del centro.`,
+   pl:true, playa:`litoral de arena amplio pero urbano y sin mucho encanto. Cumple, poco más.`,
    comer:`Cocina local y buena pastelería; probá los taralli y la burrata de la zona.`},
 
   {n:`Lecce`, lat:40.3520, lng:18.1720, cat:'historia', p:4.8,
    d:`La "Florencia del barroco", en piedra dorada leccese.`,
    larga:`La "Florencia del Sur". La Basílica di Santa Croce es un delirio escultórico tallado en la cálida piedra leccese; sumale la Piazza del Duomo (una plaza casi cerrada, teatral), el anfiteatro romano en Piazza Sant'Oronzo y un pasticciotto (masa rellena de crema) con café. Es de esas ciudades para perderse a pie durante horas.`,
    park:`Todo el centro es ZTL. Estacioná fuera de la muralla (por ejemplo en el Foro Boario) y caminá.`,
+   pl:false, playa:`la ciudad es de interior; la costa más cercana es San Cataldo (~12 km), correcta pero no de las mejores del Salento.`,
    comer:`Alle Due Corti y Cucina Casereccia ("Le Zie") para cocina salentina de la nonna; el pasticciotto clásico en Natale o Avio Bar.`},
 
   {n:`Otranto`, lat:40.1470, lng:18.4910, cat:'ciudad', p:4.7,
    d:`El punto más oriental de Italia; catedral con mosaico y castillo.`,
    larga:`El pueblo más oriental de Italia, un casco blanco amurallado sobre agua turquesa. Su catedral guarda un asombroso mosaico medieval del "Árbol de la Vida" que cubre todo el piso, y una capilla con los cráneos de los 800 mártires. Sumá el castillo aragonés y, cerca, la surreal cantera de Bauxite y la Grotta della Poesia.`,
    park:`Casco ZTL. Parkings de pago junto al puerto y en la entrada del centro.`,
+   pl:true, playa:`sí, y muy buena. Además de la playa del pueblo, cerca está Baia dei Turchi: arena fina entre pinares y agua baja y transparente, de las mejores del Adriático y cómoda para chicos.`,
    comer:`Pescado fresco en el casco; L'Altro Baffo para algo más cuidado y creativo.`},
 
   {n:`Gallipoli`, lat:40.0560, lng:17.9920, cat:'costa', p:4.6,
    d:`Ciudad-isla amurallada sobre el Jónico, con playas.`,
    larga:`Una ciudad-isla amurallada unida por un puente al pueblo nuevo. Recorré el anillo de murallas, el Castello angioino, la catedral barroca de Sant'Agata y las callecitas del casco; después bajá a las playas (la Purità dentro de las murallas, o Baia Verde a las afueras). De noche se pone bien movida en verano.`,
    park:`Estacioná en la ciudad nueva y cruzá a pie a la isla (peatonal).`,
+   pl:true, playa:`sí. La Purità es chica y está en el casco; Baia Verde, a las afueras, es un arenal largo (más fiestero). Arena y agua que entra despacio: buena para los chicos.`,
    comer:`Pescado y la scapece gallipolina (pescado marinado); trattorias del casco antiguo.`},
 
   {n:`Grotta della Poesia`, lat:40.2861, lng:18.4300, cat:'costa', p:4.6,
    d:`Piscina natural turquesa entre ruinas messapias.`,
    larga:`Una piscina natural de agua turquesa abierta en la roca, junto a las ruinas messapias de Roca Vecchia. Se puede nadar y, con cuidado, saltar desde los bordes — una de las imágenes más impactantes del Salento. En pleno verano se llena, así que andá temprano.`,
    park:`Estacionamiento de pago en temporada junto al sitio (Roca Vecchia).`,
+   pl:true, playa:`no es una playa de arena sino una piscina natural en la roca, con agua honda y saltos. Espectacular para nadar, pero nada apta para nenes chicos.`,
    comer:`Kioscos y chiringuitos cerca; para comer bien, Otranto o Torre dell'Orso.`},
 
   {n:`Pescoluse`, lat:39.8330, lng:18.3230, cat:'costa', p:4.5,
    d:`Las "Maldivas del Salento": arena fina y agua poco profunda.`,
    larga:`Apodada "le Maldive del Salento": arena blanca finísima y agua transparente que entra muy poco profunda durante metros — ideal para chicos. Hay lidos (balnearios con servicios) y tramos de playa libre. Está casi en la punta jónica del tacón.`,
    park:`Estacionamientos de pago junto a los lidos en temporada; llená temprano.`,
+   pl:true, playa:`LA playa para los chicos: arena blanca finísima y agua transparente que entra bajísima durante metros, las “Maldivas del Salento”. Totalmente recomendada.`,
    comer:`Los lidos suelen tener restaurante; pescado en Pescoluse o la cercana Torre Vado.`},
 
   {n:`Punta Prosciutto`, lat:40.3060, lng:17.7370, cat:'costa', p:4.5,
    d:`Dunas y agua caribeña en la costa jónica.`,
    larga:`Dunas, agua color caribe y ambiente algo salvaje, dentro de la reserva de Palude del Conte. Es de las playas más lindas del Jónico: hay tramos libres y lidos. Perfecta para un día de playa tranquilo, con menos edificación que otras zonas.`,
    park:`Estacionamientos de pago cerca de los lidos; en verano se llena temprano.`,
+   pl:true, playa:`de las mejores del Jónico. Dunas, arena y agua baja color caribe: ideal para los peques. Muy recomendada.`,
    comer:`Lidos con cocina de playa; más opciones en Porto Cesareo.`},
 
   {n:`Santa Maria di Leuca`, lat:39.7960, lng:18.3580, cat:'costa', p:4.5,
    d:`El fin del tacón, donde se juntan Adriático y Jónico.`,
    larga:`El extremo sur del tacón, "de finibus terrae", donde simbólicamente se encuentran el Adriático y el Jónico. Está el santuario de la Madonna di Finibus Terrae, el faro, una cascada monumental y villas señoriales de la Belle Époque. Desde el puerto salen paseos en barco a las grutas marinas.`,
    park:`Estacionamiento junto al puerto y el lungomare.`,
+   pl:true, playa:`la zona es más de acantilados y roca que de arena; hay algunas playitas y lidos, pero se viene más por el paisaje y las grutas que por la playa.`,
    comer:`Restaurantes de mar en el porto turístico.`},
 
   {n:`Torre dell'Orso`, lat:40.2680, lng:18.4340, cat:'costa', p:4.4,
    d:`Playa dorada y los faraglioni "Due Sorelle".`,
    larga:`Una amplia playa de arena dorada enmarcada por pinares y acantilados, con los dos faraglioni "Le Due Sorelle" al final, ligados a una leyenda local. Agua limpia y poco profunda: un día de playa cómodo en el Adriático salentino, con buenos servicios.`,
    park:`Estacionamientos de pago detrás de la playa.`,
+   pl:true, playa:`sí, excelente. Arenal amplio, agua limpia y poco profunda, con buenos servicios. Muy cómoda para chicos.`,
    comer:`Lidos con restaurante; trattorias en el pueblito.`},
 
   {n:`Porto Cesareo`, lat:40.2610, lng:17.8930, cat:'costa', p:4.3,
    d:`Área marina protegida de aguas cristalinas e islotes.`,
    larga:`Área marina protegida de aguas transparentes con islotes cercanos (como la Isola dei Conigli), muy buena para playa familiar y algo de snorkel en el Jónico. Pueblo de pescadores con lidos y arenales largos.`,
    park:`Estacionamientos de pago junto a las playas.`,
+   pl:true, playa:`sí, y muy buena para los chicos: arena, agua baja y transparente en área protegida, con islotes cerca. Recomendada.`,
    comer:`Pescado fresco; varios restaurantes de mar en el pueblo.`},
 
   {n:`Nardò`, lat:40.1790, lng:18.0330, cat:'ciudad', p:4.2,
    d:`Centro barroco con la escenográfica Piazza Salandra.`,
    larga:`Un centro barroco muchas veces eclipsado por Lecce, pero con una joya: la Piazza Salandra, de las plazas más bonitas del Salento, con su guglia (obelisco) y fachadas ornamentadas. Menos turística y muy auténtica. Cerca tiene costa en Santa Maria al Bagno.`,
    park:`Parkings alrededor del centro (ZTL en el casco).`,
+   pl:false, playa:`el pueblo es de interior, pero su costa (Santa Maria al Bagno, Santa Caterina, Porto Selvaggio) tiene calas y playas muy lindas. Vale la pena acercarse.`,
    comer:`Trattorias locales en el casco histórico.`},
 
   {n:`Taranto`, lat:40.4640, lng:17.2470, cat:'historia', p:3.9,
    d:`La ciudad de los dos mares; el museo MArTA.`,
    larga:`La "città dei due mari". Su gran atractivo es el MArTA, Museo Arqueológico Nacional, uno de los mejores de Italia para la Magna Grecia, con los famosos "Ori di Taranto" (orfebrería griega). La città vecchia, en una isla, está en recuperación; el Castello Aragonese frente al canal es una buena foto.`,
    park:`Estacioná en la città nuova, cerca del museo.`,
+   pl:true, playa:`las playas urbanas no valen mucho; las buenas están en las afueras. No es el motivo para venir.`,
    comer:`Cozze tarantine (mejillones, aquí son famosos) y pescado; trattorias del casco.`},
 
   {n:`Vieste`, lat:41.8820, lng:16.1780, cat:'costa', p:4.6,
    d:`La perla del Gargano: casco blanco y el Pizzomunno.`,
    larga:`La perla del Gargano: un casco blanco encaramado sobre el mar, con la catedral, el castillo y el famoso monolito Pizzomunno junto a la playa. Es la mejor base para excursiones en barco a las grutas marinas y para recorrer la espectacular costa hacia Mattinata y Peschici.`,
    park:`Casco ZTL. Parkings de pago en el borde del centro.`,
+   pl:true, playa:`sí, y muy buenas. La del Pizzomunno (Scialara) es un arenal largo junto al pueblo; sumá calas de ensueño accesibles en barco. Recomendada.`,
    comer:`Pescado del Adriático en las trattorias del casco antiguo.`},
 
   {n:`Peschici`, lat:41.9450, lng:16.0140, cat:'costa', p:4.5,
    d:`Pueblo blanco sobre un acantilado, con trabucchi.`,
    larga:`Un pueblo blanco colgado de un acantilado sobre calas turquesa, con un casco laberíntico, castillo y, en la costa, los característicos trabucchi: antiguas máquinas de pesca de madera que se meten en el mar, algunas hoy convertidas en restaurantes. Muy fotogénico, sobre todo al atardecer.`,
    park:`Estacionamientos en el acceso al centro, que es peatonal.`,
+   pl:true, playa:`sí: un arenal cómodo justo debajo del pueblo, más calas turquesa alrededor. Muy linda.`,
    comer:`Un trabucco convertido en restaurante para comer pescado sobre el agua (reservá); trattorias del casco.`},
 
   {n:`Isole Tremiti`, lat:42.1220, lng:15.4990, cat:'naturaleza', p:4.6,
    d:`Archipiélago protegido de agua transparente.`,
    larga:`Un pequeño archipiélago protegido de agua cristalina: San Domino, con pinares y calas para nadar, y San Nicola, con una abadía fortificada medieval. Se llega en ferry o hidrofoil. Snorkel, paseos en barca y mucha calma — una excelente excursión de día completo desde el Gargano.`,
    park:`En las islas no se necesita auto: dejalo en el puerto de salida (Vieste, Peschici o Termoli) y cruzá en barco.`,
+   pl:true, playa:`más que arena, son calas de roca y agua cristalina, ideales para nadar y snorkel. El agua es lo mejor de todo (mejor con chicos que ya nadan).`,
    comer:`Restaurantes de pescado en San Domino.`},
 
   {n:`Foresta Umbra`, lat:41.8180, lng:16.0000, cat:'naturaleza', p:4.5,
    d:`Bosque de hayas centenarias en el Parque del Gargano.`,
    larga:`El corazón verde del Parque Nacional del Gargano: un bosque de hayas y robles centenarios (Patrimonio de la Humanidad) con senderos señalizados, un pequeño lago con ciervos y un centro de visitantes. Aire fresco y sombra, un contraste perfecto con el calor de la costa.`,
    park:`Estacionamiento en el centro de visitantes.`,
+   pl:false, playa:``,
    comer:`Poca oferta dentro; llevá un picnic o comé en Vieste o Monte Sant'Angelo.`},
 
   {n:`Monte Sant'Angelo`, lat:41.7080, lng:15.9560, cat:'historia', p:4.4,
    d:`Santuario de San Miguel en gruta, meta de peregrinación.`,
    larga:`Pueblo en altura con el Santuario de San Michele Arcangelo, construido sobre una gruta y meta de peregrinación desde la Alta Edad Media (Patrimonio de la Humanidad, dentro de los sitios longobardos). Sumá el pintoresco barrio Junno y las vistas amplias sobre el golfo. Aire medieval y místico.`,
    park:`Estacioná a la entrada del centro histórico y subí a pie.`,
+   pl:false, playa:``,
    comer:`Probá el pane di Monte Sant'Angelo y las hostie ripiene, un dulce típico del pueblo.`},
 
   {n:`Mattinata`, lat:41.7100, lng:16.0530, cat:'costa', p:4.3,
    d:`Base para las calas más lindas del Gargano.`,
    larga:`Un pueblo blanco tranquilo rodeado de olivares, que funciona como base para algunas de las calas más lindas del Gargano: Baia delle Zagare y Vignanotica, de guijarros blancos y agua turquesa, muchas mejor accesibles en barco. Buen plan de naturaleza y playa.`,
    park:`Estacionamientos junto a las calas o en el pueblo.`,
+   pl:true, playa:`calas de guijarros blancos y agua turquesa (Baia delle Zagare, Vignanotica), preciosas pero de piedra y algo hondas, varias accesibles en barco. Más escénicas que prácticas con chicos chicos.`,
    comer:`Pescado y cocina garganica en las trattorias del pueblo.`},
 
   {n:`San Giovanni Rotondo`, lat:41.7060, lng:15.7280, cat:'historia', p:4.2,
    d:`Gran centro de peregrinación del Padre Pío.`,
    larga:`Uno de los mayores centros de peregrinación de Europa, en torno a la figura del Padre Pío: el santuario antiguo y la enorme iglesia moderna diseñada por Renzo Piano. Su interés es sobre todo religioso; si no es tu tema, es más una parada de paso dentro del Gargano.`,
    park:`Amplios estacionamientos para peregrinos junto al santuario.`,
+   pl:false, playa:``,
    comer:`Mucha oferta sencilla orientada al peregrino alrededor del santuario.`}
 ];
 
@@ -389,12 +425,13 @@ function renderLocs(){
         <div class="loc-score" style="background:${c}">${p.p.toFixed(1)}</div>
         <div class="loc-meta">
           <div class="loc-cat" style="color:${c}">${CAT[p.cat]}</div>
-          <div class="loc-name">${p.n}</div>
+          <div class="loc-name">${p.n}${p.pl?' <span class="beach-badge" title="Tiene playa">🏖️</span>':''}</div>
         </div>
         <div class="loc-arrow">▾</div>
       </div>
       <div class="loc-body"><div class="loc-body-inner">
         <div class="loc-desc">${p.larga}</div>
+        ${p.playa ? `<div class="loc-row"><span class="ic">🏖️</span><div><span class="lbl">Playa:</span>${p.playa}</div></div>` : `<div class="loc-row loc-row-muted"><span class="ic">⛰️</span><div>Sin playa: es un lugar de interior.</div></div>`}
         <div class="loc-row"><span class="ic">🅿️</span><div><span class="lbl">Dónde estacionar:</span>${p.park}</div></div>
         <div class="loc-row"><span class="ic">🍽️</span><div><span class="lbl">Dónde comer:</span>${p.comer}</div></div>
         <button class="loc-map-btn" data-i="${p.i}">📍 Centrar en el mapa</button>
