@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Puglia · Mapa de puntos turísticos</title>
+<title>Puglia · Mapa y guía de puntos turísticos</title>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" crossorigin=""/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" crossorigin=""></script>
@@ -22,101 +22,49 @@
     --muted:#8a9aa0;
     --borde:#e4ddce;
     --white:#ffffff;
-
-    --terra:#b5532e;   /* 4.7+  */
-    --gold:#cf9a34;    /* 4.4 - 4.6 */
-    --olive:#6f7d4a;   /* 4.0 - 4.3 */
-    --slate:#7a8a94;   /* < 4.0 */
+    --terra:#b5532e;
+    --gold:#cf9a34;
+    --olive:#6f7d4a;
+    --slate:#7a8a94;
   }
-
   *{margin:0;padding:0;box-sizing:border-box}
-  body{
-    font-family:'Inter',system-ui,sans-serif;
-    background:var(--cream);
-    color:var(--ink);
-    overflow-x:hidden;
-  }
+  body{font-family:'Inter',system-ui,sans-serif;background:var(--cream);color:var(--ink);overflow-x:hidden}
 
-  /* ---------- HERO ---------- */
+  /* HERO */
   .hero{
     background:
       radial-gradient(130% 100% at 100% 0%, rgba(207,154,52,.18), transparent 55%),
       radial-gradient(120% 90% at 0% 100%, rgba(18,85,106,.5), transparent 55%),
       var(--sea-deep);
-    padding:64px 40px 52px;
-    position:relative;
-    overflow:hidden;
+    padding:64px 40px 52px;position:relative;overflow:hidden;
   }
-  .hero::after{
-    content:'';position:absolute;inset:0;
-    background:repeating-linear-gradient(45deg,transparent,transparent 42px,rgba(255,255,255,.015) 42px,rgba(255,255,255,.015) 43px);
-  }
+  .hero::after{content:'';position:absolute;inset:0;background:repeating-linear-gradient(45deg,transparent,transparent 42px,rgba(255,255,255,.015) 42px,rgba(255,255,255,.015) 43px)}
   .hero-inner{max-width:980px;margin:0 auto;position:relative;z-index:2}
-  .eyebrow{
-    font-family:'Inter',sans-serif;font-size:11px;font-weight:600;
-    letter-spacing:.28em;text-transform:uppercase;color:var(--gold);
-    margin-bottom:16px;display:flex;align-items:center;gap:12px;
-  }
+  .eyebrow{font-size:11px;font-weight:600;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);margin-bottom:16px;display:flex;align-items:center;gap:12px}
   .eyebrow::before{content:'';width:30px;height:1px;background:var(--gold);display:block}
-  .hero h1{
-    font-family:'Fraunces',serif;font-weight:900;
-    font-size:clamp(40px,6vw,68px);line-height:.95;
-    color:var(--lime);letter-spacing:-.01em;margin-bottom:12px;
-  }
+  .hero h1{font-family:'Fraunces',serif;font-weight:900;font-size:clamp(40px,6vw,68px);line-height:.95;color:var(--lime);letter-spacing:-.01em;margin-bottom:12px}
   .hero h1 em{font-style:italic;color:var(--gold)}
-  .hero p.sub{
-    font-size:15px;color:var(--sand);opacity:.85;max-width:560px;
-    line-height:1.6;margin-bottom:26px;font-weight:400;
-  }
+  .hero p.sub{font-size:15px;color:var(--sand);opacity:.85;max-width:560px;line-height:1.6;margin-bottom:26px}
   .chips{display:flex;flex-wrap:wrap;gap:8px}
-  .chip{
-    font-size:12px;font-weight:500;letter-spacing:.02em;
-    background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);
-    color:rgba(246,241,230,.85);padding:6px 14px;border-radius:999px;
-  }
+  .chip{font-size:12px;font-weight:500;letter-spacing:.02em;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:rgba(246,241,230,.85);padding:6px 14px;border-radius:999px}
 
-  /* ---------- MAIN ---------- */
+  /* MAIN */
   .main{max-width:980px;margin:0 auto;padding:0 24px}
-
   .sec-head{margin:44px 0 22px}
-  .sec-head h2{
-    font-family:'Fraunces',serif;font-size:30px;font-weight:600;
-    color:var(--sea-deep);margin-bottom:7px;
-  }
-  .sec-head p{color:var(--muted);font-size:15px;line-height:1.6;max-width:640px}
+  .sec-head h2{font-family:'Fraunces',serif;font-size:30px;font-weight:600;color:var(--sea-deep);margin-bottom:7px}
+  .sec-head p{color:var(--muted);font-size:15px;line-height:1.6;max-width:660px}
 
-  /* ---------- MAP ---------- */
-  #map-wrap{
-    width:100%;
-    height:520px;
-    border-radius:16px;
-    overflow:hidden;
-    border:1px solid var(--borde);
-    box-shadow:0 6px 30px rgba(10,50,63,.12);
-    background:#dfe7e4;
-  }
+  /* MAP */
+  #map-wrap{width:100%;height:520px;border-radius:16px;overflow:hidden;border:1px solid var(--borde);box-shadow:0 6px 30px rgba(10,50,63,.12);background:#dfe7e4}
   #leaflet-map{width:100%;height:100%}
-
-  .legend{
-    display:flex;flex-wrap:wrap;gap:16px;align-items:center;
-    margin:18px 2px 6px;font-size:12.5px;color:var(--muted);
-  }
+  .legend{display:flex;flex-wrap:wrap;gap:16px;align-items:center;margin:18px 2px 6px;font-size:12.5px;color:var(--muted)}
   .legend b{color:var(--ink);font-weight:600;margin-right:2px}
   .legend span{display:flex;align-items:center;gap:7px}
   .dot{width:12px;height:12px;border-radius:50%;flex:none}
 
-  /* ---------- MARKERS + POPUP ---------- */
-  .pin-inner{
-    width:36px;height:36px;border-radius:50% 50% 50% 4px;
-    transform:rotate(45deg);
-    background:var(--c);border:2.5px solid #fff;
-    box-shadow:0 3px 8px rgba(10,30,40,.35);
-    display:grid;place-items:center;transition:transform .12s;
-  }
-  .pin-inner b{
-    transform:rotate(-45deg);color:#fff;
-    font-family:'Fraunces',serif;font-weight:600;font-size:12.5px;line-height:1;
-  }
+  /* MARKERS + POPUP */
+  .pin-inner{width:36px;height:36px;border-radius:50% 50% 50% 4px;transform:rotate(45deg);background:var(--c);border:2.5px solid #fff;box-shadow:0 3px 8px rgba(10,30,40,.35);display:grid;place-items:center;transition:transform .12s}
+  .pin-inner b{transform:rotate(-45deg);color:#fff;font-family:'Fraunces',serif;font-weight:600;font-size:12.5px;line-height:1}
   .leaflet-marker-icon:hover .pin-inner{transform:rotate(45deg) scale(1.12)}
   .leaflet-popup-content-wrapper{border-radius:14px;box-shadow:0 10px 30px rgba(10,30,40,.22);padding:2px}
   .leaflet-popup-content{margin:14px 16px;font-family:'Inter',sans-serif}
@@ -126,49 +74,36 @@
   .pop-score .badge{color:#fff;padding:2px 9px;border-radius:7px;font-size:12px;font-family:'Fraunces',serif}
   .pop-desc{font-size:13px;line-height:1.5;color:#4a4d47}
 
-  /* ---------- CARDS ---------- */
-  .cards{
-    display:grid;
-    grid-template-columns:repeat(auto-fill,minmax(270px,1fr));
-    gap:18px;margin:8px 0 20px;
-  }
-  .card{
-    background:var(--white);border:1px solid var(--borde);
-    border-radius:16px;padding:22px;position:relative;overflow:hidden;
-    cursor:pointer;transition:box-shadow .2s,transform .2s;
-  }
-  .card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:var(--c)}
-  .card:hover{box-shadow:0 10px 30px rgba(10,50,63,.13);transform:translateY(-2px)}
-  .card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:12px}
-  .card-cat{
-    font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;
-    font-weight:700;color:var(--c);margin-bottom:6px;
-  }
-  .card h3{font-family:'Fraunces',serif;font-size:20px;font-weight:600;color:var(--sea-deep);line-height:1.15}
-  .card-score{
-    flex:none;width:46px;height:46px;border-radius:12px;
-    display:grid;place-items:center;background:var(--c);color:#fff;
-    font-family:'Fraunces',serif;font-weight:600;font-size:18px;line-height:1;
-  }
-  .card p{font-size:13.5px;color:#5a5f5a;line-height:1.6;font-weight:400}
-  .card .go{
-    margin-top:14px;font-size:12px;font-weight:600;color:var(--sea);
-    display:flex;align-items:center;gap:6px;opacity:.75;
-  }
+  /* ACORDEÓN DE LOCACIONES */
+  .note{background:rgba(207,154,52,.1);border:1px solid rgba(207,154,52,.28);border-left:4px solid var(--gold);border-radius:10px;padding:13px 16px;font-size:13px;line-height:1.6;color:#6b5316;margin-bottom:20px}
+  .locs{display:flex;flex-direction:column;gap:12px;margin:8px 0 20px}
+  .loc{background:#fff;border:1px solid var(--borde);border-radius:16px;overflow:hidden;box-shadow:0 2px 12px rgba(10,50,63,.05)}
+  .loc-hdr{display:flex;align-items:center;gap:14px;padding:16px 20px;cursor:pointer;user-select:none;transition:background .15s}
+  .loc-hdr:hover{background:rgba(18,85,106,.04)}
+  .loc-score{flex:none;width:46px;height:46px;border-radius:12px;display:grid;place-items:center;color:#fff;font-family:'Fraunces',serif;font-weight:600;font-size:18px}
+  .loc-meta{flex:1;min-width:0}
+  .loc-cat{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;margin-bottom:3px}
+  .loc-name{font-family:'Fraunces',serif;font-size:20px;font-weight:600;color:var(--sea-deep);line-height:1.1}
+  .loc-arrow{font-size:14px;color:var(--muted);transition:transform .3s;flex:none}
+  .loc.open .loc-arrow{transform:rotate(180deg)}
+  .loc-body{max-height:0;overflow:hidden;transition:max-height .45s ease}
+  .loc.open .loc-body{max-height:1600px}
+  .loc-body-inner{padding:2px 20px 20px}
+  .loc-desc{font-size:14px;line-height:1.7;color:#484d48;margin-bottom:6px}
+  .loc-row{display:flex;gap:11px;padding:11px 0;border-top:1px solid var(--borde);font-size:13.5px;line-height:1.6;color:#4a4f4a}
+  .loc-row .ic{flex:none;font-size:15px;line-height:1.5}
+  .loc-row .lbl{font-weight:700;color:var(--sea-deep);margin-right:5px}
+  .loc-map-btn{margin-top:15px;display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;color:#fff;background:var(--sea);border:none;border-radius:9px;padding:9px 15px;cursor:pointer;font-family:inherit;transition:background .15s}
+  .loc-map-btn:hover{background:var(--sea-deep)}
 
-  /* ---------- FOOTER ---------- */
-  footer{
-    background:var(--sea-deep);color:rgba(246,241,230,.55);
-    text-align:center;padding:30px 20px;font-size:12px;margin-top:44px;
-    letter-spacing:.02em;
-  }
+  footer{background:var(--sea-deep);color:rgba(246,241,230,.55);text-align:center;padding:30px 20px;font-size:12px;margin-top:44px;letter-spacing:.02em}
   footer b{color:var(--gold)}
 
   @media(max-width:600px){
     .hero{padding:44px 22px 38px}
     .main{padding:0 16px}
     #map-wrap{height:400px}
-    .cards{grid-template-columns:1fr}
+    .loc.open .loc-body{max-height:2400px}
   }
 </style>
 </head>
@@ -178,11 +113,11 @@
   <div class="hero-inner">
     <p class="eyebrow">Sur de Italia · Adriático &amp; Jónico</p>
     <h1>Puglia<em>.</em></h1>
-    <p class="sub">El tacón de la bota italiana, punto por punto: trulli, ciudades blancas, barroco salentino, calas turquesa y el Gargano. Cada lugar con su puntaje sobre 5.</p>
+    <p class="sub">El tacón de la bota italiana, punto por punto: trulli, ciudades blancas, barroco salentino, calas turquesa y el Gargano. Cada lugar con su puntaje, qué ver, dónde estacionar y dónde comer.</p>
     <div class="chips">
       <div class="chip">📍 34 locaciones</div>
-      <div class="chip">🏖 Costa &amp; playas</div>
-      <div class="chip">🏛 Historia &amp; arte</div>
+      <div class="chip">🅿️ Dónde estacionar</div>
+      <div class="chip">🍽️ Dónde comer</div>
       <div class="chip">⭐ Puntaje sobre 5</div>
     </div>
   </div>
@@ -192,7 +127,7 @@
 
   <div class="sec-head">
     <h2>El mapa</h2>
-    <p>Todos los puntos turísticos de la región. El número dentro de cada marcador es su puntaje. Hacé clic en un marcador —o en una tarjeta más abajo— para ver el detalle.</p>
+    <p>Todos los puntos turísticos de la región. El número dentro de cada marcador es su puntaje. Hacé clic en un marcador para ver el detalle, o desplegá cada ficha más abajo.</p>
   </div>
 
   <div id="map-wrap"><div id="leaflet-map"></div></div>
@@ -207,19 +142,20 @@
 
   <div class="sec-head">
     <h2>Las locaciones</h2>
-    <p>Ordenadas de mayor a menor puntaje. Tocá una tarjeta para centrarla en el mapa.</p>
+    <p>Ordenadas de mayor a menor puntaje. Tocá una ficha para desplegar la descripción, dónde estacionar y dónde comer.</p>
   </div>
 
-  <div class="cards" id="cards"></div>
+  <div class="note">🍽️ Los restaurantes son recomendaciones conocidas de cada zona, pero abren y cierran seguido: confirmá horarios y reservá con anticipación, sobre todo en los lugares chicos o de temporada.</div>
+
+  <div class="locs" id="locs"></div>
 
 </div>
 
 <footer>
-  Guía de la <b>Puglia</b> · 34 puntos turísticos con puntaje · Mapa Leaflet · Generado con Claude
+  Guía de la <b>Puglia</b> · 34 puntos turísticos con puntaje, estacionamiento y gastronomía · Mapa Leaflet · Generado con Claude
 </footer>
 
 <script>
-/* ---------- Datos ---------- */
 const CAT = {
   ciudad:'Ciudades y pueblos',
   costa:'Costa y playas',
@@ -229,40 +165,209 @@ const CAT = {
 };
 
 const PUNTOS = [
-  {n:'Alberobello',        lat:40.7826, lng:17.2371, cat:'historia',   p:4.9, d:'Capital de los trulli, casas cónicas de piedra seca. Patrimonio de la Humanidad.'},
-  {n:'Polignano a Mare',   lat:40.9958, lng:17.2186, cat:'costa',      p:4.8, d:'Casco antiguo suspendido sobre acantilados y la cala de Lama Monachile.'},
-  {n:'Ostuni',             lat:40.7304, lng:17.5772, cat:'ciudad',     p:4.7, d:'La "Ciudad Blanca": laberinto de callejones encalados sobre una colina.'},
-  {n:'Locorotondo',        lat:40.7546, lng:17.3265, cat:'ciudad',     p:4.5, d:'Uno de los pueblos más bonitos de Italia, de planta circular y casas blancas.'},
-  {n:'Martina Franca',     lat:40.7050, lng:17.3370, cat:'ciudad',     p:4.5, d:'Elegancia barroca y balcones de hierro forjado en el Valle d\u2019Itria.'},
-  {n:'Cisternino',         lat:40.7420, lng:17.4230, cat:'ciudad',     p:4.4, d:'Pueblo tranquilo famoso por sus asadores de carne "fornello pronto".'},
-  {n:'Monopoli',           lat:40.9509, lng:17.3001, cat:'ciudad',     p:4.5, d:'Puerto pesquero, murallas y decenas de pequeñas calas urbanas.'},
-  {n:'Grotte di Castellana',lat:40.8790,lng:17.1680, cat:'gruta',      p:4.6, d:'Complejo de cuevas subterráneas de 3 km con la deslumbrante Grotta Bianca.'},
-  {n:'Egnazia',            lat:40.8883, lng:17.3922, cat:'historia',   p:4.3, d:'Yacimiento arqueológico messapio-romano junto al mar.'},
-  {n:'Fasano (Zoosafari)', lat:40.8370, lng:17.3610, cat:'naturaleza', p:4.0, d:'El mayor parque de fauna de Italia, recorrido en coche entre animales.'},
-  {n:'Grottaglie',         lat:40.5370, lng:17.4340, cat:'historia',   p:4.2, d:'Ciudad de la cerámica: barrio de alfareros y talleres tradicionales.'},
-  {n:'Bari',               lat:41.1258, lng:16.8698, cat:'ciudad',     p:4.3, d:'La capital: Bari Vecchia, la Basílica de San Nicolás y el paseo marítimo.'},
-  {n:'Trani',              lat:41.2775, lng:16.4172, cat:'historia',   p:4.6, d:'Catedral románica de piedra blanca asomada directamente al Adriático.'},
-  {n:'Castel del Monte',   lat:41.0840, lng:16.2710, cat:'historia',   p:4.7, d:'Castillo octogonal de Federico II, enigmático y Patrimonio de la Humanidad.'},
-  {n:'Bisceglie',          lat:41.2430, lng:16.5050, cat:'costa',      p:4.0, d:'Casco medieval y la cala de Ripalta sobre el mar.'},
-  {n:'Barletta',           lat:41.3190, lng:16.2840, cat:'ciudad',     p:4.0, d:'Castillo suabo y el "Coloso", estatua de bronce romana de 5 m.'},
-  {n:'Lecce',              lat:40.3520, lng:18.1720, cat:'historia',   p:4.8, d:'La "Florencia del Sur": barroco exuberante en piedra dorada de Lecce.'},
-  {n:'Otranto',            lat:40.1470, lng:18.4910, cat:'ciudad',     p:4.7, d:'Punto más oriental de Italia; catedral con mosaico y castillo aragonés.'},
-  {n:'Gallipoli',          lat:40.0560, lng:17.9920, cat:'costa',      p:4.6, d:'Ciudad-isla amurallada sobre el Jónico, con playas y vida nocturna.'},
-  {n:'Grotta della Poesia',lat:40.2861, lng:18.4300, cat:'costa',      p:4.6, d:'Piscina natural de agua turquesa entre ruinas messapias en Roca Vecchia.'},
-  {n:'Pescoluse',          lat:39.8330, lng:18.3230, cat:'costa',      p:4.5, d:'Las "Maldivas del Salento": arena fina y aguas cristalinas poco profundas.'},
-  {n:'Punta Prosciutto',   lat:40.3060, lng:17.7370, cat:'costa',      p:4.5, d:'Dunas y mar caribeño en la costa jónica, junto a la reserva de Palude del Conte.'},
-  {n:'Santa Maria di Leuca',lat:39.7960,lng:18.3580, cat:'costa',      p:4.5, d:'Fin del tacón, donde se encuentran los mares Adriático y Jónico.'},
-  {n:'Torre dell\u2019Orso',lat:40.2680,lng:18.4340, cat:'costa',      p:4.4, d:'Playa de arena dorada y las "Due Sorelle", farallones gemelos.'},
-  {n:'Porto Cesareo',      lat:40.2610, lng:17.8930, cat:'costa',      p:4.3, d:'Área marina protegida con aguas transparentes e islotes.'},
-  {n:'Nardò',              lat:40.1790, lng:18.0330, cat:'ciudad',     p:4.2, d:'Centro histórico barroco a menudo eclipsado, con la escenográfica Piazza Salandra.'},
-  {n:'Taranto',            lat:40.4640, lng:17.2470, cat:'historia',   p:3.9, d:'Ciudad de los dos mares; Museo Arqueológico con los "Ori" magnogriegos.'},
-  {n:'Vieste',             lat:41.8820, lng:16.1780, cat:'costa',      p:4.6, d:'Perla del Gargano: casco blanco, el faraglione Pizzomunno y calas.'},
-  {n:'Peschici',           lat:41.9450, lng:16.0140, cat:'costa',      p:4.5, d:'Pueblo blanco encaramado a un acantilado sobre el Adriático.'},
-  {n:'Isole Tremiti',      lat:42.1220, lng:15.4990, cat:'naturaleza', p:4.6, d:'Archipiélago protegido de aguas transparentes, ideal para snorkel y barco.'},
-  {n:'Foresta Umbra',      lat:41.8180, lng:16.0000, cat:'naturaleza', p:4.5, d:'Bosque de hayas centenarias en el corazón del Parque Nacional del Gargano.'},
-  {n:'Monte Sant\u2019Angelo',lat:41.7080,lng:15.9560,cat:'historia',  p:4.4, d:'Santuario de San Miguel Arcángel en gruta, Patrimonio de la Humanidad.'},
-  {n:'Mattinata',          lat:41.7100, lng:16.0530, cat:'costa',      p:4.3, d:'Calas de guijarros blancos y aguas turquesa bajo acantilados del Gargano.'},
-  {n:'San Giovanni Rotondo',lat:41.7060,lng:15.7280, cat:'historia',   p:4.2, d:'Gran centro de peregrinación en torno a la figura del Padre Pío.'}
+  {n:`Alberobello`, lat:40.7826, lng:17.2371, cat:'historia', p:4.9,
+   d:`Capital de los trulli, casas cónicas de piedra seca. Patrimonio de la Humanidad.`,
+   larga:`La capital mundial de los trulli. El Rione Monti concentra más de 1.000 de estas casitas cónicas de piedra seca: subí por sus callecitas hasta los Trulli Siamesi y la iglesia-trullo de Sant'Antonio. Cruzá al Rione Aia Piccola, más residencial y auténtico, y no te pierdas el Trullo Sovrano, el único de dos plantas. Al atardecer, cuando bajan los tours en bus, el pueblo se vuelve mágico.`,
+   park:`El centro es ZTL (tránsito restringido). Dejá el auto en el parking de pago de Largo Martellotta, al pie del Rione Monti, y subí a pie.`,
+   comer:`Trullo d'Oro o La Cantina para cocina tradicional dentro de un trullo; Il Poeta Contadino para una cena más refinada.`},
+
+  {n:`Polignano a Mare`, lat:40.9958, lng:17.2186, cat:'costa', p:4.8,
+   d:`Casco antiguo sobre acantilados y la cala de Lama Monachile.`,
+   larga:`La postal más famosa de Puglia. Asomate a la Terrazza Santo Stefano sobre el acantilado y bajá a la cala de Lama Monachile, encajada entre las rocas. Recorré el casco antiguo con sus versos pintados en escaleras y balcones (homenaje a Domenico Modugno, el autor de "Volare", que nació acá). Un helado o un espresso en la plaza y listo.`,
+   park:`Casco peatonal. Estacioná en los parkings de pago cerca de Piazza Aldo Moro o en las calles del borde del centro.`,
+   comer:`Pescaria en Piazza Aldo Moro para panini de mar de culto (hay cola, vale la pena); Grotta Palazzese para cenar dentro de una gruta sobre el mar (carísimo y espectacular, reservá sí o sí).`},
+
+  {n:`Ostuni`, lat:40.7304, lng:17.5772, cat:'ciudad', p:4.7,
+   d:`La "Ciudad Blanca": callejones encalados sobre una colina.`,
+   larga:`La "Città Bianca", un laberinto de callejones encalados trepando una colina, coronado por la Concattedrale gótica. Perdete sin rumbo, buscá los miradores sobre el mar y los olivares, y quedate para el atardecer, que es cuando mejor se ve. Base ideal para todo el Valle d'Itria y la zona de Rosa Marina.`,
+   park:`ZTL en el casco. Estacioná en los parkings de pago alrededor de Piazza della Libertà y subí caminando.`,
+   comer:`Osteria Piazzetta Cattedrale (Bib Gourmand, chico y muy rico — mejor para adultos, reservá) para una cena especial; Drogheria Pugliese, Trattoria Sapere e Sapori o La Taverna da Maurizio para algo más casual.`},
+
+  {n:`Locorotondo`, lat:40.7546, lng:17.3265, cat:'ciudad', p:4.5,
+   d:`Pueblo circular de casas blancas, de los más bonitos de Italia.`,
+   larga:`Uno de "I Borghi più belli d'Italia", de planta circular (de ahí el nombre) y casas blancas con techos a dos aguas llamados cummerse. Callejeá sin apuro, asomate a los miradores sobre el Valle d'Itria salpicado de trulli, y probá el vino blanco local, un DOC muy rico.`,
+   park:`Centro peatonal. Estacionamiento en el anillo exterior, cerca de la Villa Comunale.`,
+   comer:`La Taverna del Duca o Quartino Rosso para cocina de la zona en el casco histórico.`},
+
+  {n:`Martina Franca`, lat:40.7050, lng:17.3370, cat:'ciudad', p:4.5,
+   d:`Capital barroca del Valle d'Itria, con balcones de hierro forjado.`,
+   larga:`La joya barroca del Valle d'Itria: el Palazzo Ducale, la Basílica de San Martino y una sucesión de balcones de hierro forjado y fachadas ornamentadas. En julio y agosto se llena con el Festival della Valle d'Itria, de ópera. Probá el capocollo di Martina Franca, un embutido local con IGP.`,
+   park:`Estacioná fuera del casco (ZTL) y entrá a pie por Piazza XX Settembre / Corso Italia.`,
+   comer:`Trattorias con carnes y embutidos de la zona; buscá el capocollo y las bombette (rollitos de carne rellenos).`},
+
+  {n:`Cisternino`, lat:40.7420, lng:17.4230, cat:'ciudad', p:4.4,
+   d:`Pueblo tranquilo, famoso por sus asadores "fornello pronto".`,
+   larga:`Otro de los pueblos más lindos de Italia, tranquilo y sin las multitudes de Alberobello. Su especialidad son los "fornello pronto": carnicerías donde elegís la carne en la vitrina (bombette, salchichas, costillas) y te la asan al momento para comerla ahí mismo. Callejeá el casco blanco y disfrutá la calma.`,
+   park:`Estacionamiento en el borde del centro histórico, que es peatonal.`,
+   comer:`Cualquier fornello del centro para la experiencia de carne a la brasa; es la razón para venir.`},
+
+  {n:`Monopoli`, lat:40.9509, lng:17.3001, cat:'ciudad', p:4.5,
+   d:`Puerto de barcas de colores, murallas y calas urbanas.`,
+   larga:`Un puerto vivo con barcas de pesca de colores (gozzi), murallas, el castillo de Carlos V y un casco histórico blanco lleno de iglesias. Tiene además calas urbanas como Cala Porta Vecchia para meter los pies en el agua sin salir del pueblo. Menos concurrida y más "de verdad" que Polignano.`,
+   park:`Parkings de pago junto al puerto o cerca de Largo Fontanelle; el casco es peatonal.`,
+   comer:`Osteria Perricci, clásico de pescado; abundan las trattorias de mar en el casco antiguo.`},
+
+  {n:`Grotte di Castellana`, lat:40.8790, lng:17.1680, cat:'gruta', p:4.6,
+   d:`Cuevas subterráneas de 3 km con la deslumbrante Grotta Bianca.`,
+   larga:`El sistema de cuevas más espectacular de Italia. Se visita con guía en dos recorridos: el corto (1 km, ~50 min) o el completo (3 km, ~2 h) que termina en la Grotta Bianca, de alabastro blanco reluciente. Abajo hay ~15 °C todo el año, así que llevá algo de abrigo. Reservá el turno online.`,
+   park:`Amplio estacionamiento gratuito en el complejo de las grutas.`,
+   comer:`Hay bar/restaurante en el complejo; para comer mejor, combiná con Alberobello o Putignano, a 15 min.`},
+
+  {n:`Egnazia`, lat:40.8883, lng:17.3922, cat:'historia', p:4.3,
+   d:`Yacimiento messapio-romano junto al mar.`,
+   larga:`Una ciudad messapia y luego romana junto al mar, con muralla, foro, vía Traiana, basílicas paleocristianas y un buen museo arqueológico. Se camina entre ruinas con el Adriático de fondo. Tranquila, buena para una media mañana con algo de historia.`,
+   park:`Estacionamiento gratuito en el propio área arqueológica.`,
+   comer:`Muy cerca está Savelletri, con excelentes restaurantes de pescado frente al puertito (ideal para combinar con la visita).`},
+
+  {n:`Fasano (Zoosafari)`, lat:40.8370, lng:17.3610, cat:'naturaleza', p:4.0,
+   d:`El mayor parque de fauna de Italia, se recorre en auto.`,
+   larga:`El safari en auto más grande de Italia: recorrés con tu propio vehículo un circuito entre leones, jirafas, cebras y elefantes, y después hay una zona tipo parque de atracciones, delfinario y espectáculos. Muy pensado para chicos; dale medio día si viajás con peques.`,
+   park:`Estacionamiento amplio y gratuito en la entrada del parque.`,
+   comer:`Hay puestos de comida dentro del parque; para algo mejor bajá a Savelletri o al centro de Fasano.`},
+
+  {n:`Grottaglie`, lat:40.5370, lng:17.4340, cat:'historia', p:4.2,
+   d:`La ciudad de la cerámica, con barrio de alfareros.`,
+   larga:`La capital de la cerámica pugliese. El Quartiere delle Ceramiche está lleno de talleres excavados donde ves a los alfareros trabajar y comprás las típicas pumi (piñas de la buena suerte) y platos pintados a mano. Sumá el Castello Episcopio. Buen lugar para llevarte un recuerdo auténtico.`,
+   park:`Estacioná cerca del Castello Episcopio; el barrio de los talleres se recorre a pie.`,
+   comer:`Trattorias del centro; zona de buenas orecchiette y carnes.`},
+
+  {n:`Bari`, lat:41.1258, lng:16.8698, cat:'ciudad', p:4.3,
+   d:`La capital: Bari Vecchia, San Nicola y el paseo marítimo.`,
+   larga:`La capital, con una Bari Vecchia que es puro teatro callejero: mirá a las señoras haciendo orecchiette a mano en Arco Basso ("la strada delle orecchiette"), entrá a la Basílica de San Nicola (gran peregrinación ortodoxa) y a la Catedral, y caminá el imponente Lungomare. Comé focaccia barese recién salida del horno.`,
+   park:`El casco es ZTL. Usá parkings de pago (por ejemplo cerca del Teatro Petruzzelli o del puerto) y entrá a pie.`,
+   comer:`Panificio Fiore para focaccia barese; orecchiette caseras al toque en Arco Basso; Le Travi – "Da Nonna Rosa" para cocina barese tradicional.`},
+
+  {n:`Trani`, lat:41.2775, lng:16.4172, cat:'historia', p:4.6,
+   d:`Catedral románica blanca asomada al Adriático.`,
+   larga:`Su catedral románica de piedra blanca, plantada casi sobre el mar, es de las más bellas de Italia — imperdible al atardecer. Rodeá el puerto pesquero lleno de barquitas, el Castello Svevo y el antiguo barrio judío (la Giudecca) con su sinagoga-iglesia. Un pueblo elegante y luminoso.`,
+   park:`Parkings de pago junto al puerto; la zona de la catedral es peatonal.`,
+   comer:`Restaurantes de pescado alrededor del porto; buena movida gastronómica al caer la tarde.`},
+
+  {n:`Castel del Monte`, lat:41.0840, lng:16.2710, cat:'historia', p:4.7,
+   d:`El enigmático castillo octogonal de Federico II.`,
+   larga:`El castillo octogonal de Federico II, solo en lo alto de una colina: geometría perfecta, ocho torres, ocho salas, una obsesión con el número 8, y sin una función militar clara — un misterio que sigue fascinando. Reservá entrada online. Aparece en la moneda italiana de 1 céntimo.`,
+   park:`No se accede en auto hasta el castillo: se estaciona abajo (parking de pago) y sube un bus lanzadera, o se camina.`,
+   comer:`En el sitio hay poco; almorzá en Andria (cuna de la burrata) o en Trani.`},
+
+  {n:`Bisceglie`, lat:41.2430, lng:16.5050, cat:'costa', p:4.0,
+   d:`Casco medieval y la cala de Ripalta sobre el mar.`,
+   larga:`Pueblo costero con casco medieval, catedral, torre normanda y un puerto tranquilo con buen paseo de mar. Tiene calas como Ripalta para un baño. Una parada relajada entre Trani y Bari, sin grandes multitudes.`,
+   park:`Estacionamiento junto al puerto y el lungomare.`,
+   comer:`Trattorias de pescado en el puerto.`},
+
+  {n:`Barletta`, lat:41.3190, lng:16.2840, cat:'ciudad', p:4.0,
+   d:`Castillo suabo y el "Coloso", bronce romano de 5 m.`,
+   larga:`Sus íconos son el Colosso di Barletta (una estatua de bronce romana de más de 5 metros, en plena calle) y el gran Castello svevo-angioino. Tiene catedral, casco histórico y la leyenda de la Disfida di Barletta, un duelo caballeresco del s. XVI que se recrea cada año.`,
+   park:`Parkings cerca del castillo y del centro.`,
+   comer:`Cocina local y buena pastelería; probá los taralli y la burrata de la zona.`},
+
+  {n:`Lecce`, lat:40.3520, lng:18.1720, cat:'historia', p:4.8,
+   d:`La "Florencia del barroco", en piedra dorada leccese.`,
+   larga:`La "Florencia del Sur". La Basílica di Santa Croce es un delirio escultórico tallado en la cálida piedra leccese; sumale la Piazza del Duomo (una plaza casi cerrada, teatral), el anfiteatro romano en Piazza Sant'Oronzo y un pasticciotto (masa rellena de crema) con café. Es de esas ciudades para perderse a pie durante horas.`,
+   park:`Todo el centro es ZTL. Estacioná fuera de la muralla (por ejemplo en el Foro Boario) y caminá.`,
+   comer:`Alle Due Corti y Cucina Casereccia ("Le Zie") para cocina salentina de la nonna; el pasticciotto clásico en Natale o Avio Bar.`},
+
+  {n:`Otranto`, lat:40.1470, lng:18.4910, cat:'ciudad', p:4.7,
+   d:`El punto más oriental de Italia; catedral con mosaico y castillo.`,
+   larga:`El pueblo más oriental de Italia, un casco blanco amurallado sobre agua turquesa. Su catedral guarda un asombroso mosaico medieval del "Árbol de la Vida" que cubre todo el piso, y una capilla con los cráneos de los 800 mártires. Sumá el castillo aragonés y, cerca, la surreal cantera de Bauxite y la Grotta della Poesia.`,
+   park:`Casco ZTL. Parkings de pago junto al puerto y en la entrada del centro.`,
+   comer:`Pescado fresco en el casco; L'Altro Baffo para algo más cuidado y creativo.`},
+
+  {n:`Gallipoli`, lat:40.0560, lng:17.9920, cat:'costa', p:4.6,
+   d:`Ciudad-isla amurallada sobre el Jónico, con playas.`,
+   larga:`Una ciudad-isla amurallada unida por un puente al pueblo nuevo. Recorré el anillo de murallas, el Castello angioino, la catedral barroca de Sant'Agata y las callecitas del casco; después bajá a las playas (la Purità dentro de las murallas, o Baia Verde a las afueras). De noche se pone bien movida en verano.`,
+   park:`Estacioná en la ciudad nueva y cruzá a pie a la isla (peatonal).`,
+   comer:`Pescado y la scapece gallipolina (pescado marinado); trattorias del casco antiguo.`},
+
+  {n:`Grotta della Poesia`, lat:40.2861, lng:18.4300, cat:'costa', p:4.6,
+   d:`Piscina natural turquesa entre ruinas messapias.`,
+   larga:`Una piscina natural de agua turquesa abierta en la roca, junto a las ruinas messapias de Roca Vecchia. Se puede nadar y, con cuidado, saltar desde los bordes — una de las imágenes más impactantes del Salento. En pleno verano se llena, así que andá temprano.`,
+   park:`Estacionamiento de pago en temporada junto al sitio (Roca Vecchia).`,
+   comer:`Kioscos y chiringuitos cerca; para comer bien, Otranto o Torre dell'Orso.`},
+
+  {n:`Pescoluse`, lat:39.8330, lng:18.3230, cat:'costa', p:4.5,
+   d:`Las "Maldivas del Salento": arena fina y agua poco profunda.`,
+   larga:`Apodada "le Maldive del Salento": arena blanca finísima y agua transparente que entra muy poco profunda durante metros — ideal para chicos. Hay lidos (balnearios con servicios) y tramos de playa libre. Está casi en la punta jónica del tacón.`,
+   park:`Estacionamientos de pago junto a los lidos en temporada; llená temprano.`,
+   comer:`Los lidos suelen tener restaurante; pescado en Pescoluse o la cercana Torre Vado.`},
+
+  {n:`Punta Prosciutto`, lat:40.3060, lng:17.7370, cat:'costa', p:4.5,
+   d:`Dunas y agua caribeña en la costa jónica.`,
+   larga:`Dunas, agua color caribe y ambiente algo salvaje, dentro de la reserva de Palude del Conte. Es de las playas más lindas del Jónico: hay tramos libres y lidos. Perfecta para un día de playa tranquilo, con menos edificación que otras zonas.`,
+   park:`Estacionamientos de pago cerca de los lidos; en verano se llena temprano.`,
+   comer:`Lidos con cocina de playa; más opciones en Porto Cesareo.`},
+
+  {n:`Santa Maria di Leuca`, lat:39.7960, lng:18.3580, cat:'costa', p:4.5,
+   d:`El fin del tacón, donde se juntan Adriático y Jónico.`,
+   larga:`El extremo sur del tacón, "de finibus terrae", donde simbólicamente se encuentran el Adriático y el Jónico. Está el santuario de la Madonna di Finibus Terrae, el faro, una cascada monumental y villas señoriales de la Belle Époque. Desde el puerto salen paseos en barco a las grutas marinas.`,
+   park:`Estacionamiento junto al puerto y el lungomare.`,
+   comer:`Restaurantes de mar en el porto turístico.`},
+
+  {n:`Torre dell'Orso`, lat:40.2680, lng:18.4340, cat:'costa', p:4.4,
+   d:`Playa dorada y los faraglioni "Due Sorelle".`,
+   larga:`Una amplia playa de arena dorada enmarcada por pinares y acantilados, con los dos faraglioni "Le Due Sorelle" al final, ligados a una leyenda local. Agua limpia y poco profunda: un día de playa cómodo en el Adriático salentino, con buenos servicios.`,
+   park:`Estacionamientos de pago detrás de la playa.`,
+   comer:`Lidos con restaurante; trattorias en el pueblito.`},
+
+  {n:`Porto Cesareo`, lat:40.2610, lng:17.8930, cat:'costa', p:4.3,
+   d:`Área marina protegida de aguas cristalinas e islotes.`,
+   larga:`Área marina protegida de aguas transparentes con islotes cercanos (como la Isola dei Conigli), muy buena para playa familiar y algo de snorkel en el Jónico. Pueblo de pescadores con lidos y arenales largos.`,
+   park:`Estacionamientos de pago junto a las playas.`,
+   comer:`Pescado fresco; varios restaurantes de mar en el pueblo.`},
+
+  {n:`Nardò`, lat:40.1790, lng:18.0330, cat:'ciudad', p:4.2,
+   d:`Centro barroco con la escenográfica Piazza Salandra.`,
+   larga:`Un centro barroco muchas veces eclipsado por Lecce, pero con una joya: la Piazza Salandra, de las plazas más bonitas del Salento, con su guglia (obelisco) y fachadas ornamentadas. Menos turística y muy auténtica. Cerca tiene costa en Santa Maria al Bagno.`,
+   park:`Parkings alrededor del centro (ZTL en el casco).`,
+   comer:`Trattorias locales en el casco histórico.`},
+
+  {n:`Taranto`, lat:40.4640, lng:17.2470, cat:'historia', p:3.9,
+   d:`La ciudad de los dos mares; el museo MArTA.`,
+   larga:`La "città dei due mari". Su gran atractivo es el MArTA, Museo Arqueológico Nacional, uno de los mejores de Italia para la Magna Grecia, con los famosos "Ori di Taranto" (orfebrería griega). La città vecchia, en una isla, está en recuperación; el Castello Aragonese frente al canal es una buena foto.`,
+   park:`Estacioná en la città nuova, cerca del museo.`,
+   comer:`Cozze tarantine (mejillones, aquí son famosos) y pescado; trattorias del casco.`},
+
+  {n:`Vieste`, lat:41.8820, lng:16.1780, cat:'costa', p:4.6,
+   d:`La perla del Gargano: casco blanco y el Pizzomunno.`,
+   larga:`La perla del Gargano: un casco blanco encaramado sobre el mar, con la catedral, el castillo y el famoso monolito Pizzomunno junto a la playa. Es la mejor base para excursiones en barco a las grutas marinas y para recorrer la espectacular costa hacia Mattinata y Peschici.`,
+   park:`Casco ZTL. Parkings de pago en el borde del centro.`,
+   comer:`Pescado del Adriático en las trattorias del casco antiguo.`},
+
+  {n:`Peschici`, lat:41.9450, lng:16.0140, cat:'costa', p:4.5,
+   d:`Pueblo blanco sobre un acantilado, con trabucchi.`,
+   larga:`Un pueblo blanco colgado de un acantilado sobre calas turquesa, con un casco laberíntico, castillo y, en la costa, los característicos trabucchi: antiguas máquinas de pesca de madera que se meten en el mar, algunas hoy convertidas en restaurantes. Muy fotogénico, sobre todo al atardecer.`,
+   park:`Estacionamientos en el acceso al centro, que es peatonal.`,
+   comer:`Un trabucco convertido en restaurante para comer pescado sobre el agua (reservá); trattorias del casco.`},
+
+  {n:`Isole Tremiti`, lat:42.1220, lng:15.4990, cat:'naturaleza', p:4.6,
+   d:`Archipiélago protegido de agua transparente.`,
+   larga:`Un pequeño archipiélago protegido de agua cristalina: San Domino, con pinares y calas para nadar, y San Nicola, con una abadía fortificada medieval. Se llega en ferry o hidrofoil. Snorkel, paseos en barca y mucha calma — una excelente excursión de día completo desde el Gargano.`,
+   park:`En las islas no se necesita auto: dejalo en el puerto de salida (Vieste, Peschici o Termoli) y cruzá en barco.`,
+   comer:`Restaurantes de pescado en San Domino.`},
+
+  {n:`Foresta Umbra`, lat:41.8180, lng:16.0000, cat:'naturaleza', p:4.5,
+   d:`Bosque de hayas centenarias en el Parque del Gargano.`,
+   larga:`El corazón verde del Parque Nacional del Gargano: un bosque de hayas y robles centenarios (Patrimonio de la Humanidad) con senderos señalizados, un pequeño lago con ciervos y un centro de visitantes. Aire fresco y sombra, un contraste perfecto con el calor de la costa.`,
+   park:`Estacionamiento en el centro de visitantes.`,
+   comer:`Poca oferta dentro; llevá un picnic o comé en Vieste o Monte Sant'Angelo.`},
+
+  {n:`Monte Sant'Angelo`, lat:41.7080, lng:15.9560, cat:'historia', p:4.4,
+   d:`Santuario de San Miguel en gruta, meta de peregrinación.`,
+   larga:`Pueblo en altura con el Santuario de San Michele Arcangelo, construido sobre una gruta y meta de peregrinación desde la Alta Edad Media (Patrimonio de la Humanidad, dentro de los sitios longobardos). Sumá el pintoresco barrio Junno y las vistas amplias sobre el golfo. Aire medieval y místico.`,
+   park:`Estacioná a la entrada del centro histórico y subí a pie.`,
+   comer:`Probá el pane di Monte Sant'Angelo y las hostie ripiene, un dulce típico del pueblo.`},
+
+  {n:`Mattinata`, lat:41.7100, lng:16.0530, cat:'costa', p:4.3,
+   d:`Base para las calas más lindas del Gargano.`,
+   larga:`Un pueblo blanco tranquilo rodeado de olivares, que funciona como base para algunas de las calas más lindas del Gargano: Baia delle Zagare y Vignanotica, de guijarros blancos y agua turquesa, muchas mejor accesibles en barco. Buen plan de naturaleza y playa.`,
+   park:`Estacionamientos junto a las calas o en el pueblo.`,
+   comer:`Pescado y cocina garganica en las trattorias del pueblo.`},
+
+  {n:`San Giovanni Rotondo`, lat:41.7060, lng:15.7280, cat:'historia', p:4.2,
+   d:`Gran centro de peregrinación del Padre Pío.`,
+   larga:`Uno de los mayores centros de peregrinación de Europa, en torno a la figura del Padre Pío: el santuario antiguo y la enorme iglesia moderna diseñada por Renzo Piano. Su interés es sobre todo religioso; si no es tu tema, es más una parada de paso dentro del Gargano.`,
+   park:`Amplios estacionamientos para peregrinos junto al santuario.`,
+   comer:`Mucha oferta sencilla orientada al peregrino alrededor del santuario.`}
 ];
 
 function colorDe(p){
@@ -272,47 +377,45 @@ function colorDe(p){
   return '#7a8a94';
 }
 
-/* ---------- Tarjetas ---------- */
-function renderCards(){
-  const cont = document.getElementById('cards');
-  PUNTOS
-    .map((p,i)=>({...p,i}))
-    .sort((a,b)=>b.p-a.p)
-    .forEach(p=>{
-      const c = colorDe(p.p);
-      const card = document.createElement('div');
-      card.className = 'card';
-      card.style.setProperty('--c', c);
-      card.innerHTML = `
-        <div class="card-top">
-          <div>
-            <div class="card-cat">${CAT[p.cat]}</div>
-            <h3>${p.n}</h3>
-          </div>
-          <div class="card-score">${p.p.toFixed(1)}</div>
+/* Acordeón de locaciones */
+function renderLocs(){
+  const cont = document.getElementById('locs');
+  PUNTOS.map((p,i)=>({...p,i})).sort((a,b)=>b.p-a.p).forEach(p=>{
+    const c = colorDe(p.p);
+    const el = document.createElement('div');
+    el.className = 'loc';
+    el.innerHTML = `
+      <div class="loc-hdr">
+        <div class="loc-score" style="background:${c}">${p.p.toFixed(1)}</div>
+        <div class="loc-meta">
+          <div class="loc-cat" style="color:${c}">${CAT[p.cat]}</div>
+          <div class="loc-name">${p.n}</div>
         </div>
-        <p>${p.d}</p>
-        <div class="go">Ver en el mapa →</div>`;
-      card.onclick = ()=> focus(p.i);
-      cont.appendChild(card);
-    });
+        <div class="loc-arrow">▾</div>
+      </div>
+      <div class="loc-body"><div class="loc-body-inner">
+        <div class="loc-desc">${p.larga}</div>
+        <div class="loc-row"><span class="ic">🅿️</span><div><span class="lbl">Dónde estacionar:</span>${p.park}</div></div>
+        <div class="loc-row"><span class="ic">🍽️</span><div><span class="lbl">Dónde comer:</span>${p.comer}</div></div>
+        <button class="loc-map-btn" data-i="${p.i}">📍 Centrar en el mapa</button>
+      </div></div>`;
+    el.querySelector('.loc-hdr').addEventListener('click', ()=> el.classList.toggle('open'));
+    el.querySelector('.loc-map-btn').addEventListener('click', (e)=>{ e.stopPropagation(); focusPoint(p.i); });
+    cont.appendChild(el);
+  });
 }
 
-/* ---------- Mapa ---------- */
+/* Mapa */
 let map, markers = {};
-
 function initMap(){
   if(typeof L === 'undefined'){
     document.getElementById('map-wrap').innerHTML =
       '<div style="display:grid;place-items:center;height:100%;padding:24px;text-align:center;color:#42484a;font-family:Inter,sans-serif">No se pudo cargar Leaflet. Revisá tu conexión a internet y volvé a abrir el archivo.</div>';
     return;
   }
-
   map = L.map('leaflet-map', { zoomControl:true, scrollWheelZoom:true });
-
   L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',{
-    subdomains:'abcd',
-    maxZoom:19,
+    subdomains:'abcd', maxZoom:19,
     attribution:'&copy; OpenStreetMap contributors &copy; CARTO'
   }).addTo(map);
 
@@ -333,22 +436,19 @@ function initMap(){
     markers[i] = m;
   });
 
-  const bounds = L.latLngBounds(PUNTOS.map(p=>[p.lat,p.lng]));
-  map.fitBounds(bounds,{padding:[40,40]});
-
+  map.fitBounds(L.latLngBounds(PUNTOS.map(p=>[p.lat,p.lng])),{padding:[40,40]});
   setTimeout(()=> map.invalidateSize(), 200);
 }
 
-function focus(i){
+function focusPoint(i){
   if(!map || !markers[i]) return;
   document.getElementById('map-wrap').scrollIntoView({behavior:'smooth', block:'center'});
-  const ll = markers[i].getLatLng();
-  map.flyTo(ll, 12, {duration:.8});
+  map.flyTo(markers[i].getLatLng(), 12, {duration:.8});
   setTimeout(()=> markers[i].openPopup(), 850);
 }
 
 window.addEventListener('load', ()=>{
-  renderCards();
+  renderLocs();
   setTimeout(initMap, 150);
 });
 </script>
