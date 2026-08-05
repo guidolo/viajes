@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Costa Vicentina · Surf trip desde Monte da Choça</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" crossorigin=""/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" crossorigin=""></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --sea-deep:#0a323f;
+    --sea:#12556a;
+    --lime:#f6f1e6;
+    --sand:#e7dcc6;
+    --cream:#faf7f0;
+    --ink:#20211d;
+    --muted:#8a9aa0;
+    --borde:#e4ddce;
+    --white:#ffffff;
+    --terra:#b5532e;
+    --gold:#cf9a34;
+    --olive:#6f7d4a;
+    --slate:#7a8a94;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Inter',system-ui,sans-serif;background:var(--cream);color:var(--ink);overflow-x:hidden}
+
+  /* HERO */
+  .hero{
+    background:
+      radial-gradient(130% 100% at 100% 0%, rgba(207,154,52,.18), transparent 55%),
+      radial-gradient(120% 90% at 0% 100%, rgba(18,85,106,.5), transparent 55%),
+      var(--sea-deep);
+    padding:64px 40px 52px;position:relative;overflow:hidden;
+  }
+  .hero::after{content:'';position:absolute;inset:0;background:repeating-linear-gradient(45deg,transparent,transparent 42px,rgba(255,255,255,.015) 42px,rgba(255,255,255,.015) 43px)}
+  .hero-inner{max-width:980px;margin:0 auto;position:relative;z-index:2}
+  .eyebrow{font-size:11px;font-weight:600;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);margin-bottom:16px;display:flex;align-items:center;gap:12px}
+  .eyebrow::before{content:'';width:30px;height:1px;background:var(--gold);display:block}
+  .hero h1{font-family:'Fraunces',serif;font-weight:900;font-size:clamp(40px,6vw,68px);line-height:.95;color:var(--lime);letter-spacing:-.01em;margin-bottom:12px}
+  .hero h1 em{font-style:italic;color:var(--gold)}
+  .hero p.sub{font-size:15px;color:var(--sand);opacity:.85;max-width:560px;line-height:1.6;margin-bottom:26px}
+  .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{font-size:12px;font-weight:500;letter-spacing:.02em;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:rgba(246,241,230,.85);padding:6px 14px;border-radius:999px}
+
+  /* MAIN */
+  .main{max-width:980px;margin:0 auto;padding:0 24px}
+  .sec-head{margin:44px 0 22px}
+  .sec-head h2{font-family:'Fraunces',serif;font-size:30px;font-weight:600;color:var(--sea-deep);margin-bottom:7px}
+  .sec-head p{color:var(--muted);font-size:15px;line-height:1.6;max-width:660px}
+
+  /* MAP */
+  #map-wrap{width:100%;height:520px;border-radius:16px;overflow:hidden;border:1px solid var(--borde);box-shadow:0 6px 30px rgba(10,50,63,.12);background:#dfe7e4}
+  #leaflet-map{width:100%;height:100%}
+  .legend{display:flex;flex-wrap:wrap;gap:16px;align-items:center;margin:18px 2px 6px;font-size:12.5px;color:var(--muted)}
+  .legend b{color:var(--ink);font-weight:600;margin-right:2px}
+  .legend span{display:flex;align-items:center;gap:7px}
+  .dot{width:12px;height:12px;border-radius:50%;flex:none}
+
+  /* MARKERS + POPUP */
+  .pin-inner{width:36px;height:36px;border-radius:50% 50% 50% 4px;transform:rotate(45deg);background:var(--c);border:2.5px solid #fff;box-shadow:0 3px 8px rgba(10,30,40,.35);display:grid;place-items:center;transition:transform .12s}
+  .pin-inner b{transform:rotate(-45deg);color:#fff;font-family:'Fraunces',serif;font-weight:600;font-size:12.5px;line-height:1}
+  .leaflet-marker-icon:hover .pin-inner{transform:rotate(45deg) scale(1.12)}
+  .leaflet-popup-content-wrapper{border-radius:14px;box-shadow:0 10px 30px rgba(10,30,40,.22);padding:2px}
+  .leaflet-popup-content{margin:14px 16px;font-family:'Inter',sans-serif}
+  .pop-cat{font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:var(--terra);margin-bottom:3px}
+  .pop-name{font-family:'Fraunces',serif;font-weight:600;font-size:19px;color:var(--ink);margin-bottom:7px}
+  .pop-score{display:inline-flex;align-items:center;gap:6px;font-weight:600;font-size:12.5px;color:var(--ink);margin-bottom:8px}
+  .pop-score .badge{color:#fff;padding:2px 9px;border-radius:7px;font-size:12px;font-family:'Fraunces',serif}
+  .pop-desc{font-size:13px;line-height:1.5;color:#4a4d47}
+
+  /* ACORDEÓN */
+  .note{background:rgba(207,154,52,.1);border:1px solid rgba(207,154,52,.28);border-left:4px solid var(--gold);border-radius:10px;padding:13px 16px;font-size:13px;line-height:1.6;color:#6b5316;margin-bottom:20px}
+  .locs{display:flex;flex-direction:column;gap:12px;margin:8px 0 20px}
+  .loc{background:#fff;border:1px solid var(--borde);border-radius:16px;overflow:hidden;box-shadow:0 2px 12px rgba(10,50,63,.05)}
+  .loc-hdr{display:flex;align-items:center;gap:14px;padding:16px 20px;cursor:pointer;user-select:none;transition:background .15s}
+  .loc-hdr:hover{background:rgba(18,85,106,.04)}
+  .loc-score{flex:none;width:46px;height:46px;border-radius:12px;display:grid;place-items:center;color:#fff;font-family:'Fraunces',serif;font-weight:600;font-size:18px}
+  .loc-meta{flex:1;min-width:0}
+  .loc-cat{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;margin-bottom:3px}
+  .loc-name{font-family:'Fraunces',serif;font-size:20px;font-weight:600;color:var(--sea-deep);line-height:1.1}
+  .loc-arrow{font-size:14px;color:var(--muted);transition:transform .3s;flex:none}
+  .loc.open .loc-arrow{transform:rotate(180deg)}
+  .loc-body{max-height:0;overflow:hidden;transition:max-height .45s ease}
+  .loc.open .loc-body{max-height:1600px}
+  .loc-body-inner{padding:2px 20px 20px}
+  .loc-desc{font-size:14px;line-height:1.7;color:#484d48;margin-bottom:6px}
+  .loc-row{display:flex;gap:11px;padding:11px 0;border-top:1px solid var(--borde);font-size:13.5px;line-height:1.6;color:#4a4f4a}
+  .loc-row .ic{flex:none;font-size:15px;line-height:1.5}
+  .loc-row .lbl{font-weight:700;color:var(--sea-deep);margin-right:5px}
+  .loc-dist{font-size:11.5px;color:var(--sea);font-weight:600;margin-top:5px}
+  .pop-dist{font-size:12px;color:#0a323f;font-weight:700;margin-top:6px}
+  .house-inner{width:38px;height:38px;border-radius:50% 50% 50% 4px;transform:rotate(45deg);background:#0a323f;border:3px solid #cf9a34;box-shadow:0 3px 10px rgba(10,30,40,.45);display:grid;place-items:center}
+  .house-inner span{transform:rotate(-45deg);font-size:16px;line-height:1}
+  .rental-inner{width:32px;height:32px;border-radius:50% 50% 50% 4px;transform:rotate(45deg);background:#12556a;border:2.5px solid #fff;box-shadow:0 3px 8px rgba(10,30,40,.35);display:grid;place-items:center}
+  .rental-inner span{transform:rotate(-45deg);font-size:14px;line-height:1}
+  .loc-map-btn{margin-top:15px;display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;color:#fff;background:var(--sea);border:none;border-radius:9px;padding:9px 15px;cursor:pointer;font-family:inherit;transition:background .15s}
+  .loc-map-btn:hover{background:var(--sea-deep)}
+  .loc-btns{display:flex;flex-wrap:wrap;gap:10px;margin-top:15px}
+  .loc-btns .loc-map-btn{margin-top:0}
+  .loc-gmaps-btn{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;color:var(--sea-deep);background:#fff;border:1.5px solid var(--sea);border-radius:9px;padding:8px 14px;cursor:pointer;text-decoration:none;font-family:inherit;transition:all .15s}
+  .loc-gmaps-btn:hover{background:var(--sea);color:#fff}
+
+  footer{background:var(--sea-deep);color:rgba(246,241,230,.55);text-align:center;padding:30px 20px;font-size:12px;margin-top:44px;letter-spacing:.02em}
+  footer b{color:var(--gold)}
+
+  @media(max-width:600px){
+    .hero{padding:44px 22px 38px}
+    .main{padding:0 16px}
+    #map-wrap{height:400px}
+    .loc.open .loc-body{max-height:2400px}
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-inner">
+    <p class="eyebrow">Alentejo &amp; Algarve · Costa Vicentina</p>
+    <h1>Surf trip Portugal<em>.</em></h1>
+    <p class="sub">Los spots de la Costa Vicentina alrededor de Monte da Choça, puntuados para nivel intermedio-bajo en septiembre. Cada playa con su ola, dónde alquilar tabla y dónde comer.</p>
+    <div class="chips">
+      <div class="chip">🏄 11 spots · nivel intermedio-bajo</div>
+      <div class="chip">📅 Mediados de septiembre</div>
+      <div class="chip">🍽️ Dónde comer</div>
+      <div class="chip">🛹 Rentals de tablas</div>
+    </div>
+  </div>
+</header>
+
+<div class="main">
+
+  <div class="sec-head">
+    <h2>El mapa</h2>
+    <p>El número de cada marcador es el puntaje del spot <b>para su nivel (intermedio-bajo) en septiembre</b> — no la calidad absoluta de la ola. Los pines azules con 🏄 son rentals de tablas. Clic en cualquier marcador para el detalle.</p>
+  </div>
+
+  <div id="map-wrap"><div id="leaflet-map"></div></div>
+
+  <div class="legend">
+    <b>Puntaje para su nivel:</b>
+    <span><i class="dot" style="background:var(--terra)"></i>4.5 +</span>
+    <span><i class="dot" style="background:var(--gold)"></i>4.0 – 4.4</span>
+    <span><i class="dot" style="background:var(--olive)"></i>3.5 – 3.9</span>
+    <span><i class="dot" style="background:var(--slate)"></i>menos de 3.5</span>
+    <span style="margin-left:8px">🏠 Monte da Choça</span>
+    <span>🏄 Rental de tablas</span>
+  </div>
+
+  <div class="note">🌊 <b>Septiembre en la Costa Vicentina:</b> empiezan a entrar los primeros swells de otoño pero todavía hay muchos días manejables. Reglas de oro para intermedio-bajo: madrugar (a la mañana suele estar glassy u offshore, la nortada arranca al mediodía), mirar la previsión (Windguru / Surfline) y elegir el spot según el tamaño — con mar grande, ir a las desembocaduras protegidas (Odeceixe, Amoreira, Milfontes); con mar chico, a los beach breaks expuestos (Amado, Malhão). Agua ~18-19 °C: neopreno 3/2 alcanza.</div>
+
+  <div class="sec-head">
+    <h2>Los spots</h2>
+    <p>Ordenados de mayor a menor puntaje para su nivel. Cada ficha tiene la descripción de la ola, condiciones recomendadas, rental de tablas y dónde comer.</p>
+  </div>
+
+  <div class="note">🍽️ Los restaurantes son recomendaciones conocidas de cada zona, pero abren y cierran seguido (varios son estacionales): confirmá horarios y reservá, sobre todo los que están sobre la playa.</div>
+
+  <div class="locs" id="locs"></div>
+
+</div>
+
+<footer>
+  Surf trip <b>Costa Vicentina</b> · 11 spots puntuados para nivel intermedio-bajo · septiembre · base Monte da Choça · Generado con Claude
+</footer>
+
+<script>
+const CAT = {
+  rio:'Desembocadura protegida',
+  bahia:'Bahía protegida',
+  beach:'Beach break',
+  expuesto:'Beach break expuesto',
+  urbana:'Playa de pueblo'
+};
+
+const PUNTOS = [
+  {n:`Praia de Odeceixe`, lat:37.4402, lng:-8.7989, cat:'rio', p:4.8,
+   d:`Desembocadura del río Seixe: olas suaves y protegidas, el spot más noble de la zona para su nivel.`,
+   larga:`El spot de cabecera del viaje: a ~15 min de la casa, en la desembocadura del río Seixe. La playa forma una bahía amplia donde el río y los bancos de arena generan picos suaves y ordenados. Con marea media-alta la ola es más lenta y amable (ideal para ustedes); con marea baja se pone algo más rápida. Funciona para todos los niveles y cuando el swell crece sigue habiendo rincones protegidos. El pueblo de Odeceixe, en lo alto, es precioso.`,
+   cond:`Mejor con marea media a alta y a la mañana temprano, antes de la nortada. Es de las playas que mejor aguanta el swell grande de septiembre sin ponerse pesada.`,
+   rental:`Water Element, en la misma playa: tablas, bodyboards, SUP y clases. También softboards en los chiringuitos de temporada.`,
+   comer:`Bar da Praia, sobre la playa, para comer con vista después del agua; en el pueblo, Taberna do Gabão para cocina portuguesa de verdad.`},
+
+  {n:`Praia da Arrifana`, lat:37.2925, lng:-8.8649, cat:'bahia', p:4.7,
+   d:`Bahía en herradura protegida por acantilados: LA playa-escuela del Algarve oeste.`,
+   larga:`Una media luna espectacular encajada entre acantilados oscuros, con fondo de arena y olas nobles: es el spot de aprendizaje más famoso del Algarve occidental. El extremo norte tiene las olas más suaves; a medida que te corrés hacia el sur (y hacia afuera) hay picos más exigentes. La bahía queda protegida del viento norte, así que cuando la nortada arruina todo lo demás, acá suele estar surfeable. Único "pero": se llena de escuelas en el pico del día.`,
+   cond:`Aguanta bien la nortada y ordena swells medianos. Ir temprano o a última hora para esquivar a las escuelas. Bajada a pie desde el parking del acantilado.`,
+   rental:`Arrifana Surf School & Camp tiene un puesto de rental en la misma playa, sin reserva: softboards, epoxy y neoprenos.`,
+   comer:`Restaurante da Praia, al pie de la playa (pescado y vistas, un clásico desde 1997); arriba, O Paulo junto a la fortaleza para atardecer con mariscos, y Tasca d'Arrifana para la feijoada de pulpo.`},
+
+  {n:`Praia do Amado`, lat:37.1670, lng:-8.9024, cat:'beach', p:4.6,
+   d:`El beach break más consistente de la costa: funciona casi siempre y con todas las mareas.`,
+   larga:`El spot más consistente de toda la Costa Vicentina, y por algo es la capital de las escuelas de surf de la zona. Playa amplia de arena dorada con varios picos que funcionan con casi cualquier marea y dirección de swell. Con mar chico-mediano es un patio de juegos perfecto para intermedios; con swell grande de septiembre se pone potente y conviene mirar antes de entrar. A ~40 min de la casa, ideal combinarlo con Bordeira.`,
+   cond:`Funciona con todas las mareas. El pico frente al parking es el más concurrido; caminando un poco hay picos más tranquilos. Con nortada fuerte se desordena: mejor de mañana.`,
+   rental:`Varias escuelas alquilan tablas y neoprenos directamente en el parking de la playa en temporada.`,
+   comer:`Sítio do Forno, colgado del acantilado entre Amado y Bordeira: pescado fresco y cataplana de pulpo con vista al mar (reservá).`},
+
+  {n:`Praia da Amoreira`, lat:37.3483, lng:-8.8455, cat:'rio', p:4.6,
+   d:`Desembocadura del río de Aljezur: olas suaves, paisaje enorme, perfecta para ganar confianza.`,
+   larga:`La desembocadura del río de Aljezur forma una playa enorme y salvaje con bancos de arena que dan olas largas y suaves, sobre todo cerca del río. Es el lugar perfecto para sesiones relajadas y para afinar técnica sin presión: mucho espacio, poca gente comparado con Arrifana, y un paisaje de dunas y acantilados impresionante. Con marea subiendo, los picos junto al río son oro para intermedio-bajo.`,
+   cond:`Mejor con marea media subiendo. Con swell grande, quedarse del lado del río, que queda más protegido. Ojo con la corriente del propio río con marea bajando.`,
+   rental:`Aljezur Surf Shop (en Aljezur, a 10 min) alquila de todo y hace entregas; Algarve Adventure entrega tablas en tu alojamiento (17-20 h) o en sus puestos de Arrifana y Monte Clérigo (9-13 h).`,
+   comer:`O Paraíso do Mar, el restaurante sobre la playa, para pescado con vista a la desembocadura; más opciones en el pueblo de Aljezur.`},
+
+  {n:`Praia de Monte Clérigo`, lat:37.3404, lng:-8.8519, cat:'beach', p:4.4,
+   d:`Beach break familiar de picos suaves, con un pueblito de casas de colores.`,
+   larga:`Una playa familiar y encantadora, con un caserío de casitas blancas y de colores que baja hasta la arena. Los picos son en general suaves y viables para intermedio-bajo, con fondo de arena y algunas rocas en los extremos. Al estar más abierta que Arrifana, el viento norte la afecta más; con nortada fuerte se pica. Buen plan de día completo: sesión de surf, almuerzo al lado del agua y siesta en la arena.`,
+   cond:`Mejor de mañana temprano con viento calmo y marea media. Con swell grande de septiembre se pasa de tamaño: ese día, Arrifana u Odeceixe.`,
+   rental:`Algarve Adventure tiene puesto en Monte Clérigo (9-13 h) y entrega a domicilio por la zona de Aljezur / Vale da Telha.`,
+   comer:`O Zé, el clásico frente a la playa, para pescado a la brasa con los pies casi en la arena.`},
+
+  {n:`Vila Nova de Milfontes (Franquia)`, lat:37.7215, lng:-8.7842, cat:'rio', p:4.3,
+   d:`Desembocadura del Mira: la ola más mansa de la lista, plan B perfecto con mar grande.`,
+   larga:`En la desembocadura del río Mira, la playa de Franquia es la ola más mansa de toda la lista: olitas largas y sin fuerza que rompen sobre arena en agua abrigada. Cuando el Atlántico se pone bravo y todo lo demás está gigante, acá se surfea igual — por eso es el plan B ideal para su nivel. Enfrente, en la orilla sur, Furnas tiene picos algo más movidos. Milfontes es además el pueblo más lindo del Alentejo costero para pasear y cenar.`,
+   cond:`Brilla justamente cuando hay swell grande: la desembocadura filtra el tamaño. Con mar chico puede quedar plano — ese día, Malhão al lado.`,
+   rental:`SurfMilfontes, en el pueblo: tablas, neoprenos y clases, con conocimiento fino de los bancos del Mira y de Malhão.`,
+   comer:`Tasca do Celso, el gran clásico alentejano del pueblo (reservá sí o sí); Porto das Barcas sobre el acantilado para algo más elegante; A Fateixa junto al río para pescado sencillo.`},
+
+  {n:`Praia do Malhão`, lat:37.7650, lng:-8.7995, cat:'expuesto', p:4.1,
+   d:`Kilómetros de beach break expuesto y consistente; potente cuando entra swell.`,
+   larga:`Un arenal enorme y salvaje al norte de Milfontes, dentro del parque natural: dunas, ni un edificio y picos repartidos a lo largo de kilómetros — casi seguro surfean solos. Es consistente y con mar chico-mediano es un playground excelente para intermedios. Pero es un spot expuesto: cuando el swell de septiembre entra de verdad se pone potente, con corrientes, y deja de ser para su nivel.`,
+   cond:`Mejor con marea baja-media y temprano. Regla simple: si la previsión marca más de ~1,5 m de swell, mejor Franquia u Odeceixe. Sin servicios en la playa: llevar agua.`,
+   rental:`SurfMilfontes (en Milfontes, a 10 min) alquila tablas y suele saber qué pico de Malhão está funcionando.`,
+   comer:`Nada en la playa: bajar a Milfontes (Tasca do Celso, A Fateixa) o llevar picnic para las dunas.`},
+
+  {n:`Praia do Carvalhal`, lat:37.5030, lng:-8.7885, cat:'beach', p:3.9,
+   d:`Playa amplia y tranquila cerca de la casa, con picos decentes y poca gente.`,
+   larga:`Una de las playas más cercanas a la casa (~15 min), amplia, respaldada por acantilados y con mucha menos gente que los spots famosos. Tiene picos de beach break que con condiciones chicas y limpias funcionan bien para intermedio-bajo; con swell se desordena y aparecen corrientes. No es un spot "de destino", pero como sesión rápida de mañana antes del desayuno es imbatible.`,
+   cond:`Solo con mar chico-mediano y viento calmo. Chequear desde el acantilado antes de bajar; si se ve movido, seguir 10 min hasta Odeceixe.`,
+   rental:`Sin rental propio: alquilar en Odeceixe (Water Element) o pedir entrega a la casa vía Aljezur Surf Shop / Algarve Adventure.`,
+   comer:`A 5 min está el puertito de Azenha do Mar con su restaurante homónimo: percebes y pescado fresquísimo de las barcas locales, encima del mar. Muy recomendado y muy cerca de la casa.`},
+
+  {n:`Praia da Bordeira (Carrapateira)`, lat:37.1985, lng:-8.9059, cat:'expuesto', p:3.7,
+   d:`Playa gigante y escénica; potente, solo para los días chicos.`,
+   larga:`Una de las playas más espectaculares de Portugal: un arenal inmenso con dunas, una laguna y acantilados dorados. Como spot para su nivel es más limitado: es muy expuesta y las olas suelen ser potentes y con corriente. Con mar chico y limpio los picos junto a la laguna son divertidos; con el swell típico de septiembre suele pasarse de tamaño. Vale la visita aunque no se surfee — el mirador del acantilado hacia Amado es de los paisajes del viaje.`,
+   cond:`Solo días de swell pequeño y sin viento. Si está grande, Amado (al lado) suele estar más ordenada, y Arrifana más protegida.`,
+   rental:`Escuelas y rentals en el parking de Amado, a 5 min; también en el pueblo de Carrapateira.`,
+   comer:`O Sítio do Rio, junto al acceso a la playa: cocina regional en un caserío con encanto, institución de Carrapateira.`},
+
+  {n:`Praia de Almograve`, lat:37.6494, lng:-8.8017, cat:'beach', p:3.6,
+   d:`Picos entre rocas y corrientes: solo para días pequeños y con marea correcta.`,
+   larga:`Playa bonita del parque natural, con arena dorada partida por lenguas de roca oscura. Tiene picos surfeables, pero las rocas y las corrientes exigen elegir bien el día y el lugar: no es la mejor opción para intermedio-bajo salvo con mar chico y marea media-alta (con baja quedan muchas piedras descubiertas). Como playa de día de descanso, en cambio, es una preciosura.`,
+   cond:`Solo con swell pequeño, marea media-alta y viento calmo. Ante la duda, seguir hasta Milfontes o volver a Odeceixe.`,
+   rental:`Sin rental propio: lo más cerca es SurfMilfontes (15 min).`,
+   comer:`Restaurantes sencillos en el pueblo de Almograve; para comer bien, Milfontes está a 15 min.`},
+
+  {n:`Zambujeira do Mar`, lat:37.5254, lng:-8.7867, cat:'urbana', p:3.5,
+   d:`Playa urbana chica al pie del pueblo; la famosa "Zambujeira Left" es solo para expertos.`,
+   larga:`El pueblo balneario más cercano a la casa, encaramado en el acantilado con su playa al pie. La ola famosa del lugar, la "Zambujeira Left", rompe sobre roca y es cosa de surfistas muy experimentados — ni acercarse. La playa del pueblo, en cambio, con mar chico tiene olitas para pasar el rato, y la vecina cala de Alteirinhos (5 min a pie) es más abrigada. Mejor plan: sesión en Odeceixe a la mañana y Zambujeira a la tarde para baño, atardecer y cena.`,
+   cond:`Solo con mar chico. Su verdadero valor en el viaje es gastronómico y de atardecer, no surfístico.`,
+   rental:`Sin rental estable en el pueblo: alquilar en Odeceixe o pedir entrega a domicilio.`,
+   comer:`Costa Alentejana, famoso por su mariscada (de las mejores de la costa); Restaurante Rita para pescado del día. Y en el puertito de Entrada da Barca, pescado a la brasa mirando las barcas.`}
+];
+
+const RENTALS = [
+  {n:`Water Element`, lat:37.4413, lng:-8.7975, d:`En la misma Praia de Odeceixe: tablas, bodyboard, SUP, kayak y clases. El rental más cercano a la casa.`},
+  {n:`Arrifana Surf School (Surf Hut)`, lat:37.2930, lng:-8.8640, d:`Puesto de rental en la playa de Arrifana, sin reserva: softboards, epoxy, neoprenos, leash y wax.`},
+  {n:`Aljezur Surf Shop`, lat:37.3180, lng:-8.8034, d:`Tienda en Aljezur con tablas para todos los niveles, de foamies a shortboards. Retiro en tienda o entrega en la zona.`},
+  {n:`Algarve Adventure (Monte Clérigo)`, lat:37.3396, lng:-8.8506, d:`Puesto en Monte Clérigo y Arrifana (9-13 h) y entrega de tablas a tu alojamiento (17-20 h) por toda la zona de Aljezur.`},
+  {n:`SurfMilfontes`, lat:37.7250, lng:-8.7815, d:`En Vila Nova de Milfontes: tablas, neoprenos y clases. Cubre Franquia, Furnas y Malhão.`}
+];
+
+const HOUSE = {lat:37.4669455, lng:-8.7314919, name:'Monte da Choça'};
+function distKm(pt){
+  const R=6371, toR=x=>x*Math.PI/180;
+  const dLat=toR(pt.lat-HOUSE.lat), dLng=toR(pt.lng-HOUSE.lng);
+  const a=Math.sin(dLat/2)**2 + Math.cos(toR(HOUSE.lat))*Math.cos(toR(pt.lat))*Math.sin(dLng/2)**2;
+  return R*2*Math.asin(Math.sqrt(a));
+}
+function fmtKm(d){ return d<10 ? d.toFixed(1) : Math.round(d).toString(); }
+
+function colorDe(p){
+  if(p>=4.5) return '#b5532e';
+  if(p>=4.0) return '#cf9a34';
+  if(p>=3.5) return '#6f7d4a';
+  return '#7a8a94';
+}
+
+/* Acordeón de spots */
+function renderLocs(){
+  const cont = document.getElementById('locs');
+  PUNTOS.map((p,i)=>({...p,i})).sort((a,b)=>b.p-a.p).forEach(p=>{
+    const c = colorDe(p.p);
+    const el = document.createElement('div');
+    el.className = 'loc';
+    el.innerHTML = `
+      <div class="loc-hdr">
+        <div class="loc-score" style="background:${c}">${p.p.toFixed(1)}</div>
+        <div class="loc-meta">
+          <div class="loc-cat" style="color:${c}">${CAT[p.cat]}</div>
+          <div class="loc-name">${p.n}</div>
+          <div class="loc-dist">📍 A ${fmtKm(distKm(p))} km de la casa (línea recta)</div>
+        </div>
+        <div class="loc-arrow">▾</div>
+      </div>
+      <div class="loc-body"><div class="loc-body-inner">
+        <div class="loc-desc">${p.larga}</div>
+        <div class="loc-row"><span class="ic">🌊</span><div><span class="lbl">Condiciones para ustedes:</span>${p.cond}</div></div>
+        <div class="loc-row"><span class="ic">🏄</span><div><span class="lbl">Rental de tablas:</span>${p.rental}</div></div>
+        <div class="loc-row"><span class="ic">🍽️</span><div><span class="lbl">Dónde comer:</span>${p.comer}</div></div>
+        <div class="loc-btns">
+          <button class="loc-map-btn" data-i="${p.i}">📍 Centrar en el mapa</button>
+          <a class="loc-gmaps-btn" href="https://www.google.com/maps/dir/?api=1&origin=${HOUSE.lat},${HOUSE.lng}&destination=${p.lat},${p.lng}&travelmode=driving" target="_blank" rel="noopener">🧭 Cómo llegar</a>
+        </div>
+      </div></div>`;
+    el.querySelector('.loc-hdr').addEventListener('click', ()=> el.classList.toggle('open'));
+    el.querySelector('.loc-map-btn').addEventListener('click', (e)=>{ e.stopPropagation(); focusPoint(p.i); });
+    cont.appendChild(el);
+  });
+}
+
+/* Mapa */
+let map, markers = {};
+function initMap(){
+  if(typeof L === 'undefined'){
+    document.getElementById('map-wrap').innerHTML =
+      '<div style="display:grid;place-items:center;height:100%;padding:24px;text-align:center;color:#42484a;font-family:Inter,sans-serif">No se pudo cargar Leaflet. Revisá tu conexión a internet y volvé a abrir el archivo.</div>';
+    return;
+  }
+  map = L.map('leaflet-map', { zoomControl:true, scrollWheelZoom:true });
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',{
+    subdomains:'abcd', maxZoom:19,
+    attribution:'&copy; OpenStreetMap contributors &copy; CARTO'
+  }).addTo(map);
+
+  PUNTOS.forEach((pt,i)=>{
+    const c = colorDe(pt.p);
+    const icon = L.divIcon({
+      className:'pin',
+      html:`<div class="pin-inner" style="--c:${c}"><b>${pt.p.toFixed(1)}</b></div>`,
+      iconSize:[36,36], iconAnchor:[18,34], popupAnchor:[0,-32]
+    });
+    const m = L.marker([pt.lat,pt.lng],{icon}).addTo(map);
+    m.bindPopup(`
+      <div class="pop-cat">${CAT[pt.cat]}</div>
+      <div class="pop-name">${pt.n}</div>
+      <div class="pop-score"><span class="badge" style="background:${c}">${pt.p.toFixed(1)}</span> para nivel intermedio-bajo</div>
+      <div class="pop-desc">${pt.d}</div>
+      <div class="pop-dist">📍 A ${fmtKm(distKm(pt))} km de la casa</div>
+    `,{maxWidth:280});
+    markers[i] = m;
+  });
+
+  RENTALS.forEach(r=>{
+    const icon = L.divIcon({className:'rental-pin', html:`<div class="rental-inner"><span>🏄</span></div>`, iconSize:[34,34], iconAnchor:[17,32], popupAnchor:[0,-30]});
+    L.marker([r.lat,r.lng],{icon}).addTo(map)
+      .bindPopup(`<div class="pop-cat" style="color:#12556a">Rental de tablas</div><div class="pop-name">${r.n}</div><div class="pop-desc">${r.d}</div>`,{maxWidth:260});
+  });
+
+  const houseIcon = L.divIcon({className:'house-pin', html:`<div class="house-inner"><span>🏠</span></div>`, iconSize:[40,40], iconAnchor:[20,38], popupAnchor:[0,-36]});
+  L.marker([HOUSE.lat,HOUSE.lng],{icon:houseIcon, zIndexOffset:1000}).addTo(map)
+    .bindPopup(`<div class="pop-cat" style="color:#0a323f">Tu alojamiento</div><div class="pop-name">${HOUSE.name}</div><div class="pop-desc">Base del viaje, en el campo entre São Teotónio y Odeceixe. Todos los spots quedan a menos de 1 h.</div>`,{maxWidth:260});
+
+  map.fitBounds(L.latLngBounds([[HOUSE.lat,HOUSE.lng], ...PUNTOS.map(p=>[p.lat,p.lng])]),{padding:[45,45]});
+  setTimeout(()=> map.invalidateSize(), 200);
+}
+
+function focusPoint(i){
+  if(!map || !markers[i]) return;
+  document.getElementById('map-wrap').scrollIntoView({behavior:'smooth', block:'center'});
+  map.flyTo(markers[i].getLatLng(), 13, {duration:.8});
+  setTimeout(()=> markers[i].openPopup(), 850);
+}
+
+window.addEventListener('load', ()=>{
+  renderLocs();
+  setTimeout(initMap, 150);
+});
+</script>
+</body>
+</html>
