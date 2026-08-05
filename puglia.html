@@ -95,6 +95,11 @@
   .loc-row .lbl{font-weight:700;color:var(--sea-deep);margin-right:5px}
   .loc-row-muted{color:var(--muted)}
   .beach-badge{font-size:14px;vertical-align:-1px}
+  .loc-dist{font-size:11.5px;color:var(--sea);font-weight:600;margin-top:5px}
+  .playa-badge{display:inline-block;color:#fff;font-family:'Fraunces',serif;font-size:11px;font-weight:600;padding:1px 7px;border-radius:6px;vertical-align:1px}
+  .pop-dist{font-size:12px;color:#0a323f;font-weight:700;margin-top:6px}
+  .house-inner{width:38px;height:38px;border-radius:50% 50% 50% 4px;transform:rotate(45deg);background:#0a323f;border:3px solid #cf9a34;box-shadow:0 3px 10px rgba(10,30,40,.45);display:grid;place-items:center}
+  .house-inner span{transform:rotate(-45deg);font-size:16px;line-height:1}
   .loc-map-btn{margin-top:15px;display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;color:#fff;background:var(--sea);border:none;border-radius:9px;padding:9px 15px;cursor:pointer;font-family:inherit;transition:background .15s}
   .loc-map-btn:hover{background:var(--sea-deep)}
 
@@ -140,11 +145,12 @@
     <span><i class="dot" style="background:var(--gold)"></i>4.4 – 4.6</span>
     <span><i class="dot" style="background:var(--olive)"></i>4.0 – 4.3</span>
     <span><i class="dot" style="background:var(--slate)"></i>menos de 4.0</span>
+    <span style="margin-left:8px">🏠 Tu casa (Holiday Home Pilone)</span>
   </div>
 
   <div class="sec-head">
     <h2>Las locaciones</h2>
-    <p>Ordenadas de mayor a menor puntaje. Tocá una ficha para desplegar la descripción, dónde estacionar y dónde comer.</p>
+    <p>Ordenadas de mayor a menor puntaje. Cada ficha muestra la distancia desde tu casa en Pilone. Tocá una para desplegar descripción, playa, estacionamiento y dónde comer.</p>
   </div>
 
   <div class="note">🍽️ Los restaurantes son recomendaciones conocidas de cada zona, pero abren y cierran seguido: confirmá horarios y reservá con anticipación, sobre todo en los lugares chicos o de temporada.</div>
@@ -179,6 +185,7 @@ const PUNTOS = [
    larga:`La postal más famosa de Puglia. Asomate a la Terrazza Santo Stefano sobre el acantilado y bajá a la cala de Lama Monachile, encajada entre las rocas. Recorré el casco antiguo con sus versos pintados en escaleras y balcones (homenaje a Domenico Modugno, el autor de "Volare", que nació acá). Un helado o un espresso en la plaza y listo.`,
    park:`Casco peatonal. Estacioná en los parkings de pago cerca de Piazza Aldo Moro o en las calles del borde del centro.`,
    pl:true, playa:`la cala de Lama Monachile es preciosa pero chica, de piedra y siempre llena, con agua honda. Más para la foto y un chapuzón rápido que para pasar el día; poco cómoda con nenes.`,
+   playaScore:3.5,
    comer:`Pescaria en Piazza Aldo Moro para panini de mar de culto (hay cola, vale la pena); Grotta Palazzese para cenar dentro de una gruta sobre el mar (carísimo y espectacular, reservá sí o sí).`},
 
   {n:`Ostuni`, lat:40.7304, lng:17.5772, cat:'ciudad', p:4.7,
@@ -186,6 +193,7 @@ const PUNTOS = [
    larga:`La "Città Bianca", un laberinto de callejones encalados trepando una colina, coronado por la Concattedrale gótica. Perdete sin rumbo, buscá los miradores sobre el mar y los olivares, y quedate para el atardecer, que es cuando mejor se ve. Base ideal para todo el Valle d'Itria y la zona de Rosa Marina.`,
    park:`ZTL en el casco. Estacioná en los parkings de pago alrededor de Piazza della Libertà y subí caminando.`,
    pl:true, playa:`el pueblo está en una colina, pero su marina (Rosa Marina, Pilone, Costa Merlata) tiene buenas playas de arena y roca. Cerca, la reserva de Torre Guaceto ofrece agua baja y limpia, ideal para los chicos.`,
+   playaScore:4.5,
    comer:`Osteria Piazzetta Cattedrale (Bib Gourmand, chico y muy rico — mejor para adultos, reservá) para una cena especial; Drogheria Pugliese, Trattoria Sapere e Sapori o La Taverna da Maurizio para algo más casual.`},
 
   {n:`Locorotondo`, lat:40.7546, lng:17.3265, cat:'ciudad', p:4.5,
@@ -214,6 +222,7 @@ const PUNTOS = [
    larga:`Un puerto vivo con barcas de pesca de colores (gozzi), murallas, el castillo de Carlos V y un casco histórico blanco lleno de iglesias. Tiene además calas urbanas como Cala Porta Vecchia para meter los pies en el agua sin salir del pueblo. Menos concurrida y más "de verdad" que Polignano.`,
    park:`Parkings de pago junto al puerto o cerca de Largo Fontanelle; el casco es peatonal.`,
    pl:true, playa:`calas urbanas (Cala Porta Vecchia) y, hacia el sur (zona Capitolo), muy buenas playas de arena. Vale la pena, y varias son cómodas para chicos.`,
+   playaScore:4.0,
    comer:`Osteria Perricci, clásico de pescado; abundan las trattorias de mar en el casco antiguo.`},
 
   {n:`Grotte di Castellana`, lat:40.8790, lng:17.1680, cat:'gruta', p:4.6,
@@ -228,6 +237,7 @@ const PUNTOS = [
    larga:`Una ciudad messapia y luego romana junto al mar, con muralla, foro, vía Traiana, basílicas paleocristianas y un buen museo arqueológico. Se camina entre ruinas con el Adriático de fondo. Tranquila, buena para una media mañana con algo de historia.`,
    park:`Estacionamiento gratuito en el propio área arqueológica.`,
    pl:true, playa:`la costa de al lado (Savelletri) es sobre todo rocosa, con calas y lidos: linda para nadar, pero no de arena.`,
+   playaScore:3.0,
    comer:`Muy cerca está Savelletri, con excelentes restaurantes de pescado frente al puertito (ideal para combinar con la visita).`},
 
   {n:`Fasano (Zoosafari)`, lat:40.8370, lng:17.3610, cat:'naturaleza', p:4.0,
@@ -249,6 +259,7 @@ const PUNTOS = [
    larga:`La capital, con una Bari Vecchia que es puro teatro callejero: mirá a las señoras haciendo orecchiette a mano en Arco Basso ("la strada delle orecchiette"), entrá a la Basílica de San Nicola (gran peregrinación ortodoxa) y a la Catedral, y caminá el imponente Lungomare. Comé focaccia barese recién salida del horno.`,
    park:`El casco es ZTL. Usá parkings de pago (por ejemplo cerca del Teatro Petruzzelli o del puerto) y entrá a pie.`,
    pl:true, playa:`tiene la playa urbana Pane e Pomodoro, práctica pero nada especial. Para playa de verdad conviene salir de la ciudad.`,
+   playaScore:2.5,
    comer:`Panificio Fiore para focaccia barese; orecchiette caseras al toque en Arco Basso; Le Travi – "Da Nonna Rosa" para cocina barese tradicional.`},
 
   {n:`Trani`, lat:41.2775, lng:16.4172, cat:'historia', p:4.6,
@@ -256,6 +267,7 @@ const PUNTOS = [
    larga:`Su catedral románica de piedra blanca, plantada casi sobre el mar, es de las más bellas de Italia — imperdible al atardecer. Rodeá el puerto pesquero lleno de barquitas, el Castello Svevo y el antiguo barrio judío (la Giudecca) con su sinagoga-iglesia. Un pueblo elegante y luminoso.`,
    park:`Parkings de pago junto al puerto; la zona de la catedral es peatonal.`,
    pl:true, playa:`solo una playita (Spiaggia Colonna) junto a la catedral y algún tramo de roca. Alcanza para un chapuzón, no para un día entero.`,
+   playaScore:2.5,
    comer:`Restaurantes de pescado alrededor del porto; buena movida gastronómica al caer la tarde.`},
 
   {n:`Castel del Monte`, lat:41.0840, lng:16.2710, cat:'historia', p:4.7,
@@ -270,6 +282,7 @@ const PUNTOS = [
    larga:`Pueblo costero con casco medieval, catedral, torre normanda y un puerto tranquilo con buen paseo de mar. Tiene calas como Ripalta para un baño. Una parada relajada entre Trani y Bari, sin grandes multitudes.`,
    park:`Estacionamiento junto al puerto y el lungomare.`,
    pl:true, playa:`calas y playas (Ripalta, Salsello), algunas de arena. Decentes, sin ser espectaculares.`,
+   playaScore:3.0,
    comer:`Trattorias de pescado en el puerto.`},
 
   {n:`Barletta`, lat:41.3190, lng:16.2840, cat:'ciudad', p:4.0,
@@ -277,6 +290,7 @@ const PUNTOS = [
    larga:`Sus íconos son el Colosso di Barletta (una estatua de bronce romana de más de 5 metros, en plena calle) y el gran Castello svevo-angioino. Tiene catedral, casco histórico y la leyenda de la Disfida di Barletta, un duelo caballeresco del s. XVI que se recrea cada año.`,
    park:`Parkings cerca del castillo y del centro.`,
    pl:true, playa:`litoral de arena amplio pero urbano y sin mucho encanto. Cumple, poco más.`,
+   playaScore:2.5,
    comer:`Cocina local y buena pastelería; probá los taralli y la burrata de la zona.`},
 
   {n:`Lecce`, lat:40.3520, lng:18.1720, cat:'historia', p:4.8,
@@ -291,6 +305,7 @@ const PUNTOS = [
    larga:`El pueblo más oriental de Italia, un casco blanco amurallado sobre agua turquesa. Su catedral guarda un asombroso mosaico medieval del "Árbol de la Vida" que cubre todo el piso, y una capilla con los cráneos de los 800 mártires. Sumá el castillo aragonés y, cerca, la surreal cantera de Bauxite y la Grotta della Poesia.`,
    park:`Casco ZTL. Parkings de pago junto al puerto y en la entrada del centro.`,
    pl:true, playa:`sí, y muy buena. Además de la playa del pueblo, cerca está Baia dei Turchi: arena fina entre pinares y agua baja y transparente, de las mejores del Adriático y cómoda para chicos.`,
+   playaScore:4.7,
    comer:`Pescado fresco en el casco; L'Altro Baffo para algo más cuidado y creativo.`},
 
   {n:`Gallipoli`, lat:40.0560, lng:17.9920, cat:'costa', p:4.6,
@@ -298,6 +313,7 @@ const PUNTOS = [
    larga:`Una ciudad-isla amurallada unida por un puente al pueblo nuevo. Recorré el anillo de murallas, el Castello angioino, la catedral barroca de Sant'Agata y las callecitas del casco; después bajá a las playas (la Purità dentro de las murallas, o Baia Verde a las afueras). De noche se pone bien movida en verano.`,
    park:`Estacioná en la ciudad nueva y cruzá a pie a la isla (peatonal).`,
    pl:true, playa:`sí. La Purità es chica y está en el casco; Baia Verde, a las afueras, es un arenal largo (más fiestero). Arena y agua que entra despacio: buena para los chicos.`,
+   playaScore:4.3,
    comer:`Pescado y la scapece gallipolina (pescado marinado); trattorias del casco antiguo.`},
 
   {n:`Grotta della Poesia`, lat:40.2861, lng:18.4300, cat:'costa', p:4.6,
@@ -305,6 +321,7 @@ const PUNTOS = [
    larga:`Una piscina natural de agua turquesa abierta en la roca, junto a las ruinas messapias de Roca Vecchia. Se puede nadar y, con cuidado, saltar desde los bordes — una de las imágenes más impactantes del Salento. En pleno verano se llena, así que andá temprano.`,
    park:`Estacionamiento de pago en temporada junto al sitio (Roca Vecchia).`,
    pl:true, playa:`no es una playa de arena sino una piscina natural en la roca, con agua honda y saltos. Espectacular para nadar, pero nada apta para nenes chicos.`,
+   playaScore:4.2,
    comer:`Kioscos y chiringuitos cerca; para comer bien, Otranto o Torre dell'Orso.`},
 
   {n:`Pescoluse`, lat:39.8330, lng:18.3230, cat:'costa', p:4.5,
@@ -312,6 +329,7 @@ const PUNTOS = [
    larga:`Apodada "le Maldive del Salento": arena blanca finísima y agua transparente que entra muy poco profunda durante metros — ideal para chicos. Hay lidos (balnearios con servicios) y tramos de playa libre. Está casi en la punta jónica del tacón.`,
    park:`Estacionamientos de pago junto a los lidos en temporada; llená temprano.`,
    pl:true, playa:`LA playa para los chicos: arena blanca finísima y agua transparente que entra bajísima durante metros, las “Maldivas del Salento”. Totalmente recomendada.`,
+   playaScore:4.9,
    comer:`Los lidos suelen tener restaurante; pescado en Pescoluse o la cercana Torre Vado.`},
 
   {n:`Punta Prosciutto`, lat:40.3060, lng:17.7370, cat:'costa', p:4.5,
@@ -319,6 +337,7 @@ const PUNTOS = [
    larga:`Dunas, agua color caribe y ambiente algo salvaje, dentro de la reserva de Palude del Conte. Es de las playas más lindas del Jónico: hay tramos libres y lidos. Perfecta para un día de playa tranquilo, con menos edificación que otras zonas.`,
    park:`Estacionamientos de pago cerca de los lidos; en verano se llena temprano.`,
    pl:true, playa:`de las mejores del Jónico. Dunas, arena y agua baja color caribe: ideal para los peques. Muy recomendada.`,
+   playaScore:4.8,
    comer:`Lidos con cocina de playa; más opciones en Porto Cesareo.`},
 
   {n:`Santa Maria di Leuca`, lat:39.7960, lng:18.3580, cat:'costa', p:4.5,
@@ -326,6 +345,7 @@ const PUNTOS = [
    larga:`El extremo sur del tacón, "de finibus terrae", donde simbólicamente se encuentran el Adriático y el Jónico. Está el santuario de la Madonna di Finibus Terrae, el faro, una cascada monumental y villas señoriales de la Belle Époque. Desde el puerto salen paseos en barco a las grutas marinas.`,
    park:`Estacionamiento junto al puerto y el lungomare.`,
    pl:true, playa:`la zona es más de acantilados y roca que de arena; hay algunas playitas y lidos, pero se viene más por el paisaje y las grutas que por la playa.`,
+   playaScore:3.3,
    comer:`Restaurantes de mar en el porto turístico.`},
 
   {n:`Torre dell'Orso`, lat:40.2680, lng:18.4340, cat:'costa', p:4.4,
@@ -333,6 +353,7 @@ const PUNTOS = [
    larga:`Una amplia playa de arena dorada enmarcada por pinares y acantilados, con los dos faraglioni "Le Due Sorelle" al final, ligados a una leyenda local. Agua limpia y poco profunda: un día de playa cómodo en el Adriático salentino, con buenos servicios.`,
    park:`Estacionamientos de pago detrás de la playa.`,
    pl:true, playa:`sí, excelente. Arenal amplio, agua limpia y poco profunda, con buenos servicios. Muy cómoda para chicos.`,
+   playaScore:4.5,
    comer:`Lidos con restaurante; trattorias en el pueblito.`},
 
   {n:`Porto Cesareo`, lat:40.2610, lng:17.8930, cat:'costa', p:4.3,
@@ -340,6 +361,7 @@ const PUNTOS = [
    larga:`Área marina protegida de aguas transparentes con islotes cercanos (como la Isola dei Conigli), muy buena para playa familiar y algo de snorkel en el Jónico. Pueblo de pescadores con lidos y arenales largos.`,
    park:`Estacionamientos de pago junto a las playas.`,
    pl:true, playa:`sí, y muy buena para los chicos: arena, agua baja y transparente en área protegida, con islotes cerca. Recomendada.`,
+   playaScore:4.5,
    comer:`Pescado fresco; varios restaurantes de mar en el pueblo.`},
 
   {n:`Nardò`, lat:40.1790, lng:18.0330, cat:'ciudad', p:4.2,
@@ -354,6 +376,7 @@ const PUNTOS = [
    larga:`La "città dei due mari". Su gran atractivo es el MArTA, Museo Arqueológico Nacional, uno de los mejores de Italia para la Magna Grecia, con los famosos "Ori di Taranto" (orfebrería griega). La città vecchia, en una isla, está en recuperación; el Castello Aragonese frente al canal es una buena foto.`,
    park:`Estacioná en la città nuova, cerca del museo.`,
    pl:true, playa:`las playas urbanas no valen mucho; las buenas están en las afueras. No es el motivo para venir.`,
+   playaScore:2.5,
    comer:`Cozze tarantine (mejillones, aquí son famosos) y pescado; trattorias del casco.`},
 
   {n:`Vieste`, lat:41.8820, lng:16.1780, cat:'costa', p:4.6,
@@ -361,6 +384,7 @@ const PUNTOS = [
    larga:`La perla del Gargano: un casco blanco encaramado sobre el mar, con la catedral, el castillo y el famoso monolito Pizzomunno junto a la playa. Es la mejor base para excursiones en barco a las grutas marinas y para recorrer la espectacular costa hacia Mattinata y Peschici.`,
    park:`Casco ZTL. Parkings de pago en el borde del centro.`,
    pl:true, playa:`sí, y muy buenas. La del Pizzomunno (Scialara) es un arenal largo junto al pueblo; sumá calas de ensueño accesibles en barco. Recomendada.`,
+   playaScore:4.6,
    comer:`Pescado del Adriático en las trattorias del casco antiguo.`},
 
   {n:`Peschici`, lat:41.9450, lng:16.0140, cat:'costa', p:4.5,
@@ -368,6 +392,7 @@ const PUNTOS = [
    larga:`Un pueblo blanco colgado de un acantilado sobre calas turquesa, con un casco laberíntico, castillo y, en la costa, los característicos trabucchi: antiguas máquinas de pesca de madera que se meten en el mar, algunas hoy convertidas en restaurantes. Muy fotogénico, sobre todo al atardecer.`,
    park:`Estacionamientos en el acceso al centro, que es peatonal.`,
    pl:true, playa:`sí: un arenal cómodo justo debajo del pueblo, más calas turquesa alrededor. Muy linda.`,
+   playaScore:4.4,
    comer:`Un trabucco convertido en restaurante para comer pescado sobre el agua (reservá); trattorias del casco.`},
 
   {n:`Isole Tremiti`, lat:42.1220, lng:15.4990, cat:'naturaleza', p:4.6,
@@ -375,6 +400,7 @@ const PUNTOS = [
    larga:`Un pequeño archipiélago protegido de agua cristalina: San Domino, con pinares y calas para nadar, y San Nicola, con una abadía fortificada medieval. Se llega en ferry o hidrofoil. Snorkel, paseos en barca y mucha calma — una excelente excursión de día completo desde el Gargano.`,
    park:`En las islas no se necesita auto: dejalo en el puerto de salida (Vieste, Peschici o Termoli) y cruzá en barco.`,
    pl:true, playa:`más que arena, son calas de roca y agua cristalina, ideales para nadar y snorkel. El agua es lo mejor de todo (mejor con chicos que ya nadan).`,
+   playaScore:4.5,
    comer:`Restaurantes de pescado en San Domino.`},
 
   {n:`Foresta Umbra`, lat:41.8180, lng:16.0000, cat:'naturaleza', p:4.5,
@@ -396,6 +422,7 @@ const PUNTOS = [
    larga:`Un pueblo blanco tranquilo rodeado de olivares, que funciona como base para algunas de las calas más lindas del Gargano: Baia delle Zagare y Vignanotica, de guijarros blancos y agua turquesa, muchas mejor accesibles en barco. Buen plan de naturaleza y playa.`,
    park:`Estacionamientos junto a las calas o en el pueblo.`,
    pl:true, playa:`calas de guijarros blancos y agua turquesa (Baia delle Zagare, Vignanotica), preciosas pero de piedra y algo hondas, varias accesibles en barco. Más escénicas que prácticas con chicos chicos.`,
+   playaScore:4.4,
    comer:`Pescado y cocina garganica en las trattorias del pueblo.`},
 
   {n:`San Giovanni Rotondo`, lat:41.7060, lng:15.7280, cat:'historia', p:4.2,
@@ -405,6 +432,15 @@ const PUNTOS = [
    pl:false, playa:``,
    comer:`Mucha oferta sencilla orientada al peregrino alrededor del santuario.`}
 ];
+
+const HOUSE = {lat:40.8032076, lng:17.5369128, name:'Holiday Home Pilone'};
+function distKm(pt){
+  const R=6371, toR=x=>x*Math.PI/180;
+  const dLat=toR(pt.lat-HOUSE.lat), dLng=toR(pt.lng-HOUSE.lng);
+  const a=Math.sin(dLat/2)**2 + Math.cos(toR(HOUSE.lat))*Math.cos(toR(pt.lat))*Math.sin(dLng/2)**2;
+  return R*2*Math.asin(Math.sqrt(a));
+}
+function fmtKm(d){ return d<10 ? d.toFixed(1) : Math.round(d).toString(); }
 
 function colorDe(p){
   if(p>=4.7) return '#b5532e';
@@ -426,12 +462,13 @@ function renderLocs(){
         <div class="loc-meta">
           <div class="loc-cat" style="color:${c}">${CAT[p.cat]}</div>
           <div class="loc-name">${p.n}${p.pl?' <span class="beach-badge" title="Tiene playa">🏖️</span>':''}</div>
+          <div class="loc-dist">📍 A ${fmtKm(distKm(p))} km de la casa (línea recta)</div>
         </div>
         <div class="loc-arrow">▾</div>
       </div>
       <div class="loc-body"><div class="loc-body-inner">
         <div class="loc-desc">${p.larga}</div>
-        ${p.playa ? `<div class="loc-row"><span class="ic">🏖️</span><div><span class="lbl">Playa:</span>${p.playa}</div></div>` : `<div class="loc-row loc-row-muted"><span class="ic">⛰️</span><div>Sin playa: es un lugar de interior.</div></div>`}
+        ${p.playa ? `<div class="loc-row"><span class="ic">🏖️</span><div><span class="lbl">Playa:</span>${p.playaScore?` <span class="playa-badge" style="background:${colorDe(p.playaScore)}">${p.playaScore.toFixed(1)}/5</span>`:``} ${p.playa}</div></div>` : `<div class="loc-row loc-row-muted"><span class="ic">⛰️</span><div>Sin playa: es un lugar de interior.</div></div>`}
         <div class="loc-row"><span class="ic">🅿️</span><div><span class="lbl">Dónde estacionar:</span>${p.park}</div></div>
         <div class="loc-row"><span class="ic">🍽️</span><div><span class="lbl">Dónde comer:</span>${p.comer}</div></div>
         <button class="loc-map-btn" data-i="${p.i}">📍 Centrar en el mapa</button>
@@ -469,11 +506,16 @@ function initMap(){
       <div class="pop-name">${pt.n}</div>
       <div class="pop-score"><span class="badge" style="background:${c}">${pt.p.toFixed(1)}</span> puntaje sobre 5</div>
       <div class="pop-desc">${pt.d}</div>
+      <div class="pop-dist">📍 A ${fmtKm(distKm(pt))} km de la casa</div>
     `,{maxWidth:280});
     markers[i] = m;
   });
 
-  map.fitBounds(L.latLngBounds(PUNTOS.map(p=>[p.lat,p.lng])),{padding:[40,40]});
+  const houseIcon = L.divIcon({className:'house-pin', html:`<div class="house-inner"><span>🏠</span></div>`, iconSize:[40,40], iconAnchor:[20,38], popupAnchor:[0,-36]});
+  L.marker([HOUSE.lat,HOUSE.lng],{icon:houseIcon, zIndexOffset:1000}).addTo(map)
+    .bindPopup(`<div class="pop-cat" style="color:#0a323f">Tu alojamiento</div><div class="pop-name">${HOUSE.name}</div><div class="pop-desc">Base del viaje, en la costa de Ostuni (Pilone / Rosa Marina).</div>`,{maxWidth:260});
+
+  map.fitBounds(L.latLngBounds([[HOUSE.lat,HOUSE.lng], ...PUNTOS.map(p=>[p.lat,p.lng])]),{padding:[45,45]});
   setTimeout(()=> map.invalidateSize(), 200);
 }
 
