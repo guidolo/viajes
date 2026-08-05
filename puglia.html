@@ -102,6 +102,10 @@
   .house-inner span{transform:rotate(-45deg);font-size:16px;line-height:1}
   .loc-map-btn{margin-top:15px;display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;color:#fff;background:var(--sea);border:none;border-radius:9px;padding:9px 15px;cursor:pointer;font-family:inherit;transition:background .15s}
   .loc-map-btn:hover{background:var(--sea-deep)}
+  .loc-btns{display:flex;flex-wrap:wrap;gap:10px;margin-top:15px}
+  .loc-btns .loc-map-btn{margin-top:0}
+  .loc-gmaps-btn{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;color:var(--sea-deep);background:#fff;border:1.5px solid var(--sea);border-radius:9px;padding:8px 14px;cursor:pointer;text-decoration:none;font-family:inherit;transition:all .15s}
+  .loc-gmaps-btn:hover{background:var(--sea);color:#fff}
 
   footer{background:var(--sea-deep);color:rgba(246,241,230,.55);text-align:center;padding:30px 20px;font-size:12px;margin-top:44px;letter-spacing:.02em}
   footer b{color:var(--gold)}
@@ -471,7 +475,10 @@ function renderLocs(){
         ${p.playa ? `<div class="loc-row"><span class="ic">🏖️</span><div><span class="lbl">Playa:</span>${p.playaScore?` <span class="playa-badge" style="background:${colorDe(p.playaScore)}">${p.playaScore.toFixed(1)}/5</span>`:``} ${p.playa}</div></div>` : `<div class="loc-row loc-row-muted"><span class="ic">⛰️</span><div>Sin playa: es un lugar de interior.</div></div>`}
         <div class="loc-row"><span class="ic">🅿️</span><div><span class="lbl">Dónde estacionar:</span>${p.park}</div></div>
         <div class="loc-row"><span class="ic">🍽️</span><div><span class="lbl">Dónde comer:</span>${p.comer}</div></div>
-        <button class="loc-map-btn" data-i="${p.i}">📍 Centrar en el mapa</button>
+        <div class="loc-btns">
+          <button class="loc-map-btn" data-i="${p.i}">📍 Centrar en el mapa</button>
+          <a class="loc-gmaps-btn" href="https://www.google.com/maps/dir/?api=1&origin=${HOUSE.lat},${HOUSE.lng}&destination=${p.lat},${p.lng}&travelmode=driving" target="_blank" rel="noopener">🧭 Cómo llegar</a>
+        </div>
       </div></div>`;
     el.querySelector('.loc-hdr').addEventListener('click', ()=> el.classList.toggle('open'));
     el.querySelector('.loc-map-btn').addEventListener('click', (e)=>{ e.stopPropagation(); focusPoint(p.i); });
